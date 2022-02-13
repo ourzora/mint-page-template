@@ -2,8 +2,8 @@
 
 ## Updating your environment variables
 
-Before you can begin, you will need to set up an etherscan account, and an alchemy account.
-You will need an API key from both of these services.
+Before you can begin, you will need to set up an etherscan and an alchemy account.
+You will need your API keys from both of these services. For now you can leave `RINKEBY_PRIVATE_KEY` empty.
 
 ```shell
 cp .env.example .env
@@ -11,7 +11,7 @@ cp .env.example .env
 ```
 
 
-## Example contract
+## Example contract & testing
 
 Your main contract lives within `contracts/YOURCONTRACT.sol`.
 
@@ -34,7 +34,7 @@ npx hardhat test
 
 ## Local development and testing
 
-For local development, and testing of your frontend app, you will need to run a local hardhat node, and deploy the contract onto it.
+For local development and testing of your frontend app, you will need to a local hardhat node running, and then to deploy your contract onto it.
 
 To run a local hardhat node,
 
@@ -42,15 +42,17 @@ To run a local hardhat node,
 npx hardhat node
 ```
 
-Then we need to deploy the contract onto the node (this needs to happen every time you stop and then restart the node).
+When you start up a node, it will spit out a number of test addresses, you can take one of the private keys and [connect it to Metamask](https://stackoverflow.com/questions/68814078/how-do-i-add-ether-to-my-localhost-metamask-wallet-with-hardhat) and use it to test your frontend app in-browser.
+
+Then we need to deploy the contract onto the node (note: you need to do this every time you restart the node).
 
 ```shell
 npx hardhat run scripts/deploy-testnet.js --network localhost
 ```
 
-Then copy the 'Token address' which is returned (ie. "0x6969B2315678afecb367f032d93F642f64180aa3"), this will need to go into then .env.local file within our main frontend app as `NEXT_PUBLIC_CONTRACT_ADDRESS=`. We will also use this to interact with the contract through the hardhat console, so keep it saved somewhere close to hand.
+Copy the 'Token address' which is returned (ie. `0x6969B2315678afecb367f032d93F642f64180aa3`), this will need to go into your `.env.local` file within the main frontend app as `NEXT_PUBLIC_CONTRACT_ADDRESS=`. We will also use this to interact with the contract through the hardhat console, so keep it saved somewhere close to hand.
 
-Then, the last step, the contract begins paused, so we need to unpause it to interact with it with our frontend.
+Then, the last step, the contract begins paused, so we need to `unpause` it to test most of the useful methods.
 
 ```shell
 npx hardhat console --network localhost
@@ -70,13 +72,14 @@ c.unpause()
 
 ## Testnet deployment
 
-Before you can deploy the contract on rinkeby, you will need to set up a fresh wallet which you will never use on the ethereum mainnet (best practice is to set up a fresh rinkeby wallet for each new project). We will be using the private key of this wallet to deploy, so there is a non-trivial chance you will accidentally leak it. This is why it is important not to use a wallet which also contains ether, or assets from mainnet.
+Before you can deploy the contract on rinkeby, you will need to set up a fresh wallet address. This wallet can NEVER be used on the ethereum mainnet (best practice is to set up a fresh rinkeby wallet for each new project). We will be using the private key of this wallet to deploy, so there is a non-trivial chance you will accidentally leak it publicly. It is important to use a wallet address which does NOT contain any ether or assets on the ethereum mainnet, unless you are willing to risk losing them.
 
-This wallet will also needed to be seeded with some rinkeby ether, which can be attained from one of the rinkeby faucets for free. :)
+This wallet will also need some rinkeby ether, which can be attained from one of the rinkeby faucets for free. :)
+The faucets which actually work do tend to change quite frequently, so it is best to check for the best current rinkeby faucet on discord or reddit [references needed].
 
-Once you have this all set up, update the `.env` file within this contracts folder with your rinkeby wallet private key.
+Once you have this all set up, update the `.env` file within folder with your rinkeby wallet private key.
 
-If you want to keep your private key extra-secure, you can use `scripts/deploy.js` instead of `scripts/deploy-testnet.js` in the deploy command. This will verify the transactions using <https://frame.sh>, which you can install, and then add your rinkeby wallet to, and use that to verify the required transaction.
+Note: If you want to keep your private key extra-secure, you can use `scripts/deploy.js` instead of `scripts/deploy-testnet.js` in the following deploy command. This will verify the transactions using <https://frame.sh>, which you can install, add your rinkeby wallet to, and use to verify the required transaction.
 
 Deploying the contract to the rinkeby testnet is as simple as running:
 
@@ -84,7 +87,7 @@ Deploying the contract to the rinkeby testnet is as simple as running:
 npx hardhat run scripts/deploy-testnet.js --network rinkeby
 ```
 
-This will return a contract address which you can view directly on <https://rinkeby.etherscan.io/>, save this contract address somewhere, as you will need it for the next step.
+This will return a contract address which you can view directly on <https://rinkeby.etherscan.io/token/YOURCONTRACT_ADDRESS>. Save this contract address somewhere, as you will need it for the next step.
 
 Before you can view the source code and run any of the methods directly on etherscan (like unpausing the contract, don't forget that part!), you will need to verify the contract.
 
@@ -92,4 +95,6 @@ Before you can view the source code and run any of the methods directly on ether
 npx hardhat verify "0x6969B2315678afecb367f032d93F642f64186969" --network rinkeby
 ```
 
-Once this has completed, you can view your contract, including all of the source code, and test out the methods (as long as you are using the same rinkeby wallet which deployed the contract - the one matching the rinkeby private key you are using inside your .env file).
+Once this has completed, you can view your contract, including all of the source code, and test out all the methods (any admin-only methods will require using the same rinkeby wallet address which deployed the contract - the one matching the rinkeby private key you are using inside your .env file - or used through frame.sh).
+
+You can also update the `NEXT_PUBLIC_CONTRACT_ADDRESS=` in your main frontend app `.env.local` file and test your site using the deployed contract on rinkeby directly.
