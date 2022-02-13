@@ -2,7 +2,13 @@
 
 ## Updating your environment variables
 
-Before you can begin, you will need to set up an etherscan and an alchemy account.
+To install all the required libraries you will need to first run
+```shell
+yarn install
+```
+within this folder.
+
+Before you can begin testing in earnest, you will need to set up an etherscan and an alchemy account.
 You will need your API keys from both of these services. For now you can leave `RINKEBY_PRIVATE_KEY` empty.
 
 ```shell
