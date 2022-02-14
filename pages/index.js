@@ -49,7 +49,7 @@ const Home = () => {
           {utils.formatEther(contractData.ETH_PRICE)} ETH
           <br />
           {contractData.totalSupply.toString()} /{" "}
-          {contractData.maxSupply.toString()}
+          {contractData.maxSupply.sub(1).toString()}
         </>
       )}
     </Box>
