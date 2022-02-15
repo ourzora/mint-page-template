@@ -1,43 +1,8 @@
-import { useState, useEffect } from "react";
-import { utils } from "ethers";
+import { utils, BigNumber } from "ethers";
 import { Box, Text } from "@components/primitives";
 import { ConnectWallet } from "@components/ConnectWallet";
-import { useContract, useProvider } from "wagmi";
-import Contract from "../contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json";
 
-const getContractData = async (contract, ...args) => {
-  try {
-    const o = await Promise.all(
-      args.map(async (k) => [k, await contract[k]()])
-    );
-    return Object.fromEntries(o);
-  } catch (e) {
-    return null;
-  }
-};
-
-const Home = () => {
-  const provider = useProvider();
-  const contract = useContract({
-    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    contractInterface: Contract.abi,
-    signerOrProvider: provider,
-  });
-  const [contractData, setContractData] = useState();
-
-  useEffect(() => {
-    const f = async () => {
-      const data = await getContractData(
-        contract,
-        "ETH_PRICE",
-        "totalSupply",
-        "maxSupply"
-      );
-      setContractData(data);
-    };
-    f();
-  }, []);
-
+const Home = ({ contractData }) => {
   return (
     <Box css={{ textAlign: "center" }}>
       <Text>Hello.</Text>
@@ -48,12 +13,27 @@ const Home = () => {
           <br />
           {utils.formatEther(contractData.ETH_PRICE)} ETH
           <br />
-          {contractData.totalSupply.toString()} /{" "}
-          {contractData.maxSupply.sub(1).toString()}
+          {BigNumber.from(contractData.totalSupply).toString()} /{" "}
+          {BigNumber.from(contractData.maxSupply).sub(1).toString()}
+          <br />
+          {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per
+          transaction
         </>
       )}
     </Box>
   );
 };
+
+export async function getStaticProps() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/contract-data/ETH_PRICE,totalSupply,maxSupply,MAX_MINT_COUNT`
+  );
+  const contractData = await response.json();
+  return {
+    props: {
+      contractData,
+    },
+  };
+}
 
 export default Home;

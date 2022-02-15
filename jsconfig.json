@@ -20,7 +20,8 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@contracts/*": ["contracts/*"],
     }
   },
   "include": [
