@@ -1,30 +1,11 @@
 import "../styles/globals.css";
+import { chains } from "@lib/chains";
 
 import { providers } from "ethers";
 import { Provider } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { WalletLinkConnector } from "wagmi/connectors/walletLink";
-
-const chains = [
-  {
-    id: 31337,
-    name: "hardhat",
-    testnet: false,
-    rpcUrls: ["http://localhost:8545"],
-  },
-  {
-    id: 1,
-    name: "Mainnet",
-    rpcUrls: [process.env.NEXT_PUBLIC_RPC_URL],
-  },
-  {
-    id: 4,
-    name: "Rinkeby",
-    testnet: true,
-    rpcUrls: [process.env.NEXT_PUBLIC_RINKEBY_RPC_URL],
-  },
-];
 
 function App({ Component, pageProps }) {
   const provider = ({ chainId, connector }) => {
