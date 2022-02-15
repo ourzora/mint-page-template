@@ -3,7 +3,7 @@ import Contract from "@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRA
 import fs from "fs";
 import path from "path";
 
-const getContractData = async (contract, ...args) => {
+const extractContractData = async (contract, ...args) => {
   try {
     const o = await Promise.all(
       args.map(async (k) => [k, await contract[k]()])
@@ -14,14 +14,14 @@ const getContractData = async (contract, ...args) => {
   }
 };
 
-const getContractDataCached = async (values) => {
+const getContractData = async (values) => {
   const contract = new ethers.Contract(
     process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     Contract.abi,
     new ethers.providers.JsonRpcProvider()
   );
 
-  const data = await getContractData(contract, ...values.split(","));
+  const data = await extractContractData(contract, ...values.split(","));
   return data;
 };
 
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   } catch (error) {}
 
   if (!cachedData) {
-    const data = await getContractDataCached(values);
+    const data = await getContractData(values);
     try {
       fs.writeFileSync(CACHE_PATH, JSON.stringify(data), "utf8");
     } catch (error) {
