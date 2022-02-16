@@ -1,4 +1,5 @@
-import { ethers, utils } from 'ethers'
+import { ethers } from 'ethers'
+import shortHash from 'shorthash2'
 import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
 import fs from 'fs'
 import path from 'path'
@@ -29,11 +30,7 @@ const getContractData = async (values) => {
 
 export default async function handler(req, res) {
   const { values } = req.query
-  const hash = utils.solidityPack(
-    ['string', 'string'],
-    [process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, values]
-  )
-
+  const hash = shortHash(`${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS},${values}`)
   const CACHE_PATH = path.resolve(`.contract-data-${hash.replace('0x', '')}`)
 
   let cachedData

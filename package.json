@@ -17,6 +17,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-prevent-outside-scroll": "^0.0.2",
+    "shorthash2": "^1.0.3",
     "wagmi": "^0.2.10"
   },
   "devDependencies": {
