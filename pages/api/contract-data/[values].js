@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import Contract from "@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json";
 import fs from "fs";
 import path from "path";
@@ -27,10 +27,12 @@ const getContractData = async (values) => {
 
 export default async function handler(req, res) {
   const { values } = req.query;
-  let buff = new Buffer(values);
-  let base64data = buff.toString("base64");
+  const hash = utils.solidityPack(
+    ["string", "string"],
+    [process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, values]
+  );
 
-  const CACHE_PATH = path.resolve(`.contract-data-${base64data}`);
+  const CACHE_PATH = path.resolve(`.contract-data-${hash.replace("0x", "")}`);
 
   let cachedData;
   try {

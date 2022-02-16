@@ -50,7 +50,7 @@ const Home = ({ contractData }) => {
 
 export async function getStaticProps() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/contract-data/ETH_PRICE,totalSupply,maxSupply,MAX_MINT_COUNT`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/contract-data/ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
   );
   const contractData = await response.json();
   return {
