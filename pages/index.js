@@ -1,8 +1,14 @@
 import { utils, BigNumber } from "ethers";
 import { Box, Text } from "@components/primitives";
 import { ConnectWallet } from "@components/ConnectWallet";
+import { useAccount } from "wagmi";
+import { useAllowlist } from "@hooks/useAllowlist";
 
 const Home = ({ contractData }) => {
+  const [{ data: accountData }, disconnect] = useAccount();
+  const [{ allowlistChecked, allowlistVerified }, checkAllowlist] =
+    useAllowlist();
+
   return (
     <Box css={{ textAlign: "center" }}>
       <Text>Hello.</Text>
@@ -18,6 +24,24 @@ const Home = ({ contractData }) => {
           <br />
           {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per
           transaction
+        </>
+      )}
+      {accountData && (
+        <>
+          <br />
+          <br />
+          <button onClick={() => checkAllowlist(accountData.address)}>
+            Check whitelist
+          </button>
+          {allowlistChecked && (
+            <>
+              <br />
+              <br />
+              {allowlistVerified
+                ? "You are on the list!"
+                : "You are not on the list"}
+            </>
+          )}
         </>
       )}
     </Box>
