@@ -59,7 +59,7 @@ export async function getStaticProps() {
   const contractData = await response.json()
   return {
     props: {
-      contractData,
+      contractData: !contractData.error ? contractData : null,
     },
   }
 }
