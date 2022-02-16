@@ -28,6 +28,11 @@ export const Text = styled('p', {
         textAlign: 'center',
       },
     },
+    error: {
+      true: {
+        color: '$red',
+      },
+    },
   },
 })
 

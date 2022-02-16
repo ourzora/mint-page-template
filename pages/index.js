@@ -3,26 +3,39 @@ import { Box, Text } from '@components/primitives'
 import { Button } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
-import { useAccount } from 'wagmi'
+import { useAccount, useContractRead } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
+import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
 
 const Home = ({ contractData, tokens }) => {
   const [{ data: accountData }] = useAccount()
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
+  const [{ data: contractPaused, error: contractError, loading: contractLoading }] =
+    useContractRead(
+      {
+        addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+        contractInterface: Contract.abi,
+      },
+      'paused'
+    )
 
   return (
     <Box css={{ textAlign: 'center' }}>
+      <Text>
+        {contractLoading ? (
+          'Loading...'
+        ) : contractError ? (
+          <Text error>Error loading contract</Text>
+        ) : contractPaused ? (
+          'Contract paused.'
+        ) : (
+          'Contract active.'
+        )}
+      </Text>
       <Text>Hello.</Text>
       <ConnectWallet />
-      {countdownText && (
-        <>
-          <br />
-          Launching in: {countdownText}
-          <br />
-        </>
-      )}
       {contractData && (
         <>
           <br />
@@ -33,6 +46,12 @@ const Home = ({ contractData, tokens }) => {
           <br />
           {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per transaction
           <br />
+        </>
+      )}
+      {countdownText && (
+        <>
+          <br />
+          Launching in: {countdownText}
         </>
       )}
       {accountData && (
