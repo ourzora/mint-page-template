@@ -67,4 +67,10 @@ export const globalStyles = globalCss({
     color: '$primary',
     padding: '$dmargin',
   },
+  em: {
+    fontStyle: 'italic',
+  },
+  strong: {
+    fontWeight: '600',
+  },
 })

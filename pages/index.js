@@ -17,6 +17,9 @@ const Home = ({ contractData, tokens }) => {
   return (
     <Box css={{ textAlign: 'center' }}>
       <Text>
+        <strong>YOURCONTRACT NFT Project.</strong>
+      </Text>
+      <Text>
         {contractLoading ? (
           'Loading...'
         ) : contractError ? (
@@ -27,7 +30,6 @@ const Home = ({ contractData, tokens }) => {
           'Contract active.'
         )}
       </Text>
-      <Text>Hello.</Text>
       <ConnectWallet />
       {contractData && (
         <>
@@ -84,6 +86,7 @@ export async function getStaticProps() {
   const contractData = await response.json()
 
   // Fake tokens
+  // react-query / cache this part?
   const end = 5
   let start = end - 12 + 1
   if (start < 1) start = 1

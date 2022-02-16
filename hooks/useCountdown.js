@@ -23,12 +23,18 @@ export const useCountdown = (dateStr) => {
   }, [])
 
   const countdownText = useMemo(() => {
-    const { days, hours, minutes, seconds } = intervalToDuration({
+    const { weeks, days, hours, minutes, seconds } = intervalToDuration({
       start: now,
       end: date,
     })
 
-    return [days + 'd', hours + 'hr', minutes + 'm', seconds + 's'].join(' ')
+    return [
+      weeks && weeks + ' weeks',
+      days + ' days',
+      hours + ' hours',
+      minutes + ' minutes',
+      seconds + ' seconds',
+    ].join(' ')
   }, [date, now, plural])
 
   return { countdownText: ready ? countdownText : '...' }
