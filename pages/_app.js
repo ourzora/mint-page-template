@@ -1,4 +1,3 @@
-import '../styles/globals.css'
 import { chains } from '@lib/chains'
 
 import { providers } from 'ethers'

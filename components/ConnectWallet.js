@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useConnect, useAccount } from 'wagmi'
+import { Button, ButtonSet } from '@components/Button'
 
 export const useIsMounted = () => {
   const [mounted, setMounted] = useState(false)
@@ -26,24 +27,26 @@ export const ConnectWallet = () => {
             : accountData.address}
         </div>
         <div>Connected to {accountData.connector.name}</div>
-        <button onClick={disconnect}>Disconnect</button>
+        <Button link onClick={disconnect}>
+          Disconnect
+        </Button>
       </div>
     )
   }
 
   return (
-    <>
+    <ButtonSet>
       {data.connectors.map((x) => (
-        <button
+        <Button
           disabled={isMounted ? !x.ready : false}
           key={x.id}
           onClick={() => connect(x)}
         >
           {isMounted ? x.name : x.id === 'injected' ? x.id : x.name}
           {isMounted ? !x.ready && ' (unsupported)' : ''}
-        </button>
+        </Button>
       ))}
       {error && <div>{error?.message ?? 'Failed to connect'}</div>}
-    </>
+    </ButtonSet>
   )
 }

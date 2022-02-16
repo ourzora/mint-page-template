@@ -1,0 +1,35 @@
+{
+  "tokenId": 1,
+  "name": "YOURCONTRACT_001 (sample)",
+  "description": "YOURCONTRACT is a series of 888 unique generative and hand-finished digital artworks.",
+  "image": "http://localhost:3000/images/sample/1.png",
+  "image_thumbnail": "http://localhost:3000/images/sample/1.png",
+  "image_original": "http://localhost:3000/images/sample/1.png",
+  "external_url": "http://localhost:3000/token/1",
+  "attributes": [
+    {
+      "trait_type": "Set",
+      "value": "N6"
+    },
+    {
+      "trait_type": "Format",
+      "value": "UX2"
+    },
+    {
+      "trait_type": "Number",
+      "value": "U36"
+    },
+    {
+      "trait_type": "Material",
+      "value": "digital"
+    },
+    {
+      "trait_type": "Scanline",
+      "value": "S3"
+    },
+    {
+      "trait_type": "Grade",
+      "value": ""
+    }
+  ]
+}
