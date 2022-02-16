@@ -3,23 +3,16 @@ import { Box, Text } from '@components/primitives'
 import { Button } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
-import { useAccount, useContractRead } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
-import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
+import { useContractPaused } from '@hooks/useContractPaused'
 
 const Home = ({ contractData, tokens }) => {
   const [{ data: accountData }] = useAccount()
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
-  const [{ data: contractPaused, error: contractError, loading: contractLoading }] =
-    useContractRead(
-      {
-        addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-        contractInterface: Contract.abi,
-      },
-      'paused'
-    )
+  const { contractPaused, contractError, contractLoading } = useContractPaused()
 
   return (
     <Box css={{ textAlign: 'center' }}>
@@ -52,6 +45,7 @@ const Home = ({ contractData, tokens }) => {
         <>
           <br />
           Launching in: {countdownText}
+          <br />
         </>
       )}
       {accountData && (
