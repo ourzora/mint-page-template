@@ -3,18 +3,26 @@ import { Box, Text } from '@components/primitives'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
+import { useCountdown } from '@hooks/useCountdown'
 
 const Home = ({ contractData }) => {
   const [{ data: accountData }, disconnect] = useAccount()
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
+  const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
 
   return (
     <Box css={{ textAlign: 'center' }}>
       <Text>Hello.</Text>
       <ConnectWallet />
-      {contractData && (
+      {countdownText && (
         <>
           <br />
+          Launching in: {countdownText}
+          <br />
+        </>
+      )}
+      {contractData && (
+        <>
           <br />
           {utils.formatEther(contractData.ETH_PRICE)} ETH
           <br />
@@ -22,11 +30,11 @@ const Home = ({ contractData }) => {
           {BigNumber.from(contractData.maxSupply).sub(1).toString()}
           <br />
           {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per transaction
+          <br />
         </>
       )}
       {accountData && (
         <>
-          <br />
           <br />
           <button onClick={() => checkAllowlist(accountData.address)}>
             Check whitelist
