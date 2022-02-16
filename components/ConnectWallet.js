@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { useConnect, useAccount } from "wagmi";
+import { useState, useEffect } from 'react'
+import { useConnect, useAccount } from 'wagmi'
 
 export const useIsMounted = () => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return mounted;
-};
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  return mounted
+}
 
 export const ConnectWallet = () => {
-  const isMounted = useIsMounted();
-  const [{ data, error }, connect] = useConnect();
+  const isMounted = useIsMounted()
+  const [{ data, error }, connect] = useConnect()
   const [{ data: accountData }, disconnect] = useAccount({
     fetchEns: true,
-  });
+  })
 
   if (accountData) {
     return (
@@ -28,7 +28,7 @@ export const ConnectWallet = () => {
         <div>Connected to {accountData.connector.name}</div>
         <button onClick={disconnect}>Disconnect</button>
       </div>
-    );
+    )
   }
 
   return (
@@ -39,11 +39,11 @@ export const ConnectWallet = () => {
           key={x.id}
           onClick={() => connect(x)}
         >
-          {isMounted ? x.name : x.id === "injected" ? x.id : x.name}
-          {isMounted ? !x.ready && " (unsupported)" : ""}
+          {isMounted ? x.name : x.id === 'injected' ? x.id : x.name}
+          {isMounted ? !x.ready && ' (unsupported)' : ''}
         </button>
       ))}
-      {error && <div>{error?.message ?? "Failed to connect"}</div>}
+      {error && <div>{error?.message ?? 'Failed to connect'}</div>}
     </>
-  );
-};
+  )
+}
