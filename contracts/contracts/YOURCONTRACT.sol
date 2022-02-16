@@ -27,18 +27,16 @@ contract YOURCONTRACT is
     Counters.Counter private _tokenIds;
     bytes32 public constant MANAGER_ROLE = keccak256("MANAGER_ROLE");
 
-    uint256 public constant MAX_MINT_COUNT = 8;       // +1 to save on gas cost of <= vs <
+    uint256 public constant MAX_MINT_COUNT = 4;       // +1 to save on gas cost of <= vs <
     uint256 public constant ARTIST_PROOF_COUNT = 11;  // +1 to save on gas cost of <= vs <
-    uint256 public constant MAX_SUPPLY = 334;         // +1 to save on gas cost of <= vs <
-    uint256 public constant ETH_PRICE = 0.22 ether;
-    string public provenanceHash = '';
+    uint256 public constant MAX_SUPPLY = 889;         // +1 to save on gas cost of <= vs <
+    uint256 public constant ETH_PRICE = 0.0069 ether;
     string private _baseURIextended = "http://localhost:3000/api/metadata/";
     address payable private _withdrawalWallet;
 
     constructor() ERC721("YOURCONTRACT", "YOURCONTRACT") {
         _pause(); // start paused
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(MANAGER_ROLE, 0xcb77c9A73E969D0d19CcaE16545eF635702baA85); // k ledger
         grantRole(MANAGER_ROLE, msg.sender);
     }
 
@@ -56,9 +54,6 @@ contract YOURCONTRACT is
         _unpause();
     }
 
-    function setProvenanceHash(string memory provenanceHash_) external onlyRole(MANAGER_ROLE) {
-        provenanceHash = provenanceHash_;
-    }
     function setBaseURI(string memory baseURI_) external onlyRole(MANAGER_ROLE) {
         _baseURIextended = baseURI_;
     }
@@ -78,6 +73,27 @@ contract YOURCONTRACT is
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(tokenId <= _tokenIds.current(), "Nonexistent token");
         return string(abi.encodePacked(_baseURIextended, tokenId.toString(), ".json"));
+    }
+
+    uint256 private constant MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+    uint256[3] arr = [MAX_INT, MAX_INT, MAX_INT];
+    function claimTicket(uint256 ticketNumber) external {
+        require(ticketNumber < arr.length * 256, "bad ticket");
+        uint256 storageOffset;
+        uint256 offsetWithin256;
+        uint256 localGroup;
+        uint256 storedBit;
+        unchecked {
+            storageOffset = ticketNumber / 256;
+            offsetWithin256 = ticketNumber % 256;
+        }
+        localGroup = arr[storageOffset];
+
+        storedBit = (localGroup >> offsetWithin256) & uint256(1);
+        require(storedBit == 1, "already claimed");
+        localGroup = localGroup & ~(uint256(1) << offsetWithin256);
+
+        arr[storageOffset] = localGroup;
     }
 
     function mint(uint256 count)

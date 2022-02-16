@@ -101,13 +101,6 @@ describe("YOURCONTRACT", function () {
     expect(data).to.equal("http://anotherapi.com/tokens/1.json");
   });
 
-  it("Can change provenance hash", async function () {
-    await contract.connect(owner).setProvenanceHash("ABC123");
-
-    const data = await contract.provenanceHash();
-    expect(data).to.equal("ABC123");
-  });
-
   it("Has Pausable minting", async function () {
     // Unpause contract
     await contract.connect(owner).unpause();
@@ -162,8 +155,8 @@ describe("YOURCONTRACT", function () {
     await contract.connect(owner).unpause();
 
     // Add funds
-    await contract.connect(bob).mint(5, {
-      value: mintPrice.mul(5),
+    await contract.connect(bob).mint(maxMintCount, {
+      value: mintPrice.mul(maxMintCount),
     });
     await expect(contract.connect(alice).withdraw()).to.be.revertedWith(
       `AccessControl: account ${alice.address.toLowerCase()} is missing role ${managerRole}`
@@ -175,8 +168,8 @@ describe("YOURCONTRACT", function () {
     await contract.connect(owner).unpause();
 
     // Add funds
-    await contract.connect(bob).mint(5, {
-      value: mintPrice.mul(5),
+    await contract.connect(bob).mint(maxMintCount, {
+      value: mintPrice.mul(maxMintCount),
     });
 
     // Pause contract
@@ -202,8 +195,8 @@ describe("YOURCONTRACT", function () {
     // Unpause contract
     await contract.connect(owner).unpause();
     // Add funds
-    await contract.connect(bob).mint(5, {
-      value: mintPrice.mul(5),
+    await contract.connect(bob).mint(maxMintCount, {
+      value: mintPrice.mul(maxMintCount),
     });
     // Pause contract
     await contract.connect(owner).pause();
