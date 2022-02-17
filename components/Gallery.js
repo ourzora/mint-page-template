@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Button } from './button'
-import { Box, Figure } from './primitives'
+import { Button } from '@components/Button'
+import { Box, Figure } from '@components/primitives'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ipfsImage } from '@lib/helpers'
 import PreventOutsideScroll from 'react-prevent-outside-scroll'
