@@ -58,11 +58,12 @@ export default function handler(req, res) {
     } catch (e) {
       console.log(e)
     }
-    const result = data.filter((x) => x !== null)
+    let result = data.filter((x) => x !== null)
 
     if (!!result.length) {
       res.setHeader('Cache-Control', `public, max-age=5000`)
       res.setHeader('Content-type', 'application/json')
+      if (result && result.length === 1) result = result[0]
       res.status(200).json(result)
     } else {
       res.status(404).end()
