@@ -6,13 +6,19 @@ import { Gallery } from '@components/Gallery'
 import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
+import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractPaused } from '@hooks/useContractPaused'
 
-const Home = ({ contractData, tokens }) => {
+const Home = ({ contractData }) => {
   const [{ data: accountData }] = useAccount()
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
   const { contractPaused, contractError, contractLoading } = useContractPaused()
+  const { isLoading: tokensLoading, tokens } = useRecentTokens({
+    length: 5,
+    count: 5,
+    reverse: false,
+  })
 
   return (
     <Box css={{ textAlign: 'center' }}>
@@ -73,7 +79,7 @@ const Home = ({ contractData, tokens }) => {
         <strong>Gallery</strong>
       </h1>
       <br />
-      <Gallery preview tokens={tokens} />
+      {tokensLoading ? 'Loading...' : <Gallery preview tokens={tokens} />}
     </Box>
   )
 }
@@ -84,24 +90,8 @@ export async function getStaticProps() {
     `${baseUrl}/api/contract-data/ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
   )
   const contractData = await response.json()
-
-  // Fake tokens
-  // react-query / cache this part?
-  const end = 5
-  let start = end - 12 + 1
-  if (start < 1) start = 1
-  const tokenIds = Array.from({ length: end - start + 1 }, (_, i) => i + start)
-  const tokens = await Promise.all(
-    tokenIds
-      .reverse()
-      .map((token) =>
-        fetch(`${baseUrl}/api/metadata/sample/${token}.json`).then((r) => r.json())
-      )
-  )
-
   return {
     props: {
-      tokens,
       contractData: !contractData.error ? contractData : null,
     },
   }
