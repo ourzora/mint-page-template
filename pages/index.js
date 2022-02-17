@@ -15,8 +15,8 @@ const Home = ({ contractData }) => {
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
   const { contractPaused, contractError, contractLoading } = useContractPaused()
   const { isLoading: tokensLoading, tokens } = useRecentTokens({
-    length: 5,
-    count: 5,
+    start: 1,
+    end: 5,
     reverse: false,
   })
 
