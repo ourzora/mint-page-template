@@ -11,11 +11,8 @@ export const useTotalSupply = () => {
         contractInterface: Contract.abi,
         signerOrProvider: provider,
       },
-      'totalSupply',
-      {}
+      'totalSupply'
     )
-
-  useEffect(() => read(), [])
 
   return [
     {
