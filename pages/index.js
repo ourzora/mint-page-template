@@ -9,13 +9,19 @@ import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractPaused } from '@hooks/useContractPaused'
+import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 
 const Home = ({ contractData }) => {
   const [{ data: accountData }] = useAccount()
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
-  const { contractPaused, contractError, contractLoading } = useContractPaused()
+  const {
+    contractPaused,
+    contractError: supplyError,
+    contractLoading: supplyLoading,
+  } = useContractPaused()
+  const { totalSupply, contractError, contractLoading } = useTotalSupply()
   const { isLoading: tokensLoading, tokens } = useRecentTokens({
     start: 1,
     end: 5,
@@ -57,7 +63,9 @@ const Home = ({ contractData }) => {
           <br />
           {utils.formatEther(contractData.ETH_PRICE)} ETH
           <br />
-          {BigNumber.from(contractData.totalSupply).toString()} /{' '}
+          {supplyLoading || !totalSupply
+            ? '?'
+            : BigNumber.from(totalSupply).toString()} /{' '}
           {BigNumber.from(contractData.maxSupply).sub(1).toString()}
           <br />
           {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per transaction
