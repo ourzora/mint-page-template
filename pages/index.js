@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { utils, BigNumber } from 'ethers'
 import { Box, Text } from '@components/primitives'
-import { Button } from '@components/Button'
+import { Button, IncrementButton } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
 import { useAccount } from 'wagmi'
@@ -32,6 +33,7 @@ const Home = ({ contractData }) => {
     },
     mint,
   ] = useContractMint()
+  const [mintQuantity, setMintQuantity] = useState(1)
 
   return (
     <Box css={{ textAlign: 'center' }}>
@@ -103,12 +105,36 @@ const Home = ({ contractData }) => {
             <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
           </>
         ) : (
-          <Button
-            disabled={isAwaitingApproval || isMinting}
-            onClick={() => mint({ mintPrice: contractData.ETH_PRICE, quantity: 3 })}
-          >
-            {isAwaitingApproval ? 'Awaiting approval' : isMinting ? 'Minting...' : 'Mint'}
-          </Button>
+          <>
+            <input
+              style={{ width: '3em', marginRight: '1em' }}
+              type="number"
+              value={mintQuantity}
+              onChange={(e) => {
+                setMintQuantity(
+                  Math.max(
+                    Math.min(
+                      Number(e.target.value),
+                      BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toNumber()
+                    ),
+                    1
+                  )
+                )
+              }}
+            />
+            <Button
+              disabled={isAwaitingApproval || isMinting}
+              onClick={() =>
+                mint({ mintPrice: contractData.ETH_PRICE, quantity: mintQuantity })
+              }
+            >
+              {isAwaitingApproval
+                ? 'Awaiting approval'
+                : isMinting
+                ? 'Minting...'
+                : 'Mint'}
+            </Button>
+          </>
         ))}
       <br />
       {accountData && mintError && <Text error>{mintError}</Text>}
