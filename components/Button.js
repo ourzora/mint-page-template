@@ -46,6 +46,14 @@ const BaseButton = styled('button', {
     },
   },
   variants: {
+    disabled: {
+      true: {
+        pointerEvents: 'none',
+        opacity: '0.6',
+        background: '$primary50',
+        color: '$primary70',
+      },
+    },
     link: {
       true: {
         padding: 0,

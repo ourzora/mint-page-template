@@ -9,12 +9,15 @@ export const { styled, getCssText, globalCss } = createStitches({
   theme: {
     colors: {
       black: '#000000',
+      black10: '#cccccc',
       black50: '#999999',
-      greyLight: '#f4f4f4',
+      black70: '#666666',
       white: '#ffffff',
       red: '#ff0000',
       primary: '$black',
+      primary10: '$black10',
       primary50: '$black50',
+      primary70: '$black70',
       background: '$white',
     },
 
