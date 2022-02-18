@@ -8,6 +8,7 @@ import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractPaused } from '@hooks/useContractPaused'
+import { useContractMint } from '@hooks/useContractMint'
 
 const Home = ({ contractData }) => {
   const [{ data: accountData }] = useAccount()
@@ -19,6 +20,18 @@ const Home = ({ contractData }) => {
     end: 5,
     reverse: false,
   })
+  const [
+    {
+      isLoading: isMintLoading,
+      isAwaitingApproval,
+      isMinting,
+      isSuccess,
+      txHash,
+      data,
+      error: mintError,
+    },
+    mint,
+  ] = useContractMint()
 
   return (
     <Box css={{ textAlign: 'center' }}>
@@ -59,21 +72,46 @@ const Home = ({ contractData }) => {
       {accountData && (
         <>
           <br />
-          {!allowlistChecked && (
-            <Button onClick={() => checkAllowlist(accountData.address)}>
-              Am I on the allowlist?
-            </Button>
-          )}
-          {allowlistChecked && (
+          {allowlistChecked ? (
             <>
               {allowlistVerified
                 ? 'You are on the allowlist!'
                 : 'You are not on the allowlist :('}
+              <br />
+              <br />
+            </>
+          ) : (
+            <>
+              <Button onClick={() => checkAllowlist(accountData.address)}>
+                Am I on the allowlist?
+              </Button>
+              <br />
+              <br />
             </>
           )}
         </>
       )}
+      {accountData &&
+        (isMintLoading ? (
+          'Loading...'
+        ) : isSuccess && data ? (
+          JSON.stringify(data)
+        ) : isMinting && txHash ? (
+          <>
+            Minting...
+            <br />
+            <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+          </>
+        ) : (
+          <Button
+            disabled={isAwaitingApproval || isMinting}
+            onClick={() => mint({ mintPrice: contractData.ETH_PRICE, quantity: 3 })}
+          >
+            {isAwaitingApproval ? 'Awaiting approval' : isMinting ? 'Minting...' : 'Mint'}
+          </Button>
+        ))}
       <br />
+      {accountData && mintError && <Text error>{mintError}</Text>}
       <br />
       <h1>
         <strong>Gallery</strong>
