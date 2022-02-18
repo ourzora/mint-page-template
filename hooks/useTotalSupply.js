@@ -17,9 +17,12 @@ export const useTotalSupply = () => {
 
   useEffect(() => read(), [])
 
-  return {
-    totalSupply,
-    contractError,
-    contractLoading,
-  }
+  return [
+    {
+      totalSupply,
+      contractError,
+      contractLoading,
+    },
+    read,
+  ]
 }

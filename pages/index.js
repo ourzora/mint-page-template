@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
 import { Box, Text } from '@components/primitives'
 import { Button, IncrementButton } from '@components/Button'
@@ -21,7 +21,8 @@ const Home = ({ contractData }) => {
     contractError: supplyError,
     contractLoading: supplyLoading,
   } = useContractPaused()
-  const { totalSupply, contractError, contractLoading } = useTotalSupply()
+  const [{ totalSupply, contractError, contractLoading }, updateTotalSupply] =
+    useTotalSupply()
   const { isLoading: tokensLoading, tokens } = useRecentTokens({
     start: 1,
     end: 5,
@@ -40,6 +41,8 @@ const Home = ({ contractData }) => {
     mint,
   ] = useContractMint()
   const [mintQuantity, setMintQuantity] = useState(1)
+
+  useEffect(() => updateTotalSupply(), [, isSuccess])
 
   return (
     <Box css={{ textAlign: 'center' }}>
