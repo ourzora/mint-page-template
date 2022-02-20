@@ -4,11 +4,15 @@ const fsp = require('fs').promises
 import { existsSync } from 'fs'
 
 import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
+import { chains } from '../../../lib/chains'
+
+const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 const contract = new ethers.Contract(
   contractAddress,
   Contract.abi,
-  new ethers.providers.JsonRpcProvider()
+  new ethers.providers.JsonRpcProvider(chain)
 )
 
 const privateDirectory = path.resolve(process.cwd(), 'private')

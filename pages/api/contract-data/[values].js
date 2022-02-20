@@ -4,6 +4,8 @@ import fs from 'fs'
 import path from 'path'
 
 import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
+import { chains } from '../../../lib/chains'
+
 const extractContractData = async (contract, ...args) => {
   try {
     const o = await Promise.all(args.map(async (k) => [k, await contract[k]()]))
@@ -17,11 +19,13 @@ const extractContractData = async (contract, ...args) => {
   }
 }
 
+const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
 const getContractData = async (values) => {
   const contract = new ethers.Contract(
     process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     Contract.abi,
-    new ethers.providers.JsonRpcProvider()
+    new ethers.providers.JsonRpcProvider(chain)
   )
 
   const data = await extractContractData(contract, ...values.split(','))
