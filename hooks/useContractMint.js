@@ -24,6 +24,7 @@ export const useContractMint = (abi) => {
 
   const mint = async ({ mintPrice, quantity }) => {
     try {
+      setError(false)
       setIsAwaitingApproval(true)
       const price = BigNumber.from(mintPrice)
       const totalCost = utils.formatEther(price.mul(quantity))
