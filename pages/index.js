@@ -171,6 +171,7 @@ export async function getStaticProps() {
     props: {
       contractData: !contractData.error ? contractData : null,
     },
+    revalidate: 60,
   }
 }
 
