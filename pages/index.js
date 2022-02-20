@@ -162,11 +162,17 @@ const Home = ({ contractData }) => {
 }
 
 export async function getStaticProps() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-  const response = await fetch(
-    `${baseUrl}/api/contract-data/ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
-  )
-  const contractData = await response.json()
+  let contractData = {}
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+    const response = await fetch(
+      `${baseUrl}/api/contract-data/ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
+    )
+    contractData = await response.json()
+  } catch (e) {
+    contractData.error = e
+  }
+
   return {
     props: {
       contractData: !contractData.error ? contractData : null,
