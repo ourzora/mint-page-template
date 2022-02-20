@@ -22,9 +22,9 @@ const Home = ({ contractData }) => {
     contractPaused,
     contractError: supplyError,
     contractLoading: supplyLoading,
-  } = useContractPaused()
+  } = useContractPaused(Contract.abi)
   const [{ totalSupply, contractError, contractLoading }, updateTotalSupply] =
-    useTotalSupply()
+    useTotalSupply(Contract.abi)
   const { isLoading: tokensLoading, tokens } = useRecentTokens({
     start: 1,
     end: 5,
@@ -41,7 +41,7 @@ const Home = ({ contractData }) => {
       error: mintError,
     },
     mint,
-  ] = useContractMint()
+  ] = useContractMint(Contract.abi)
   const [mintQuantity, setMintQuantity] = useState(1)
 
   useEffect(() => updateTotalSupply(), [, isSuccess])

@@ -1,14 +1,13 @@
 import { useEffect } from 'react'
-import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
 import { useProvider, useContractRead } from 'wagmi'
 
-export const useContractPaused = () => {
+export const useContractPaused = (abi) => {
   const provider = useProvider()
   const [{ data: contractPaused, error: contractError, loading: contractLoading }, read] =
     useContractRead(
       {
         addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-        contractInterface: Contract.abi,
+        contractInterface: abi,
         signerOrProvider: provider,
       },
       'paused'

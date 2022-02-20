@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
-import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
 import { useSigner, useContract } from 'wagmi'
 
-export const useContractMint = () => {
+export const useContractMint = (abi) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isAwaitingApproval, setIsAwaitingApproval] = useState()
   const [isMinting, setIsMinting] = useState()
@@ -15,7 +14,7 @@ export const useContractMint = () => {
   const [{ data: signer }] = useSigner()
   const contract = useContract({
     addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    contractInterface: Contract.abi,
+    contractInterface: abi,
     signerOrProvider: signer,
   })
 
