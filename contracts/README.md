@@ -19,13 +19,13 @@ cp .env.example .env
 
 ## Example contract & testing
 
-Your main contract lives within `contracts/YOURCONTRACT.sol`.
+Your main contract lives within `contracts/YourContract.sol`.
 
-All references to "YOURCONTRACT" should be changed to the name of your own project.
-The filename itself isn't referenced within the rest of the code, the actual definitions within `contracts/YOURCONTRACT.sol` are the important parts to change.
+All references to "YourContract" should be changed to the name of your own project.
+The filename itself isn't referenced within the rest of the code, the actual definitions within `contracts/YourContract.sol` are the important parts to change.
 
 These appear within:
-1. `contracts/YOURCONTRACT.sol` (lines: 18,38)
+1. `contracts/YourContract.sol` (lines: 18,38)
 2. `test/test.js` (lines: 4,13)
 3. `scripts/deploy-testnet.js` (line: 6)
 4. `scripts/deploy.js` (line: 7)
@@ -67,7 +67,7 @@ npx hardhat console --network localhost
 Then, inside the console, run these two commands:
 
 ```shell
-const c = await (await ethers.getContractFactory("YOURCONTRACT")).attach("0x6969B2315678afecb367f032d93F642f64180aa3")
+const c = await (await ethers.getContractFactory("YourContract")).attach("0x6969B2315678afecb367f032d93F642f64180aa3")
 ```
 
 ```shell

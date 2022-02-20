@@ -1,9 +1,9 @@
 import { ethers } from 'ethers'
 import shortHash from 'shorthash2'
-import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
 import fs from 'fs'
 import path from 'path'
 
+import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 const extractContractData = async (contract, ...args) => {
   try {
     const o = await Promise.all(args.map(async (k) => [k, await contract[k]()]))

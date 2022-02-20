@@ -15,7 +15,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract YOURCONTRACT is
+contract YourContract is
     ERC721,
     IERC2981,
     Pausable,
@@ -34,7 +34,7 @@ contract YOURCONTRACT is
     string private _baseURIextended = "http://localhost:3000/api/metadata/";
     address payable private _withdrawalWallet;
 
-    constructor() ERC721("YOURCONTRACT", "YOURCONTRACT") {
+    constructor() ERC721("YourContract", "YourContract") {
         _pause(); // start paused
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         grantRole(MANAGER_ROLE, msg.sender);

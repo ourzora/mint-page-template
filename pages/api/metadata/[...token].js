@@ -3,7 +3,7 @@ const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
 
-import Contract from '@contracts/artifacts/contracts/YOURCONTRACT.sol/YOURCONTRACT.json'
+import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 const contract = new ethers.Contract(
   contractAddress,

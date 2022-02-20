@@ -1,3 +1,5 @@
+import Contract from '@contracts/artifacts/contracts/YourContract.sol/YourContract.json'
+
 import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
 import { Box, Text } from '@components/primitives'
