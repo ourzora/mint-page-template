@@ -22,7 +22,7 @@ export const useContractMint = (abi) => {
     setIsLoading(false)
   }, [contract])
 
-  const mint = async ({ mintPrice, quantity }) => {
+  const mint = async ({ mintPrice, quantity, method = 'mint' }) => {
     try {
       setError(false)
       setIsAwaitingApproval(true)
@@ -36,7 +36,7 @@ export const useContractMint = (abi) => {
       } catch (e) {
         console.log(e)
       }
-      const tx = await contract.mint(quantity, params)
+      const tx = await contract[method](quantity, params)
       setIsAwaitingApproval(false)
       setIsMinting(true)
       setTxHash(tx.hash)

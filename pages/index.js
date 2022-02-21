@@ -23,6 +23,11 @@ const Home = ({ contractData }) => {
     contractError: saleStateError,
     contractLoading: saleStateLoading,
   } = useContractMethod(Contract.abi, 'saleActive')
+  const {
+    contractResponse: presaleIsActive,
+    contractError: presaleStateError,
+    contractLoading: presaleStateLoading,
+  } = useContractMethod(Contract.abi, 'presaleActive')
   const [
     { totalSupply, contractError: supplyError, contractLoading: supplyLoading },
     updateTotalSupply,
@@ -62,6 +67,17 @@ const Home = ({ contractData }) => {
           'Sale is active.'
         ) : (
           'Sale is not active.'
+        )}
+      </Text>
+      <Text>
+        {presaleStateLoading ? (
+          'Loading...'
+        ) : presaleStateError ? (
+          <Text error>Error loading contract</Text>
+        ) : presaleIsActive ? (
+          'Presale is active.'
+        ) : (
+          'Presale is not active.'
         )}
       </Text>
       <ConnectWallet />
@@ -108,7 +124,59 @@ const Home = ({ contractData }) => {
           )}
         </>
       )}
-      {accountData &&
+
+      {contractData &&
+        accountData &&
+        presaleIsActive &&
+        (isMintLoading ? (
+          'Loading...'
+        ) : isSuccess && data ? (
+          JSON.stringify(data)
+        ) : isMinting && txHash ? (
+          <>
+            Minting...
+            <br />
+            <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+          </>
+        ) : (
+          <>
+            <input
+              style={{ width: '3em', marginRight: '1em' }}
+              type="number"
+              value={mintQuantity}
+              onChange={(e) => {
+                setMintQuantity(
+                  Math.max(
+                    Math.min(
+                      Number(e.target.value),
+                      BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toNumber()
+                    ),
+                    1
+                  )
+                )
+              }}
+            />
+            <Button
+              disabled={isAwaitingApproval || isMinting}
+              onClick={() =>
+                mint({
+                  mintPrice: contractData.PRESALE_ETH_PRICE,
+                  quantity: mintQuantity,
+                  method: 'presaleMint',
+                })
+              }
+            >
+              {isAwaitingApproval
+                ? 'Awaiting approval'
+                : isMinting
+                ? 'Minting...'
+                : 'Presale Mint'}
+            </Button>
+          </>
+        ))}
+
+      {contractData &&
+        accountData &&
         saleIsActive &&
         (isMintLoading ? (
           'Loading...'
@@ -169,7 +237,7 @@ export async function getStaticProps() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const response = await fetch(
-      `${baseUrl}/api/contract-data/ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
+      `${baseUrl}/api/contract-data/ETH_PRICE,PRESALE_ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
     )
     contractData = await response.json()
   } catch (e) {
