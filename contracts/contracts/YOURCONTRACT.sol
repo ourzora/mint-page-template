@@ -30,12 +30,17 @@ contract YourContract is
     uint256 public constant MAX_MINT_COUNT = 4;       // +1 to save on gas cost of <= vs <
     uint256 public constant ARTIST_PROOF_COUNT = 11;  // +1 to save on gas cost of <= vs <
     uint256 public constant MAX_SUPPLY = 889;         // +1 to save on gas cost of <= vs <
-    uint256 public constant ETH_PRICE = 0.0069 ether;
-    string private _baseURIextended = "http://localhost:3000/api/metadata/";
+    string public _baseURIextended = "http://localhost:3000/api/metadata/";
     address payable private _withdrawalWallet;
+    // Sale / Presale
+    uint256 public constant ETH_PRICE = 0.0069 ether;
+    uint256 public constant PRESALE_ETH_PRICE = 0.00069 ether;
+    bool public presaleActive = false;
+    bool public saleActive = false;
+
 
     constructor() ERC721("YourContract", "YourContract") {
-        _pause(); // start paused
+        //_pause(); // start paused
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         grantRole(MANAGER_ROLE, msg.sender);
     }
@@ -96,12 +101,44 @@ contract YourContract is
         arr[storageOffset] = localGroup;
     }
 
+        function setPresaleActive(bool val)
+    external
+    onlyRole(MANAGER_ROLE) 
+    {
+        presaleActive = val;
+    }
+
+    function setSaleActive(bool val)
+    external
+    onlyRole(MANAGER_ROLE) 
+    {
+        saleActive = val;
+    }
+
+    function presaleMint(uint256 count)
+    external
+    payable
+    whenNotPaused
+    returns (uint256)
+    {
+        require(presaleActive, "Presale has not begun");
+        require((PRESALE_ETH_PRICE * count) == msg.value, "Incorrect ETH sent; check price!");
+        require(count < MAX_MINT_COUNT, "Tried to mint too many NFTs at once");
+        require(_tokenIds.current() + count < MAX_SUPPLY, "SOLD OUT");
+        for (uint256 i=0; i<count; i++) {
+            _tokenIds.increment();
+            _mint(msg.sender, _tokenIds.current());
+        }
+        return _tokenIds.current();
+    }
+
     function mint(uint256 count)
     external
     payable
     whenNotPaused
     returns (uint256)
     {
+        require(saleActive, "Sale has not begun");
         require((ETH_PRICE * count) == msg.value, "Incorrect ETH sent; check price!");
         require(count < MAX_MINT_COUNT, "Tried to mint too many NFTs at once");
         require(_tokenIds.current() + count < MAX_SUPPLY, "SOLD OUT");
