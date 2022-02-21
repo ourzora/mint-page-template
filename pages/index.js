@@ -10,7 +10,7 @@ import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
-import { useContractPaused } from '@hooks/useContractPaused'
+import { useContractMethod } from '@hooks/useContractMethod'
 import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 
@@ -19,12 +19,14 @@ const Home = ({ contractData }) => {
   const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
   const {
-    contractPaused,
-    contractError: supplyError,
-    contractLoading: supplyLoading,
-  } = useContractPaused(Contract.abi)
-  const [{ totalSupply, contractError, contractLoading }, updateTotalSupply] =
-    useTotalSupply(Contract.abi)
+    contractResponse: saleIsActive,
+    contractError: saleStateError,
+    contractLoading: saleStateLoading,
+  } = useContractMethod(Contract.abi, 'saleActive')
+  const [
+    { totalSupply, contractError: supplyError, contractLoading: supplyLoading },
+    updateTotalSupply,
+  ] = useTotalSupply(Contract.abi)
   const { isLoading: tokensLoading, tokens } = useRecentTokens({
     start: 1,
     end: 5,
@@ -52,14 +54,14 @@ const Home = ({ contractData }) => {
         <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME} NFT Project.</strong>
       </Text>
       <Text>
-        {contractLoading ? (
+        {saleStateLoading ? (
           'Loading...'
-        ) : contractError ? (
+        ) : saleStateError ? (
           <Text error>Error loading contract</Text>
-        ) : contractPaused ? (
-          'Contract paused.'
+        ) : saleIsActive ? (
+          'Sale is active.'
         ) : (
-          'Contract active.'
+          'Sale is not active.'
         )}
       </Text>
       <ConnectWallet />
@@ -107,6 +109,7 @@ const Home = ({ contractData }) => {
         </>
       )}
       {accountData &&
+        saleIsActive &&
         (isMintLoading ? (
           'Loading...'
         ) : isSuccess && data ? (
