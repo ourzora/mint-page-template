@@ -1,9 +1,9 @@
-import Contract from '@contracts/artifacts/contracts/YourContract.sol/YourContract.json'
+import Contract from '../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 
 import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
 import { Box, Text } from '@components/primitives'
-import { Button, IncrementButton } from '@components/Button'
+import { Button } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
 import { useAccount } from 'wagmi'
@@ -49,7 +49,7 @@ const Home = ({ contractData }) => {
   return (
     <Box css={{ textAlign: 'center' }}>
       <Text>
-        <strong>YOURCONTRACT NFT Project.</strong>
+        <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME} NFT Project.</strong>
       </Text>
       <Text>
         {contractLoading ? (
