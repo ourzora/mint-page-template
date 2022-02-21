@@ -8,7 +8,15 @@ import { chains } from '../../../lib/chains'
 
 const extractContractData = async (contract, ...args) => {
   try {
-    const o = await Promise.all(args.map(async (k) => [k, await contract[k]()]))
+    const o = await Promise.all(
+      args.map(async (k) => {
+        try {
+          return [k, await contract[k]()]
+        } catch (e) {
+          return [k, null]
+        }
+      })
+    )
     return Object.fromEntries(o)
   } catch (e) {
     return {
