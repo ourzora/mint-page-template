@@ -1,11 +1,13 @@
 import Contract from '../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 
+import { ethers } from 'ethers'
 import { useState, useEffect } from 'react'
-import { utils, BigNumber } from 'ethers'
 import { Box, Text } from '@components/primitives'
 import { Button } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
+import { extractContractData } from '@lib/helpers'
+import { chains } from '@lib/chains'
 import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
 import { useCountdown } from '@hooks/useCountdown'
@@ -84,14 +86,12 @@ const Home = ({ contractData }) => {
       {contractData && (
         <>
           <br />
-          {utils.formatEther(contractData.ETH_PRICE)} ETH
+          {ethers.utils.formatEther(contractData.ETH_PRICE)} ETH
           <br />
-          {supplyLoading || !totalSupply
-            ? '?'
-            : BigNumber.from(totalSupply).toString()} /{' '}
-          {BigNumber.from(contractData.maxSupply).sub(1).toString()}
+          {supplyLoading || !totalSupply ? '?' : totalSupply} /{' '}
+          {contractData.maxSupply - 1}
           <br />
-          {BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toString()} per transaction
+          {contractData.MAX_MINT_COUNT - 1} per transaction
           <br />
         </>
       )}
@@ -147,10 +147,7 @@ const Home = ({ contractData }) => {
               onChange={(e) => {
                 setMintQuantity(
                   Math.max(
-                    Math.min(
-                      Number(e.target.value),
-                      BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toNumber()
-                    ),
+                    Math.min(Number(e.target.value), contractData.MAX_MINT_COUNT - 1),
                     1
                   )
                 )
@@ -197,10 +194,7 @@ const Home = ({ contractData }) => {
               onChange={(e) => {
                 setMintQuantity(
                   Math.max(
-                    Math.min(
-                      Number(e.target.value),
-                      BigNumber.from(contractData.MAX_MINT_COUNT).sub(1).toNumber()
-                    ),
+                    Math.min(Number(e.target.value), contractData.MAX_MINT_COUNT - 1),
                     1
                   )
                 )
@@ -232,23 +226,37 @@ const Home = ({ contractData }) => {
   )
 }
 
-export async function getStaticProps() {
-  let contractData = {}
+const getContractData = async (...props) => {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-    const response = await fetch(
-      `${baseUrl}/api/contract-data/ETH_PRICE,PRESALE_ETH_PRICE,MAX_MINT_COUNT,totalSupply,maxSupply`
+    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+    const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+      Contract.abi,
+      new ethers.providers.JsonRpcProvider(chain)
     )
-    contractData = await response.json()
+
+    const data = await extractContractData(contract, ...props)
+    return data
   } catch (e) {
-    contractData.error = e
+    return { error: e }
   }
+}
+
+export async function getStaticProps() {
+  const contractData = await getContractData(
+    'ETH_PRICE',
+    'PRESALE_ETH_PRICE',
+    'MAX_MINT_COUNT',
+    'totalSupply',
+    'maxSupply'
+  )
 
   return {
     props: {
       contractData: !contractData.error ? contractData : null,
     },
-    revalidate: 60,
+    revalidate: false,
   }
 }
 
