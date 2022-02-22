@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export const useRecentTokens = (count) => {
+export const useRecentTokens = ({ start, end, reverse }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [tokens, setTokens] = useState({})
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -15,7 +15,7 @@ export const useRecentTokens = (count) => {
   }
 
   useEffect(() => {
-    getTokens(count)
+    getTokens({ start, end, reverse })
   }, [])
 
   return {
