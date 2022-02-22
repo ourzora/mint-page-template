@@ -9,12 +9,14 @@ export const { styled, getCssText, globalCss } = createStitches({
   theme: {
     colors: {
       black: '#000000',
+      black5: '#e3e3e3',
       black10: '#cccccc',
       black50: '#999999',
       black70: '#666666',
       white: '#ffffff',
       red: '#ff0000',
       primary: '$black',
+      primary5: '$black5',
       primary10: '$black10',
       primary50: '$black50',
       primary70: '$black70',
@@ -68,7 +70,8 @@ export const globalStyles = globalCss({
     fontSize: '$body',
     lineHeight: '$body',
     color: '$primary',
-    padding: '$dmargin',
+    padding: '0',
+    margin: '0',
   },
   em: {
     fontStyle: 'italic',

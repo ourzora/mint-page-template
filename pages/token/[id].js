@@ -1,4 +1,5 @@
-import { Text } from '@components/primitives'
+import { Text, Box } from '@components/primitives'
+import { TokenGrid } from '@components/NFTPage'
 
 const Token = ({ tokens, errorMessage }) => {
   if (!tokens) {
@@ -12,10 +13,17 @@ const Token = ({ tokens, errorMessage }) => {
   return (
     <>
       {tokens.map((token) => (
-        <>
-          <Text>ID: {token.id}</Text>
-          <Text>data: {JSON.stringify(token.metadata)}</Text>
-        </>
+        <TokenGrid key={token.id}>
+          <Box css={{ padding: '$dmargin' }}>
+            <Text>ID: {token.id}</Text>
+            <Text css={{ wordBreak: 'break-word' }}>
+              data: {JSON.stringify(token.metadata)}
+            </Text>
+          </Box>
+          <Box>
+            <figure>x</figure>
+          </Box>
+        </TokenGrid>
       ))}
     </>
   )
