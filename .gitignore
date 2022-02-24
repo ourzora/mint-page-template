@@ -16,8 +16,8 @@
 /build
 
 # contract caches
-contracts/artifacts
-contracts/cache
+/contracts/artifacts
+/contracts/cache
 
 # misc
 .DS_Store
