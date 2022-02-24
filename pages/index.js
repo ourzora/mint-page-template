@@ -1,7 +1,7 @@
 import Contract from '../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 
 import { ethers } from 'ethers'
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { Box, Text } from '@components/primitives'
 import { Button } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
@@ -10,6 +10,7 @@ import { extractContractData } from '@lib/helpers'
 import { chains } from '@lib/chains'
 import { useAccount } from 'wagmi'
 import { useAllowlist } from '@hooks/useAllowlist'
+import { MintButton } from '@components/MintButton'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractMethod } from '@hooks/useContractMethod'
@@ -17,16 +18,26 @@ import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 
 const Home = ({ contractData }) => {
+  // HOOKS
   const [{ data: accountData }] = useAccount()
-  const [{ allowlistChecked, allowlistVerified }, checkAllowlist] = useAllowlist()
+  const [
+    {
+      allowlistRoot,
+      allowlistProof,
+      allowlistIndex,
+      allowlistChecked,
+      allowlistVerified,
+    },
+    checkAllowlist,
+  ] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
   const {
-    contractResponse: saleIsActive,
+    contractData: saleIsActive,
     contractError: saleStateError,
     contractLoading: saleStateLoading,
   } = useContractMethod(Contract.abi, 'saleActive')
   const {
-    contractResponse: presaleIsActive,
+    contractData: presaleIsActive,
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
   } = useContractMethod(Contract.abi, 'presaleActive')
@@ -34,11 +45,6 @@ const Home = ({ contractData }) => {
     { totalSupply, contractError: supplyError, contractLoading: supplyLoading },
     updateTotalSupply,
   ] = useTotalSupply(Contract.abi)
-  const { isLoading: tokensLoading, tokens } = useRecentTokens({
-    start: 1,
-    end: 5,
-    reverse: false,
-  })
   const [
     {
       isLoading: isMintLoading,
@@ -51,26 +57,77 @@ const Home = ({ contractData }) => {
     },
     mint,
   ] = useContractMint(Contract.abi)
-  const [mintQuantity, setMintQuantity] = useState(1)
+  const { isLoading: tokensLoading, tokens } = useRecentTokens({
+    start: 1,
+    end: 12,
+    reverse: false,
+  })
 
-  useEffect(() => updateTotalSupply(), [, isSuccess])
+  // EFFECTS
+  useMemo(() => {
+    return accountData?.address && checkAllowlist(accountData.address)
+  }, [, accountData && accountData.address])
+
+  useMemo(() => updateTotalSupply(), [, isSuccess])
 
   return (
-    <Box css={{ textAlign: 'center' }}>
+    <Box css={{ textAlign: 'center', padding: '$dmargin' }}>
       <Text>
         <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME} NFT Project.</strong>
       </Text>
-      <Text>
-        {saleStateLoading ? (
-          'Loading...'
-        ) : saleStateError ? (
-          <Text error>Error loading contract</Text>
-        ) : saleIsActive ? (
-          'Sale is active.'
-        ) : (
-          'Sale is not active.'
-        )}
-      </Text>
+      {countdownText && (
+        <>
+          <br />
+          Launching in: {countdownText}
+          <br />
+        </>
+      )}
+      <hr />
+      <Text>Allowlist check:</Text>
+
+      <ConnectWallet />
+
+      {accountData && (
+        <>
+          <br />
+          0x{allowlistRoot}
+          <br />
+          Allowlist index: {allowlistIndex}
+          <br />
+          {allowlistChecked && (
+            <>
+              <br />
+              {allowlistIndex > -1 && allowlistVerified ? (
+                <Button offset={50}>You are on the allowlist!</Button>
+              ) : (
+                <Text error>You are not on the allowlist :(</Text>
+              )}
+            </>
+          )}
+        </>
+      )}
+
+      <hr />
+
+      {contractData && (
+        <>
+          Mint price:{' '}
+          {contractData.ETH_PRICE && ethers.utils.formatEther(contractData.ETH_PRICE)} ETH
+          <br />
+          {contractData.PRESALE_ETH_PRICE && (
+            <>
+              Presale mint price:{' '}
+              {ethers.utils.formatEther(contractData.PRESALE_ETH_PRICE)} ETH
+            </>
+          )}
+          <br />
+          {totalSupply || contractData.totalSupply} / {contractData.maxSupply - 1}
+          <br />
+          {contractData.MAX_MINT_COUNT - 1} per transaction
+        </>
+      )}
+
+      <hr />
       <Text>
         {presaleStateLoading ? (
           'Loading...'
@@ -82,52 +139,11 @@ const Home = ({ contractData }) => {
           'Presale is not active.'
         )}
       </Text>
-      <ConnectWallet />
-      {contractData && (
-        <>
-          <br />
-          {ethers.utils.formatEther(contractData.ETH_PRICE)} ETH
-          <br />
-          {supplyLoading || !totalSupply ? '?' : totalSupply} /{' '}
-          {contractData.maxSupply - 1}
-          <br />
-          {contractData.MAX_MINT_COUNT - 1} per transaction
-          <br />
-        </>
-      )}
-      {countdownText && (
-        <>
-          <br />
-          Launching in: {countdownText}
-          <br />
-        </>
-      )}
-      {accountData && (
-        <>
-          <br />
-          {allowlistChecked ? (
-            <>
-              {allowlistVerified
-                ? 'You are on the allowlist!'
-                : 'You are not on the allowlist :('}
-              <br />
-              <br />
-            </>
-          ) : (
-            <>
-              <Button onClick={() => checkAllowlist(accountData.address)}>
-                Am I on the allowlist?
-              </Button>
-              <br />
-              <br />
-            </>
-          )}
-        </>
-      )}
 
       {contractData &&
         accountData &&
         presaleIsActive &&
+        allowlistIndex > -1 &&
         (isMintLoading ? (
           'Loading...'
         ) : isSuccess && data ? (
@@ -139,39 +155,33 @@ const Home = ({ contractData }) => {
             <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
           </>
         ) : (
-          <>
-            <input
-              style={{ width: '3em', marginRight: '1em' }}
-              type="number"
-              value={mintQuantity}
-              onChange={(e) => {
-                setMintQuantity(
-                  Math.max(
-                    Math.min(Number(e.target.value), contractData.MAX_MINT_COUNT - 1),
-                    1
-                  )
-                )
-              }}
-            />
-            <Button
-              disabled={isAwaitingApproval || isMinting}
-              onClick={() =>
-                mint({
-                  mintPrice: contractData.PRESALE_ETH_PRICE,
-                  quantity: mintQuantity,
-                  method: 'presaleMint',
-                })
-              }
-            >
-              {isAwaitingApproval
-                ? 'Awaiting approval'
-                : isMinting
-                ? 'Minting...'
-                : 'Presale Mint'}
-            </Button>
-          </>
+          <MintButton
+            buttonText="Presale Mint"
+            isAwaitingApproval={isAwaitingApproval}
+            isMinting={isMinting}
+            maxQuantity={contractData.PRESALE_MAX_MINT_COUNT}
+            onClick={(mintQuantity) =>
+              mint({
+                mintPrice: contractData.PRESALE_ETH_PRICE,
+                quantity: mintQuantity,
+                method: 'presaleMint',
+                args: [allowlistIndex, allowlistProof],
+              })
+            }
+          />
         ))}
-
+      <hr />
+      <Text>
+        {saleStateLoading ? (
+          'Loading...'
+        ) : saleStateError ? (
+          <Text error>Error loading contract</Text>
+        ) : saleIsActive ? (
+          'Sale is active.'
+        ) : (
+          'Sale is not active.'
+        )}
+      </Text>
       {contractData &&
         accountData &&
         saleIsActive &&
@@ -186,36 +196,26 @@ const Home = ({ contractData }) => {
             <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
           </>
         ) : (
-          <>
-            <input
-              style={{ width: '3em', marginRight: '1em' }}
-              type="number"
-              value={mintQuantity}
-              onChange={(e) => {
-                setMintQuantity(
-                  Math.max(
-                    Math.min(Number(e.target.value), contractData.MAX_MINT_COUNT - 1),
-                    1
-                  )
-                )
-              }}
-            />
-            <Button
-              disabled={isAwaitingApproval || isMinting}
-              onClick={() =>
-                mint({ mintPrice: contractData.ETH_PRICE, quantity: mintQuantity })
-              }
-            >
-              {isAwaitingApproval
-                ? 'Awaiting approval'
-                : isMinting
-                ? 'Minting...'
-                : 'Mint'}
-            </Button>
-          </>
+          <MintButton
+            buttonText="Mint"
+            isAwaitingApproval={isAwaitingApproval}
+            isMinting={isMinting}
+            maxQuantity={contractData.MAX_MINT_COUNT - 1}
+            onClick={(mintQuantity) =>
+              mint({
+                mintPrice: contractData.ETH_PRICE,
+                quantity: mintQuantity,
+              })
+            }
+          />
         ))}
-      <br />
-      {accountData && mintError && <Text error>{mintError}</Text>}
+      {mintError && (
+        <>
+          <br />
+          <Text error>{mintError}</Text>
+        </>
+      )}
+      <hr />
       <br />
       <h1>
         <strong>Gallery</strong>
@@ -248,6 +248,7 @@ export async function getStaticProps() {
     'ETH_PRICE',
     'PRESALE_ETH_PRICE',
     'MAX_MINT_COUNT',
+    'PRESALE_MAX_MINT_COUNT',
     'totalSupply',
     'maxSupply'
   )

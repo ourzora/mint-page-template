@@ -23,6 +23,8 @@
     "@openzeppelin/contracts": "^4.4.2",
     "base64-sol": "^1.0.1",
     "dotenv": "^10.0.0",
-    "eth-provider": "^0.9.8"
+    "eth-provider": "^0.9.8",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.2.30"
   }
 }

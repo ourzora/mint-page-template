@@ -1,5 +1,15 @@
 const { expect } = require('chai')
 const { ethers } = require('hardhat')
+const { MerkleTree } = require('merkletreejs')
+const keccak256 = require('keccak256')
+
+const abiEncode = (index, address) => {
+  const hashed = ethers.utils.defaultAbiCoder.encode(
+    ['uint256', 'address'],
+    [index, address]
+  )
+  return hashed
+}
 
 describe('YourContract', function () {
   let contract
@@ -7,6 +17,7 @@ describe('YourContract', function () {
   let mintPrice, presaleMintPrice, maxSupply, maxMintCount, artistProofCount, _baseURI
   let owner, bob, alice
   let managerRole, adminRole
+  let tree, root, accounts, leaves
 
   beforeEach(async () => {
     ;[owner, bob, alice] = await ethers.getSigners()
@@ -25,6 +36,14 @@ describe('YourContract', function () {
     const Splitter = await ethers.getContractFactory('TestSplitter')
     splitter = await Splitter.deploy([bob.address, alice.address], [62, 38])
     await splitter.deployed()
+    // Merkle tree
+    const users = await ethers.getSigners()
+    accounts = users.map((a) => a.address)
+    leaves = accounts.map((account, index) => keccak256(abiEncode(index, account)))
+    tree = new MerkleTree(leaves, keccak256, { sortPairs: true })
+    root = tree.getRoot().toString('hex')
+    // Update contract merkle root hash
+    await contract.setMerkleRoot(`0x${root}`)
   })
 
   it('Starts with sale and presale inactive', async function () {
@@ -34,14 +53,30 @@ describe('YourContract', function () {
       })
     ).to.be.revertedWith('Sale has not begun')
 
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
     await expect(
-      contract.presaleMint(1, {
+      contract.connect(bob).presaleMint(1, index, proof, {
         value: presaleMintPrice,
       })
     ).to.be.revertedWith('Presale has not begun')
   })
 
-  it('Can presale mint, but not regular mint', async function () {
+  it('Cannot presale mint if not on allowlist', async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const fakeAddress = '0x4492eCACB5da5D933af0e55eEDad4383BF8D2dB5'
+    const index = 666
+    const proof = tree.getHexProof(keccak256(abiEncode(index, fakeAddress)))
+    await expect(
+      contract.connect(bob).presaleMint(1, index, proof, {
+        value: presaleMintPrice,
+      })
+    ).to.be.revertedWith('Invalid proof')
+  })
+
+  it('Can presale mint if on allowlist, but not regular mint', async function () {
     // Unpause contract
     await contract.connect(owner).setPresaleActive(true)
 
@@ -51,22 +86,158 @@ describe('YourContract', function () {
       })
     ).to.be.revertedWith('Sale has not begun')
 
-    await contract.presaleMint(1, {
-      value: presaleMintPrice,
-    })
-    await contract.presaleMint(1, {
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
       value: presaleMintPrice,
     })
     const totalSupply = await contract.totalSupply()
-    expect(totalSupply).to.equal('2')
-    const data = await contract.tokenURI(2)
-    expect(data).to.equal(`${_baseURI}2.json`)
+    expect(totalSupply).to.equal('1')
+    const data = await contract.tokenURI(1)
+    expect(data).to.equal(`${_baseURI}1.json`)
+  })
+
+  it('Can presale mint 3', async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(3, index, proof, {
+      value: presaleMintPrice.mul(3),
+    })
+
+    const totalSupply = await contract.totalSupply()
+    expect(totalSupply).to.equal('3')
+  })
+
+  it('Can presale mint 1 three times', async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    const totalSupply = await contract.totalSupply()
+    expect(totalSupply).to.equal('3')
+  })
+
+  it('Can presale mint 2 then 1', async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(2, index, proof, {
+      value: presaleMintPrice.mul(2),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    const totalSupply = await contract.totalSupply()
+    expect(totalSupply).to.equal('3')
+  })
+
+  it("Can't presale mint over 3", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await expect(
+      contract.connect(bob).presaleMint(4, index, proof, {
+        value: presaleMintPrice.mul(4),
+      })
+    ).to.be.revertedWith("Can't mint more than allocated")
+  })
+
+  it("Can't presale mint 2 twice", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(2, index, proof, {
+      value: presaleMintPrice.mul(2),
+    })
+    await expect(
+      contract.connect(bob).presaleMint(2, index, proof, {
+        value: presaleMintPrice.mul(2),
+      })
+    ).to.be.revertedWith("Can't mint more than allocated")
+  })
+
+  it("Can't presale mint 1 four times", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await expect(
+      contract.connect(bob).presaleMint(1, index, proof, {
+        value: presaleMintPrice.mul(1),
+      })
+    ).to.be.revertedWith("Can't mint more than allocated")
+  })
+
+  it("Can't presale mint 2 then 1 twice", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(2, index, proof, {
+      value: presaleMintPrice.mul(2),
+    })
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await expect(
+      contract.connect(bob).presaleMint(1, index, proof, {
+        value: presaleMintPrice.mul(1),
+      })
+    ).to.be.revertedWith("Can't mint more than allocated")
+  })
+
+  it("Can't presale mint 1 then 3", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
+      value: presaleMintPrice.mul(1),
+    })
+    await expect(
+      contract.connect(bob).presaleMint(3, index, proof, {
+        value: presaleMintPrice.mul(3),
+      })
+    ).to.be.revertedWith("Can't mint more than allocated")
   })
 
   it('Presale can be stopped', async function () {
     // Unpause contract
     await contract.connect(owner).setPresaleActive(true)
-    await contract.presaleMint(1, {
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
       value: presaleMintPrice,
     })
     const totalSupply = await contract.totalSupply()
@@ -77,7 +248,7 @@ describe('YourContract', function () {
     // Stop presale
     await contract.connect(owner).setPresaleActive(false)
     await expect(
-      contract.presaleMint(1, {
+      contract.connect(bob).presaleMint(1, index, proof, {
         value: presaleMintPrice,
       })
     ).to.be.revertedWith('Presale has not begun')
@@ -88,7 +259,9 @@ describe('YourContract', function () {
     await contract.connect(owner).setSaleActive(true)
     await contract.connect(owner).setPresaleActive(true)
 
-    await contract.presaleMint(1, {
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await contract.connect(bob).presaleMint(1, index, proof, {
       value: presaleMintPrice,
     })
 
@@ -101,7 +274,7 @@ describe('YourContract', function () {
     ).to.be.revertedWith('Pausable: paused')
 
     await expect(
-      contract.presaleMint(1, {
+      contract.connect(bob).presaleMint(1, index, proof, {
         value: presaleMintPrice,
       })
     ).to.be.revertedWith('Pausable: paused')

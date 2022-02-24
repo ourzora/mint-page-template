@@ -79,4 +79,8 @@ export const globalStyles = globalCss({
   strong: {
     fontWeight: '600',
   },
+  hr: {
+    borderTop: '1px solid',
+    margin: '2em auto',
+  },
 })

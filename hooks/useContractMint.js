@@ -22,7 +22,7 @@ export const useContractMint = (abi) => {
     setIsLoading(false)
   }, [contract])
 
-  const mint = async ({ mintPrice, quantity, method = 'mint' }) => {
+  const mint = async ({ mintPrice, quantity, method = 'mint', args = [] }) => {
     try {
       setError(false)
       setIsAwaitingApproval(true)
@@ -30,13 +30,10 @@ export const useContractMint = (abi) => {
       const totalCost = utils.formatEther(price.mul(quantity))
       const params = { value: utils.parseEther(totalCost) }
 
-      try {
-        const gasEstimate = await contract.estimateGas.mint(quantity, params)
-        params['gasLimit'] = gasEstimate.mul(120).div(100)
-      } catch (e) {
-        console.log(e)
-      }
-      const tx = await contract[method](quantity, params)
+      const gasEstimate = await contract.estimateGas[method](quantity, ...args, params)
+      params['gasLimit'] = gasEstimate.mul(120).div(100)
+
+      const tx = await contract[method](quantity, ...args, params)
       setIsAwaitingApproval(false)
       setIsMinting(true)
       setTxHash(tx.hash)
