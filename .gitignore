@@ -15,6 +15,10 @@
 # production
 /build
 
+# contract caches
+contracts/artifacts
+contracts/cache
+
 # misc
 .DS_Store
 *.pem
