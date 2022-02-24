@@ -16,8 +16,12 @@
 /build
 
 # contract caches
-/contracts/artifacts
-/contracts/cache
+contracts/artifacts/build-info
+contracts/artifacts/hardhat
+contracts/artifacts/cache
+contracts/artifacts/@*
+contracts/artifacts/**/*.dbg.json
+contracts/cache
 
 # misc
 .DS_Store
