@@ -146,6 +146,19 @@ describe('YourContract', function () {
     expect(totalSupply).to.equal('3')
   })
 
+  it("Can't presale mint under 1", async function () {
+    // Unpause contract
+    await contract.connect(owner).setPresaleActive(true)
+
+    const index = accounts.indexOf(bob.address)
+    const proof = tree.getHexProof(keccak256(abiEncode(index, bob.address)))
+    await expect(
+      contract.connect(bob).presaleMint(-1, index, proof, {
+        value: presaleMintPrice.mul(1),
+      })
+    ).to.be.reverted
+  })
+
   it("Can't presale mint over 3", async function () {
     // Unpause contract
     await contract.connect(owner).setPresaleActive(true)

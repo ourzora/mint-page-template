@@ -82,19 +82,19 @@ contract YourContract is
         return string(abi.encodePacked(_baseURIextended, tokenId.toString(), ".json"));
     }
 
-        // Uses a uint256 base to manage allowlist claims
+    // Uses a uint256 base to manage allowlist claims
     // arr.length / PRESALE_MAX_MINT_COUNT = max allowlist length
     // So arr.length === 9, PRESALE_MAX_MINT_COUNT === 3 is equal to (9 / 3 * 256) giving a max allowlist length of 768
     uint256 private constant MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
     uint256[9] arr = [MAX_INT, MAX_INT, MAX_INT, MAX_INT, MAX_INT, MAX_INT, MAX_INT, MAX_INT, MAX_INT];
     function claimTicket(uint256 count, uint256 index) internal {
-        require(index < arr.length * 256, "bad ticket");
+        require(index < arr.length / PRESALE_MAX_MINT_COUNT * 256, "bad ticket");
 
         uint256 storageOffset = index / 256;
         uint256 offsetWithin256 = index % 256;
         uint256 localGroup1 = arr[storageOffset];
-        uint256 localGroup2 = arr[storageOffset + 3];
-        uint256 localGroup3 = arr[storageOffset + (3 * 2)];
+        uint256 localGroup2 = arr[storageOffset + PRESALE_MAX_MINT_COUNT];
+        uint256 localGroup3 = arr[storageOffset + (PRESALE_MAX_MINT_COUNT * 2)];
 
         uint256 storedBit1 = (localGroup1 >> offsetWithin256) & uint256(1);
         uint256 storedBit2 = (localGroup2 >> offsetWithin256) & uint256(1);
@@ -118,7 +118,6 @@ contract YourContract is
         }
     }
 
-
     function setPresaleActive(bool val)
     external
     onlyRole(MANAGER_ROLE) 
@@ -132,7 +131,7 @@ contract YourContract is
     {
         saleActive = val;
     }
-    
+
     function setMerkleRoot(bytes32 merkleRoot_)
     external
     onlyRole(MANAGER_ROLE) 
