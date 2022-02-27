@@ -159,6 +159,7 @@ const Home = ({ contractData }) => {
             buttonText="Presale Mint"
             isAwaitingApproval={isAwaitingApproval}
             isMinting={isMinting}
+            mintPrice={contractData.PRESALE_ETH_PRICE}
             maxQuantity={contractData.PRESALE_MAX_MINT_COUNT}
             onClick={(mintQuantity) =>
               mint({
@@ -200,6 +201,7 @@ const Home = ({ contractData }) => {
             buttonText="Mint"
             isAwaitingApproval={isAwaitingApproval}
             isMinting={isMinting}
+            mintPrice={contractData.ETH_PRICE}
             maxQuantity={contractData.MAX_MINT_COUNT - 1}
             onClick={(mintQuantity) =>
               mint({
