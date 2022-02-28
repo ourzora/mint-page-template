@@ -10,6 +10,7 @@ export const useContractMint = (abi) => {
   const [txHash, setTxHash] = useState()
   const [data, setData] = useState()
   const [error, setError] = useState()
+  const [quantity, setQuantity] = useState(1)
 
   const [{ data: signer }] = useSigner()
   const contract = useContract({
@@ -26,6 +27,7 @@ export const useContractMint = (abi) => {
     try {
       setError(false)
       setIsAwaitingApproval(true)
+      setQuantity(quantity)
       const price = BigNumber.from(mintPrice)
       const totalCost = utils.formatEther(price.mul(quantity))
       const params = { value: utils.parseEther(totalCost) }
@@ -58,6 +60,7 @@ export const useContractMint = (abi) => {
       isSuccess,
       data,
       error,
+      mintQuantity: quantity,
       txHash,
     },
     mint,

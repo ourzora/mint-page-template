@@ -45,7 +45,6 @@ export async function getStaticProps({ params }) {
     errorMessage: false,
   }
 
-  let tokens
   try {
     const ids = params.id.split(',')
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL

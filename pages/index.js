@@ -41,10 +41,9 @@ const Home = ({ contractData }) => {
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
   } = useContractMethod(Contract.abi, 'presaleActive')
-  const [
-    { totalSupply, contractError: supplyError, contractLoading: supplyLoading },
-    updateTotalSupply,
-  ] = useTotalSupply(Contract.abi)
+  // Get and update total supply
+  const [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
+  // Mint function
   const [
     {
       isLoading: isMintLoading,
@@ -53,22 +52,44 @@ const Home = ({ contractData }) => {
       isSuccess,
       txHash,
       data,
+      mintQuantity,
       error: mintError,
     },
     mint,
   ] = useContractMint(Contract.abi)
-  const { isLoading: tokensLoading, tokens } = useRecentTokens({
-    start: 1,
-    end: 12,
+  // Load initial state for recent tokens
+  const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/metadata/`,
+    start: 0,
+    end: 0,
     reverse: false,
   })
 
   // EFFECTS
+  // Check allowlist after account has been connected
   useMemo(() => {
     return accountData?.address && checkAllowlist(accountData.address)
   }, [, accountData && accountData.address])
 
   useMemo(() => updateTotalSupply(), [, isSuccess])
+  // Update tokens once totalSupply has been fetched
+  useMemo(
+    () =>
+      updateRecentTokens({
+        start: Math.max(0, totalSupply - 12),
+        end: totalSupply,
+      }),
+    [totalSupply]
+  )
+  // Redirect after successful mint
+  useMemo(() => {
+    if (isSuccess && data.args) {
+      const end = Number(data.args.slice(-1).toString())
+      const start = end - mintQuantity + 1
+      const tokenIds = Array.from({ length: end - start + 1 }, (_, i) => i + start)
+      window.location.href = `/token/${tokenIds.join(',')}`
+    }
+  }, [isSuccess, data && data.args])
 
   return (
     <Box css={{ textAlign: 'center', padding: '$dmargin' }}>
@@ -147,7 +168,7 @@ const Home = ({ contractData }) => {
         (isMintLoading ? (
           'Loading...'
         ) : isSuccess && data ? (
-          JSON.stringify(data)
+          'Minted successfully!'
         ) : isMinting && txHash ? (
           <>
             Minting...
@@ -189,7 +210,7 @@ const Home = ({ contractData }) => {
         (isMintLoading ? (
           'Loading...'
         ) : isSuccess && data ? (
-          JSON.stringify(data)
+          'Minted successfully!'
         ) : isMinting && txHash ? (
           <>
             Minting...

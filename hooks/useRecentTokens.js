@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react'
 
-export const useRecentTokens = ({ start, end, reverse }) => {
+export const useRecentTokens = ({ url, start, end, reverse }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [tokens, setTokens] = useState({})
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
-  const getTokens = async ({ start, end, reverse }) => {
+  const getTokens = async ({ url, start, end, reverse }) => {
     // react-query / cache this part?
-    const tokens = await fetch(`${baseUrl}/api/metadata/sample/${start}...${end}`).then(
-      (r) => r.json()
-    )
+    const tokens = await fetch(`${url}${start}...${end}`).then((r) => r.json())
     setTokens(reverse ? tokens.reverse() : tokens)
     setIsLoading(false)
   }
 
   useEffect(() => {
-    getTokens({ start, end, reverse })
+    getTokens({ url, start, end, reverse })
   }, [])
 
-  return {
-    isLoading,
-    tokens,
-  }
+  const update = ({ start, end }) => getTokens({ url, start, end, reverse })
+
+  return [
+    {
+      isLoading,
+      tokens,
+    },
+    update,
+  ]
 }
