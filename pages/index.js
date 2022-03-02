@@ -220,7 +220,7 @@ const getContractData = async (...props) => {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
       Contract.abi,
-      new ethers.providers.JsonRpcProvider(chain)
+      new ethers.providers.StaticJsonRpcProvider(chain)
     )
 
     const data = await extractContractData(contract, ...props)

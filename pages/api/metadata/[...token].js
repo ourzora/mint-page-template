@@ -12,7 +12,7 @@ const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 const contract = new ethers.Contract(
   contractAddress,
   Contract.abi,
-  new ethers.providers.JsonRpcProvider(chain)
+  new ethers.providers.StaticJsonRpcProvider(chain)
 )
 
 const privateDirectory = path.resolve(process.cwd(), 'private')

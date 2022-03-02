@@ -7,10 +7,10 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
 
 function App({ Component, pageProps }) {
-    return new providers.JsonRpcProvider(chain)
   const provider = () => {
     const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
     const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
+    return new providers.StaticJsonRpcProvider(chain)
   }
 
   // Set up connectors
