@@ -7,15 +7,15 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
 
 function App({ Component, pageProps }) {
-  const provider = ({ chainId, connector }) => {
-    console.log('getting provider', chainId)
-    const chain = connector?.chains.find((x) => x.id == chainId)?.rpcUrls[0]
     return new providers.JsonRpcProvider(chain)
+  const provider = () => {
+    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+    const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
   }
 
   // Set up connectors
   const connectors = ({ chainId }) => {
-    const rpcUrl = chains[chainId]
+    const rpcUrl = chains.find((x) => x.id == chainId)?.rpcUrls[0]
     const rpcUrls = chains.reduce(
       (obj, item) => Object.assign(obj, { [item.id]: item.rpcUrls[0] }),
       {}
