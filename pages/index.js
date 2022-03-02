@@ -244,7 +244,7 @@ const Home = ({ contractData }) => {
         <strong>Gallery</strong>
       </h1>
       <br />
-      {tokensLoading ? 'Loading...' : <Gallery preview tokens={tokens} />}
+      {tokensLoading ? 'Loading...' : <Gallery tokens={tokens} />}
     </Box>
   )
 }

@@ -23,21 +23,25 @@ const TokenInfo = ({ index, tokens }) => {
     >
       <Box css={{ marginBottom: 0 }}>
         <dl>
-          <dt>SET:</dt>
-          <dd>{tokens[index].attributes[0].value}</dd>
-          <dt>FORMAT: </dt>
-          <dd>{tokens[index].attributes[1].value}</dd>
-          <dt>NUMBER: </dt>
-          <dd>{tokens[index].attributes[2].value}</dd>
-          <dt>GRADE: </dt>
-          <dd>{tokens[index].attributes[3].value.toUpperCase()}</dd>
+          {tokens[index].attributes.map((t) => (
+            <>
+              <dt>{t['trait_type']}</dt>
+              <dd>{t['value']}</dd>
+            </>
+          ))}
         </dl>
       </Box>
     </Box>
   )
 }
 
-export const Gallery = ({ css, preview, tokens, ...props }) => {
+export function Gallery({ tokens, ...props }) {
+  if (!tokens || !tokens.length) return null
+
+  return <TokenGallery tokens={tokens} {...props} />
+}
+
+function TokenGallery({ css, preview, tokens, ...props }) {
   const [lightbox, setLightbox] = useState(null)
   const [showInfo, setShowInfo] = useState(false)
 
@@ -48,7 +52,7 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
       const nextImage = lightbox + 1
       setLightbox(nextImage >= tokens.length ? 0 : nextImage)
     },
-    [lightbox]
+    [lightbox, tokens.length]
   )
 
   const prev = useCallback(
@@ -58,7 +62,7 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
       const prevImage = lightbox - 1
       setLightbox(prevImage >= 0 ? prevImage : tokens.length - 1)
     },
-    [lightbox]
+    [lightbox, tokens.length]
   )
 
   const lightboxEl = lightbox !== null && lightbox > -1 && (
@@ -170,34 +174,36 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
             right: '$margin',
           }}
         >
-          &times;
+          {/* prettier-ignore */}
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M0.514709 0.404724L17.4853 17.3753" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/> <path d="M17.4853 0.404724L0.514727 17.3753" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/> </svg>
         </Box>
         <AnimatePresence>
           {showInfo && <TokenInfo index={lightbox} tokens={tokens} />}
         </AnimatePresence>
         <Box className="tools" onClick={(e) => e.stopPropagation()}>
-          {showInfo ? (
-            <Button variant="outline" onClick={() => setShowInfo(false)}>
-              Hide info
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={() =>
-                preview
-                  ? setShowInfo(true)
-                  : window.open(`/token/${tokens[lightbox].tokenId}`)
-              }
-            >
-              Show info
-            </Button>
-          )}
+          {!preview &&
+            (showInfo ? (
+              <Button variant="outline" onClick={() => setShowInfo(false)}>
+                Hide info
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  preview
+                    ? setShowInfo(true)
+                    : window.open(`/token/${tokens[lightbox].tokenId}`)
+                }
+              >
+                Show info
+              </Button>
+            ))}
         </Box>
         <Box className="nav prev" onClick={prev}>
-          <i>&larr;</i>
+          <Box css={{ transform: 'rotate(180deg)' }}>&#10749;</Box>
         </Box>
         <Box className="nav next" onClick={next}>
-          <i>&rarr;</i>
+          &#10749;
         </Box>
         <Box
           css={{
@@ -217,6 +223,8 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
     </PreventOutsideScroll>
   )
 
+  if (!tokens || !tokens.length) return null
+
   return (
     <>
       <AnimatePresence>{lightboxEl}</AnimatePresence>
@@ -224,9 +232,8 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
         {...props}
         css={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '$margin',
-          marginBottom: '$margin',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '8px',
           figure: {
             display: 'inline-block',
             cursor: 'zoom-in',
@@ -245,7 +252,7 @@ export const Gallery = ({ css, preview, tokens, ...props }) => {
             key={image.tokenId}
             onClick={() => setLightbox(i)}
             image={<img src={ipfsImage(image.image)} alt="" />}
-            caption={`0${image.tokenId}. ${image.name}`}
+            caption={preview ? '' : image.name}
           />
         ))}
       </Box>
