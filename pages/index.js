@@ -9,7 +9,7 @@ import { Gallery } from '@components/Gallery'
 import { extractContractData } from '@lib/helpers'
 import { chains } from '@lib/chains'
 import { useAccount } from 'wagmi'
-import { useAllowlist } from '@hooks/useAllowlist'
+import { AllowlistCheck } from '@components/AllowlistCheck'
 import { MintButton } from '@components/MintButton'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
@@ -20,16 +20,6 @@ import { useContractMint } from '@hooks/useContractMint'
 const Home = ({ contractData }) => {
   // HOOKS
   const [{ data: accountData }] = useAccount()
-  const [
-    {
-      allowlistRoot,
-      allowlistProof,
-      allowlistIndex,
-      allowlistChecked,
-      allowlistVerified,
-    },
-    checkAllowlist,
-  ] = useAllowlist()
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
   const {
     contractData: saleIsActive,
@@ -60,17 +50,10 @@ const Home = ({ contractData }) => {
   // Load initial state for recent tokens
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/metadata/`,
-    start: 0,
-    end: 0,
     reverse: false,
   })
 
   // EFFECTS
-  // Check allowlist after account has been connected
-  useMemo(() => {
-    return accountData?.address && checkAllowlist(accountData.address)
-  }, [, accountData && accountData.address])
-
   useMemo(() => updateTotalSupply(), [, isSuccess])
   // Update tokens once totalSupply has been fetched
   useMemo(
@@ -107,26 +90,7 @@ const Home = ({ contractData }) => {
       <Text>Allowlist check:</Text>
 
       <ConnectWallet />
-
-      {accountData && (
-        <>
-          <br />
-          0x{allowlistRoot}
-          <br />
-          Allowlist index: {allowlistIndex}
-          <br />
-          {allowlistChecked && (
-            <>
-              <br />
-              {allowlistIndex > -1 && allowlistVerified ? (
-                <Button offset={50}>You are on the allowlist!</Button>
-              ) : (
-                <Text error>You are not on the allowlist :(</Text>
-              )}
-            </>
-          )}
-        </>
-      )}
+      <AllowlistCheck />
 
       <hr />
 
