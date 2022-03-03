@@ -47,7 +47,7 @@ export const AllowlistCheck = ({}) => {
               <Text css={{ textAlign: 'left', wordBreak: 'break-all' }}>
                 Index: {allowlistIndex}
                 <br />
-                Proof: {JSON.stringify(allowlistProof)}
+                Proof: {JSON.stringify(allowlistProof).replace(/"/g, '')}
               </Text>
             </Box>
           </>
