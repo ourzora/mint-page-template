@@ -19,6 +19,11 @@ import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 
 const Home = ({ contractData }) => {
+  // Get and update total supply
+  let [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
+  const nothingMinted = !Number(totalSupply)
+  // Fallbacks for totalSupply - show 12 samples if nothing is minted yet
+  totalSupply = +totalSupply || +contractData.totalSupply || 12
   // HOOKS
   const [{ data: accountData }] = useAccount()
   // Countdown & presale countdown
@@ -37,8 +42,6 @@ const Home = ({ contractData }) => {
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
   } = useContractMethod(Contract.abi, 'presaleActive')
-  // Get and update total supply
-  const [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
   // Mint function
   const [
     {
@@ -54,9 +57,12 @@ const Home = ({ contractData }) => {
     mint,
   ] = useContractMint(Contract.abi)
   // Load initial state for recent tokens
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
-    url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/metadata/`,
+    url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
     reverse: false,
+    start: Math.max(0, totalSupply - 12),
+    end: totalSupply,
   })
 
   // EFFECTS
@@ -262,7 +268,11 @@ const Home = ({ contractData }) => {
           <strong>Gallery</strong>
         </h1>
         <br />
-        {tokensLoading ? 'Loading...' : <Gallery tokens={tokens} />}
+        {tokensLoading ? (
+          'Loading...'
+        ) : (
+          <Gallery preview={nothingMinted} tokens={tokens} />
+        )}
       </Box>
     </HomeGrid>
   )
