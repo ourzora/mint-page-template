@@ -26,7 +26,6 @@ export const AllowlistCheck = ({}) => {
 
   return (
     <>
-      <br />
       {allowlistChecked &&
         (allowlistIndex > -1 && allowlistVerified ? (
           <>
@@ -60,6 +59,7 @@ export const AllowlistCheck = ({}) => {
             </Text>
           </>
         ))}
+      <hr />
     </>
   )
 }

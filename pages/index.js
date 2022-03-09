@@ -3,13 +3,14 @@ import Contract from '../contracts/artifacts/contracts/YourContract.sol/YourCont
 import { ethers } from 'ethers'
 import { useMemo } from 'react'
 import { Box, Text } from '@components/primitives'
-import { Button } from '@components/Button'
+import { Button, ButtonSet } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
 import { extractContractData } from '@lib/helpers'
 import { chains } from '@lib/chains'
 import { useAccount } from 'wagmi'
 import { AllowlistCheck } from '@components/AllowlistCheck'
+import { HomeGrid } from '@components/Brand'
 import { MintButton } from '@components/MintButton'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
@@ -20,7 +21,12 @@ import { useContractMint } from '@hooks/useContractMint'
 const Home = ({ contractData }) => {
   // HOOKS
   const [{ data: accountData }] = useAccount()
+  // Countdown & presale countdown
   const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
+  const { countdownText: presaleCountdownText } = useCountdown(
+    process.env.NEXT_PUBLIC_PRESALE_LAUNCH_TIME
+  )
+  // Sale active states
   const {
     contractData: saleIsActive,
     contractError: saleStateError,
@@ -75,141 +81,190 @@ const Home = ({ contractData }) => {
   }, [isSuccess, data && data.args])
 
   return (
-    <Box css={{ textAlign: 'center', padding: '$dmargin' }}>
-      <Text>
-        <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME} NFT Project.</strong>
-      </Text>
-      {countdownText && (
-        <>
-          <br />
-          Launching in: {countdownText}
-          <br />
-        </>
-      )}
-      <hr />
-      <Text>Allowlist check:</Text>
+    <HomeGrid>
+      <Box>
+        <Text>
+          <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME}</strong>
+        </Text>
+        <hr />
 
-      <ConnectWallet />
-      <AllowlistCheck />
+        <ConnectWallet />
 
-      <hr />
+        <hr />
 
-      {contractData && (
-        <>
-          Mint price:{' '}
-          {contractData.ETH_PRICE && ethers.utils.formatEther(contractData.ETH_PRICE)} ETH
-          <br />
-          {contractData.PRESALE_ETH_PRICE && (
-            <>
-              Presale mint price:{' '}
-              {ethers.utils.formatEther(contractData.PRESALE_ETH_PRICE)} ETH
-            </>
-          )}
-          <br />
-          {totalSupply || contractData.totalSupply} / {contractData.maxSupply - 1}
-          <br />
-          {contractData.MAX_MINT_COUNT - 1} per transaction
-        </>
-      )}
+        <AllowlistCheck />
 
-      <hr />
-      <Text>
-        {presaleStateLoading ? (
-          'Loading...'
-        ) : presaleStateError ? (
-          <Text error>Error loading contract</Text>
-        ) : presaleIsActive ? (
-          'Presale is active.'
-        ) : (
-          'Presale is not active.'
-        )}
-      </Text>
-
-      {contractData &&
-        accountData &&
-        presaleIsActive &&
-        allowlistIndex > -1 &&
-        (isMintLoading ? (
-          'Loading...'
-        ) : isSuccess && data ? (
-          'Minted successfully!'
-        ) : isMinting && txHash ? (
+        {contractData && (
           <>
-            Minting...
+            Mint price:{' '}
+            {contractData.ETH_PRICE && ethers.utils.formatEther(contractData.ETH_PRICE)}{' '}
+            ETH
             <br />
-            <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+            {contractData.PRESALE_ETH_PRICE && (
+              <>
+                Presale mint price:{' '}
+                {ethers.utils.formatEther(contractData.PRESALE_ETH_PRICE)} ETH
+              </>
+            )}
+            <br />
+            {totalSupply} / {contractData.maxSupply - 1}
+            <br />
+            {contractData.MAX_MINT_COUNT - 1} per transaction
           </>
-        ) : (
-          <MintButton
-            buttonText="Presale Mint"
-            isAwaitingApproval={isAwaitingApproval}
-            isMinting={isMinting}
-            mintPrice={contractData.PRESALE_ETH_PRICE}
-            maxQuantity={contractData.PRESALE_MAX_MINT_COUNT}
-            onClick={(mintQuantity) =>
-              mint({
-                mintPrice: contractData.PRESALE_ETH_PRICE,
-                quantity: mintQuantity,
-                method: 'presaleMint',
-                args: [allowlistIndex, allowlistProof],
-              })
-            }
-          />
-        ))}
-      <hr />
-      <Text>
-        {saleStateLoading ? (
-          'Loading...'
-        ) : saleStateError ? (
-          <Text error>Error loading contract</Text>
-        ) : saleIsActive ? (
-          'Sale is active.'
-        ) : (
-          'Sale is not active.'
         )}
-      </Text>
-      {contractData &&
-        accountData &&
-        saleIsActive &&
-        (isMintLoading ? (
-          'Loading...'
-        ) : isSuccess && data ? (
-          'Minted successfully!'
-        ) : isMinting && txHash ? (
+
+        {/*
+
+            SOLD OUT!
+
+        */}
+        {totalSupply >= contractData.maxSupply - 1 && (
           <>
-            Minting...
-            <br />
-            <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+            <hr />
+            <Text css={{ marginBottom: '0' }}>Sold out!</Text>
+            <Text>
+              But you can still pick up a piece on the secondary market at
+              <br />
+              <ButtonSet>
+                <Button>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://zora.co/collections/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}`}
+                  >
+                    Zora
+                  </a>
+                </Button>
+              </ButtonSet>
+            </Text>
           </>
+        )}
+
+        {/*
+
+            Not Sold Out
+
+        */}
+
+        <hr />
+        <strong>Presale</strong>
+        <br />
+        {presaleIsActive ? (
+          'Presale is Live now!'
         ) : (
-          <MintButton
-            buttonText="Mint"
-            isAwaitingApproval={isAwaitingApproval}
-            isMinting={isMinting}
-            mintPrice={contractData.ETH_PRICE}
-            maxQuantity={contractData.MAX_MINT_COUNT - 1}
-            onClick={(mintQuantity) =>
-              mint({
-                mintPrice: contractData.ETH_PRICE,
-                quantity: mintQuantity,
-              })
-            }
-          />
-        ))}
-      {mintError && (
-        <>
-          <br />
-          <Text error>{mintError}</Text>
-        </>
-      )}
-      <hr />
-      <br />
-      <h1>
-        <strong>Gallery</strong>
-      </h1>
-      <br />
-      {tokensLoading ? 'Loading...' : <Gallery tokens={tokens} />}
-    </Box>
+          <>
+            {presaleCountdownText ? (
+              <>
+                {presaleCountdownText}
+                <br />
+                {'' + new Date(process.env.NEXT_PUBLIC_PRESALE_LAUNCH_TIME)}
+              </>
+            ) : (
+              'Presale finished'
+            )}
+          </>
+        )}
+        <br />
+        <br />
+        <strong>Public sale</strong>
+        <br />
+        {saleIsActive ? (
+          'Sale is Live now!'
+        ) : (
+          <>
+            {countdownText ? (
+              <>
+                {countdownText}
+                <br />
+                {'' + new Date(process.env.NEXT_PUBLIC_LAUNCH_TIME)}
+              </>
+            ) : (
+              'Sale finished'
+            )}
+          </>
+        )}
+
+        {totalSupply < contractData.maxSupply - 1 && (
+          <>
+            {contractData &&
+              accountData &&
+              presaleIsActive &&
+              allowlistIndex > -1 &&
+              (isMintLoading ? (
+                'Loading...'
+              ) : isSuccess && data ? (
+                'Minted successfully!'
+              ) : isMinting && txHash ? (
+                <>
+                  Minting...
+                  <br />
+                  <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+                </>
+              ) : (
+                <MintButton
+                  buttonText="Presale Mint"
+                  isAwaitingApproval={isAwaitingApproval}
+                  isMinting={isMinting}
+                  mintPrice={contractData.PRESALE_ETH_PRICE}
+                  maxQuantity={contractData.PRESALE_MAX_MINT_COUNT}
+                  onClick={(mintQuantity) =>
+                    mint({
+                      mintPrice: contractData.PRESALE_ETH_PRICE,
+                      quantity: mintQuantity,
+                      method: 'presaleMint',
+                      args: [allowlistIndex, allowlistProof],
+                    })
+                  }
+                />
+              ))}
+
+            {contractData &&
+              accountData &&
+              saleIsActive &&
+              (isMintLoading ? (
+                'Loading...'
+              ) : isSuccess && data ? (
+                'Minted successfully!'
+              ) : isMinting && txHash ? (
+                <>
+                  Minting...
+                  <br />
+                  <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
+                </>
+              ) : (
+                <MintButton
+                  buttonText="Mint"
+                  isAwaitingApproval={isAwaitingApproval}
+                  isMinting={isMinting}
+                  mintPrice={contractData.ETH_PRICE}
+                  maxQuantity={contractData.MAX_MINT_COUNT - 1}
+                  onClick={(mintQuantity) =>
+                    mint({
+                      mintPrice: contractData.ETH_PRICE,
+                      quantity: mintQuantity,
+                    })
+                  }
+                />
+              ))}
+            {mintError && (
+              <>
+                <br />
+                <Text error>{mintError}</Text>
+              </>
+            )}
+          </>
+        )}
+        <hr />
+        <br />
+      </Box>
+      <Box>
+        <h1>
+          <strong>Gallery</strong>
+        </h1>
+        <br />
+        {tokensLoading ? 'Loading...' : <Gallery tokens={tokens} />}
+      </Box>
+    </HomeGrid>
   )
 }
 
