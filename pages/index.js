@@ -113,7 +113,7 @@ const Home = ({ contractData }) => {
               </>
             )}
             <br />
-            {totalSupply} / {contractData.maxSupply - 1}
+            {nothingMinted ? '0' : totalSupply} / {contractData.maxSupply - 1}
             <br />
             {contractData.MAX_MINT_COUNT - 1} per transaction
           </>
