@@ -1,36 +1,11 @@
 {
   "tokenId": 2,
-  "name": "YOURCONTRACT_002 (sample)",
+  "name": "YOURCONTRACT_002 (Sample)",
   "description": "YOURCONTRACT is a series of 888 unique generative and hand-finished digital artworks.",
-  "image": "http://localhost:3000/images/sample/2.png",
-  "image_thumbnail": "http://localhost:3000/images/sample/2.png",
-  "image_original": "http://localhost:3000/images/sample/2.png",
-  "external_url": "http://localhost:3000/token/2",
-  "attributes": [
-    {
-      "trait_type": "Set",
-      "value": "N6"
-    },
-    {
-      "trait_type": "Format",
-      "value": "UX2"
-    },
-    {
-      "trait_type": "Number",
-      "value": "U36"
-    },
-    {
-      "trait_type": "Material",
-      "value": "digital"
-    },
-    {
-      "trait_type": "Scanline",
-      "value": "S3"
-    },
-    {
-      "trait_type": "Grade",
-      "value": ""
-    }
-  ]
+  "image": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
+  "image_thumbnail": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
+  "image_original": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
+  "external_url": "https://zora-nft-launch.vercel.app/token/2",
+  "attributes": []
 }
 
