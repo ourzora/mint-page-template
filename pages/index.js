@@ -30,7 +30,7 @@ import {
 const Home = ({ contractData }) => {
   // Get and update total supply
   let [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
-  const nothingMinted = !Number(totalSupply)
+  const nothingMinted = Number(totalSupply) === 0
   // Fallbacks for totalSupply - show 12 samples if nothing is minted yet
   totalSupply = +totalSupply || +contractData.totalSupply || 12
   // HOOKS
@@ -49,6 +49,7 @@ const Home = ({ contractData }) => {
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
   } = useContractMethod(Contract.abi, 'presaleActive')
+
   // Mint function
   const [
     {
@@ -102,6 +103,7 @@ const Home = ({ contractData }) => {
         <hr />
         <ConnectWallet />
         <hr />
+        {!saleIsActive && <AllowlistCheck />}
         {contractData && (
           <>
             Mint price:{' '}
@@ -125,7 +127,7 @@ const Home = ({ contractData }) => {
             SOLD OUT!
 
         */}
-        {totalSupply >= contractData.maxSupply - 1 && (
+        {!nothingMinted && totalSupply >= contractData.maxSupply - 1 && (
           <>
             <hr />
             <Text css={{ marginBottom: '0' }}>Sold out!</Text>
@@ -146,52 +148,53 @@ const Home = ({ contractData }) => {
             </Text>
           </>
         )}
-
         {/*
 
             Not Sold Out
 
         */}
-
-        <hr />
-        <strong>Presale</strong>
-        <br />
-        {presaleIsActive ? (
-          'Presale is Live now!'
-        ) : (
+        {nothingMinted || totalSupply < contractData.maxSupply - 1 ? (
           <>
-            {presaleCountdownText ? (
-              <>
-                {presaleCountdownText}
-                <br />
-                {'' + new Date(process.env.NEXT_PUBLIC_PRESALE_LAUNCH_TIME)}
-              </>
+            <hr />
+            <strong>Presale</strong>
+            <br />
+            {presaleIsActive ? (
+              <Text>Presale is Live now!</Text>
             ) : (
-              'Presale finished'
+              <>
+                {presaleCountdownText ? (
+                  <>
+                    {presaleCountdownText}
+                    <br />
+                    {'' + new Date(presaleLaunchTime)}
+                  </>
+                ) : (
+                  'Presale finished'
+                )}
+              </>
+            )}
+            <br />
+            <br />
+            <strong>Public sale</strong>
+            <br />
+            {saleIsActive ? (
+              <Text>Sale is Live now!</Text>
+            ) : (
+              <>
+                {countdownText ? (
+                  <>
+                    {countdownText}
+                    <br />
+                    {'' + new Date(launchTime)}
+                  </>
+                ) : (
+                  'Sale finished'
+                )}
+              </>
             )}
           </>
-        )}
-        <br />
-        <br />
-        <strong>Public sale</strong>
-        <br />
-        {saleIsActive ? (
-          'Sale is Live now!'
-        ) : (
-          <>
-            {countdownText ? (
-              <>
-                {countdownText}
-                <br />
-                {'' + new Date(process.env.NEXT_PUBLIC_LAUNCH_TIME)}
-              </>
-            ) : (
-              'Sale finished'
-            )}
-          </>
-        )}
-
-        {totalSupply < contractData.maxSupply - 1 && (
+        ) : null}
+        {nothingMinted || totalSupply < contractData.maxSupply - 1 ? (
           <>
             {contractData &&
               accountData &&
@@ -253,14 +256,14 @@ const Home = ({ contractData }) => {
                   }
                 />
               ))}
-            {mintError && (
+            {mintError ? (
               <>
                 <br />
                 <Text error>{mintError}</Text>
               </>
-            )}
+            ) : null}
           </>
-        )}
+        ) : null}
         <hr />
         <br />
       </Box>
