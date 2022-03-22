@@ -1,4 +1,5 @@
 import { chains } from '@lib/chains'
+import { chainId, title } from '@lib/constants'
 
 import { providers } from 'ethers'
 import { Provider } from 'wagmi'
@@ -8,13 +9,12 @@ import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
 
 function App({ Component, pageProps }) {
   const provider = () => {
-    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
     const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
     return new providers.StaticJsonRpcProvider(chain)
   }
 
   // Set up connectors
-  const connectors = ({ chainId }) => {
+  const connectors = () => {
     const rpcUrl = chains.find((x) => x.id == chainId)?.rpcUrls[0]
     const rpcUrls = chains.reduce(
       (obj, item) => Object.assign(obj, { [item.id]: item.rpcUrls[0] }),
@@ -33,7 +33,7 @@ function App({ Component, pageProps }) {
       }),
       new WalletLinkConnector({
         options: {
-          appName: process.env.APP_NAME,
+          appName: title,
           jsonRpcUrl: rpcUrl,
         },
       }),

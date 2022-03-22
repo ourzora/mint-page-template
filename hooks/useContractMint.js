@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
 import { useSigner, useContract } from 'wagmi'
+import { contractAddress, baseUrl } from '@lib/constants'
 
 export const useContractMint = (abi) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -14,7 +15,7 @@ export const useContractMint = (abi) => {
 
   const [{ data: signer }] = useSigner()
   const contract = useContract({
-    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    addressOrName: contractAddress,
     contractInterface: abi,
     signerOrProvider: signer,
   })
@@ -39,9 +40,7 @@ export const useContractMint = (abi) => {
       setIsAwaitingApproval(false)
       setIsMinting(true)
       setTxHash(tx.hash)
-      const receipt = await tx.wait(
-        process.env.NEXT_PUBLIC_BASE_URL.indexOf('localhost') > -1 ? 1 : 2
-      )
+      const receipt = await tx.wait(baseUrl.indexOf('localhost') > -1 ? 1 : 2)
       setData(receipt.events.pop())
       setIsMinting(false)
       setIsSuccess(true)

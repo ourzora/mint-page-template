@@ -17,6 +17,15 @@ import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractMethod } from '@hooks/useContractMethod'
 import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
+import {
+  title,
+  description,
+  baseUrl,
+  launchTime,
+  presaleLaunchTime,
+  chainId,
+  contractAddress,
+} from '@lib/constants'
 
 const Home = ({ contractData }) => {
   // Get and update total supply
@@ -27,10 +36,8 @@ const Home = ({ contractData }) => {
   // HOOKS
   const [{ data: accountData }] = useAccount()
   // Countdown & presale countdown
-  const { countdownText } = useCountdown(process.env.NEXT_PUBLIC_LAUNCH_TIME)
-  const { countdownText: presaleCountdownText } = useCountdown(
-    process.env.NEXT_PUBLIC_PRESALE_LAUNCH_TIME
-  )
+  const { countdownText } = useCountdown(launchTime)
+  const { countdownText: presaleCountdownText } = useCountdown(presaleLaunchTime)
   // Sale active states
   const {
     contractData: saleIsActive,
@@ -57,7 +64,6 @@ const Home = ({ contractData }) => {
     mint,
   ] = useContractMint(Contract.abi)
   // Load initial state for recent tokens
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
     url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
     reverse: false,
@@ -90,16 +96,12 @@ const Home = ({ contractData }) => {
     <HomeGrid>
       <Box>
         <Text>
-          <strong>{process.env.NEXT_PUBLIC_CONTRACT_NAME}</strong>
+          <strong>{title}</strong>
         </Text>
+        <Text>{description}</Text>
         <hr />
-
         <ConnectWallet />
-
         <hr />
-
-        <AllowlistCheck />
-
         {contractData && (
           <>
             Mint price:{' '}
@@ -118,7 +120,6 @@ const Home = ({ contractData }) => {
             {contractData.MAX_MINT_COUNT - 1} per transaction
           </>
         )}
-
         {/*
 
             SOLD OUT!
@@ -136,7 +137,7 @@ const Home = ({ contractData }) => {
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    href={`https://zora.co/collections/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}`}
+                    href={`https://zora.co/collections/${contractAddress}`}
                   >
                     Zora
                   </a>
@@ -280,10 +281,9 @@ const Home = ({ contractData }) => {
 
 const getContractData = async (...props) => {
   try {
-    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
     const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+      contractAddress,
       Contract.abi,
       new ethers.providers.StaticJsonRpcProvider(chain)
     )

@@ -17,6 +17,7 @@ export const AllowlistCheck = ({}) => {
     },
     checkAllowlist,
   ] = useAllowlist()
+
   // Check allowlist after account has been connected
   useMemo(() => {
     return accountData?.address && checkAllowlist(accountData.address)

@@ -3,12 +3,12 @@ const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
 
+import { contractAddress, chainId } from '@lib/constants'
+
 import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
 import { chains } from '../../../lib/chains'
 
-const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
 const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
-const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 const contract = new ethers.Contract(
   contractAddress,
   Contract.abi,
