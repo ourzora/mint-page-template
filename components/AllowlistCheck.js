@@ -31,7 +31,7 @@ export const AllowlistCheck = ({}) => {
         (allowlistIndex > -1 && allowlistVerified ? (
           <>
             <Text>Merkle tree root: 0x{allowlistRoot}</Text>
-            <Button offset={50} css={{ cursor: 'text' }}>
+            <Button css={{ cursor: 'text' }}>
               Congratulations! You are on the presale list!
             </Button>
             <br />
