@@ -1,7 +1,7 @@
 import { styled } from 'stitches.config'
 import { Box } from '@components/primitives'
 
-export const ButtonSet = ({ css, children, ...props }) => {
+export const ButtonSet = ({ center = true, css, children, ...props }) => {
   return (
     <Box
       css={{
@@ -9,7 +9,7 @@ export const ButtonSet = ({ css, children, ...props }) => {
         gridAutoColumns: 'max-content',
         gridAutoFlow: 'column',
         gap: '$margin',
-        justifyContent: 'center',
+        justifyContent: center ? 'center' : 'start',
         width: '100%',
         ...css,
       }}
@@ -46,6 +46,9 @@ const BaseButton = styled('button', {
     },
   },
   variants: {
+    active: {
+      true: {},
+    },
     disabled: {
       true: {
         pointerEvents: 'none',
@@ -59,15 +62,25 @@ const BaseButton = styled('button', {
         padding: 0,
         color: '$primary',
         background: 'transparent',
-        textDecoration: 'underline',
+        textDecoration: 'none',
+        textUnderlineOffset: '20%',
         '@media(hover:hover)': {
           '&:hover': {
             color: '$primary',
             background: 'transparent',
-            textDecoration: 'none',
+            textDecoration: 'underline',
           },
         },
       },
     },
   },
+  compoundVariants: [
+    {
+      link: true,
+      active: true,
+      css: {
+        textDecoration: 'underline',
+      },
+    },
+  ],
 })
