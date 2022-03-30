@@ -13,7 +13,6 @@ import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -35,6 +34,8 @@ contract YourContract is
     string public _baseURIextended = "http://localhost:3000/api/metadata/";
     bytes32 public _merkleRoot = 0x7f9947af1470e7df017d480516fb72e1b515240c75cf5afacfd79d475f309f35;
     address payable private _withdrawalWallet;
+    address payable private _royaltyWallet;
+    uint256 public _royaltyBasis = 750; // 7.5%
     // Sale / Presale
     bool public presaleActive = false;
     bool public saleActive = false;
@@ -209,6 +210,9 @@ contract YourContract is
         return _tokenIds.current();
     }
 
+    function setRoyaltyWallet(address payable royaltyWallet_) external onlyRole(MANAGER_ROLE) {
+        _royaltyWallet = (royaltyWallet_);
+    }
     /**
      * @dev See {IERC165-royaltyInfo}.
      */
@@ -219,7 +223,7 @@ contract YourContract is
         returns (address receiver, uint256 royaltyAmount)
     {
         require(_exists(tokenId), "Nonexistent token");
-        return (address(this), SafeMath.div(SafeMath.mul(salePrice, 10), 100));
+        return (payable(_royaltyWallet), uint((salePrice * _royaltyBasis)/10000));
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165, AccessControl) returns (bool) {
@@ -227,4 +231,7 @@ contract YourContract is
             interfaceId == type(IERC2981).interfaceId ||
             super.supportsInterface(interfaceId);
     }
+
+    receive () external payable {}
+    fallback () external payable {}
 }
