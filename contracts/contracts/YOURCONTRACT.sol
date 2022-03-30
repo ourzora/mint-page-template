@@ -30,7 +30,7 @@ contract YourContract is
     bytes32 public constant MANAGER_ROLE = keccak256("MANAGER_ROLE");
 
     uint256 public constant ARTIST_PROOF_COUNT = 17;     // +1 to save on gas cost of <= vs <
-    uint256 public constant MAX_SUPPLY = 889;           // +1 to save on gas cost of <= vs <
+    uint256 public constant MAX_SUPPLY = 666;           // +1 to save on gas cost of <= vs <
     string public _baseURIextended = "http://localhost:3000/api/metadata/";
     bytes32 public _merkleRoot = 0x7f9947af1470e7df017d480516fb72e1b515240c75cf5afacfd79d475f309f35;
     address payable private _withdrawalWallet;
