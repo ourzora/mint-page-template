@@ -62,6 +62,21 @@ describe('YourContract', function () {
     ).to.be.revertedWith('Presale has not begun')
   })
 
+  it('Ownership can be transferred', async function () {
+    await contract.connect(owner).transferOwnership(alice.address)
+    await contract.connect(alice).setPresaleActive(true)
+
+    await expect(contract.connect(owner).setPresaleActive(true)).to.be.revertedWith(
+      `AccessControl: account ${owner.address.toLowerCase()} is missing role ${managerRole}`
+    )
+  })
+
+  it('Ownership cannot be transferred by the public', async function () {
+    await expect(
+      contract.connect(alice).transferOwnership(alice.address)
+    ).to.be.revertedWith(`Ownable: caller is not the owner`)
+  })
+
   it('Cannot presale mint if not on allowlist', async function () {
     // Unpause contract
     await contract.connect(owner).setPresaleActive(true)

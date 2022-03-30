@@ -15,12 +15,14 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract YourContract is
     ERC721,
     IERC2981,
     Pausable,
-    AccessControl
+    AccessControl,
+    Ownable
 {
     using Strings for uint256;
 
@@ -159,6 +161,19 @@ contract YourContract is
             _mint(msg.sender, _tokenIds.current());
         }
         return _tokenIds.current();
+    }
+
+    function transferOwnership(address _newOwner)
+    public
+    override
+    onlyOwner
+    {
+        address currentOwner = owner();
+        revokeRole(MANAGER_ROLE, currentOwner);
+        revokeRole(MANAGER_ROLE, currentOwner);
+        _transferOwnership(_newOwner);
+        grantRole(DEFAULT_ADMIN_ROLE, _newOwner);
+        grantRole(MANAGER_ROLE, _newOwner);
     }
 
     function mint(uint256 count)
