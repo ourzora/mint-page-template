@@ -430,15 +430,15 @@ export async function getStaticProps() {
   })
 
   // Localhost fallback
-  // if (!tokenData.length) {
-  //   tokenData = params.id.split(',').map((id) => ({
-  //     tokenId: id,
-  //     owner: '0x0000000000000000000000000000000000000000',
-  //     minter: '0x0000000000000000000000000000000000000000',
-  //     tokenURI: process.env.NEXT_PUBLIC_BASE_URL + '/api/metadata/' + id + '.json',
-  //     transferEvents: [],
-  //   }));
-  // }
+  if (!tokenData.length) {
+    tokenData = params.id.split(',').map((id) => ({
+      tokenId: id,
+      owner: '0x0000000000000000000000000000000000000000',
+      minter: '0x0000000000000000000000000000000000000000',
+      tokenURI: process.env.NEXT_PUBLIC_BASE_URL + '/api/metadata/' + id + '.json',
+      transferEvents: [],
+    }))
+  }
 
   let rarities
   let tokens
