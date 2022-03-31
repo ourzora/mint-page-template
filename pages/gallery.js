@@ -192,8 +192,8 @@ const GalleryPage = ({ tokens, totalSupply }) => {
             gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
           }}
         >
-          {latestSales.map((t) => (
-            <Box css={{ border: '1px solid gray', padding: '1rem' }}>
+          {latestSales.map((t, idx) => (
+            <Box key={idx} css={{ border: '1px solid gray', padding: '1rem' }}>
               {utils.formatEther(t.transferEvents[0].transaction.value, 'ether')}Ξ
               <br />
               {new Date(t.transferEvents[0].transaction.blockTimestamp).toLocaleString(
