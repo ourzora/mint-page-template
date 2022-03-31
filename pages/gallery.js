@@ -151,8 +151,6 @@ const GalleryPage = ({ tokens, totalSupply }) => {
     .value()
   const highestSale = highestSales[0].transferEvents[0].transaction.value
 
-  console.log(tokens)
-
   return (
     <Box>
       <Box
