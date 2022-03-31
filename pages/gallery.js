@@ -7,9 +7,9 @@ import { gql } from '@apollo/client'
 import client from '@lib/client'
 import { filterTokens, extractAttributes } from '@lib/filterable'
 
-import { contractAddress, baseUrl } from '@lib/constants'
+import { title, descriptionText, contractAddress, baseUrl } from '@lib/constants'
 
-import { Box, Text } from '@components/primitives'
+import { Box, Flex, Text } from '@components/primitives'
 import { Button, ButtonSet } from '@components/Button'
 
 import _ from 'lodash'
@@ -73,7 +73,7 @@ function AttributeFiltersCheckboxes({ data, setAttributeSelected }) {
   ))
 }
 
-const GalleryPage = ({ tokens }) => {
+const GalleryPage = ({ tokens, totalSupply }) => {
   const [sortKey, setSortKey] = useState('default')
   const sort = useMemo(() => sortMethods[sortKey], [sortKey])
 
@@ -139,8 +139,77 @@ const GalleryPage = ({ tokens }) => {
     )
   }
 
+  const latestSales = _(tokens)
+    .filter((o) => o.transferEvents[0].transaction.value > 0)
+    .sortBy((o) => +new Date(o.transferEvents[0].transaction.blockTimestamp))
+    .reverse()
+    .value()
+  const latestSale = latestSales[0].transferEvents[0].transaction.value
+  const highestSales = _(tokens)
+    .sortBy((o) => Number(o.transferEvents[0].transaction.value))
+    .reverse()
+    .value()
+  const highestSale = highestSales[0].transferEvents[0].transaction.value
+
+  console.log(tokens)
+
   return (
     <Box>
+      <Box
+        css={{
+          padding: '3rem',
+        }}
+      >
+        <Text center>
+          <h1>{title}</h1>
+          <br />
+          {descriptionText}
+        </Text>
+        <Flex>
+          <Text center>
+            {totalSupply}
+            <br />
+            items
+          </Text>
+          <Text center>
+            {utils.formatEther(latestSale, 'ether')}Ξ<br />
+            Last sale
+          </Text>
+          <Text center>
+            {utils.formatEther(highestSale, 'ether')}Ξ<br />
+            Highest sale
+          </Text>
+        </Flex>
+      </Box>
+
+      <Box css={{ padding: '0rem 3rem 3rem' }}>
+        <Text center>
+          <strong>Latest Sales</strong>
+        </Text>
+        <Flex
+          css={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          }}
+        >
+          {latestSales.map((t) => (
+            <Box css={{ border: '1px solid gray', padding: '1rem' }}>
+              {utils.formatEther(t.transferEvents[0].transaction.value, 'ether')}Ξ
+              <br />
+              {new Date(t.transferEvents[0].transaction.blockTimestamp).toLocaleString(
+                'en-US',
+                {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                }
+              )}
+            </Box>
+          ))}
+        </Flex>
+      </Box>
       <Box
         key="grid"
         css={{
@@ -230,11 +299,10 @@ const GalleryPage = ({ tokens }) => {
                   </Link>
                   <Box
                     css={{
-                      padding: '3rem 0 3rem',
+                      padding: '1rem 0 2rem',
                     }}
                   >
                     <Text>{token.data.name}</Text>
-                    <hr />
                     <dl>
                       <dd>LAST SOLD:</dd>
                       <dt>
@@ -255,7 +323,6 @@ const GalleryPage = ({ tokens }) => {
                         #{token.rarityRank} ({token.rarity.toFixed(4)})
                       </dt>
                     </dl>
-                    <hr />
                     <dl>
                       <dd>OWNER:</dd>
                       <dt>
@@ -290,33 +357,37 @@ const GalleryPage = ({ tokens }) => {
 }
 
 export async function getStaticProps() {
-  let props = { tokens: [] }
   const cleanContractAddress = utils.getAddress(contractAddress)
   const tokenDataReq = await client.query({
     query: gql`
       query {
-        Token(
+        Token_aggregate(
           where: {
             address: { _eq: "${cleanContractAddress}" }
           }
           order_by: { tokenId: asc }
-          limit: 100
+          limit: 1000
         ) {
-          tokenId
-          tokenURI
-          owner
-          minter
-          transferEvents {
-            from
-            to
-            transaction {
-              value
-              hash
-              blockTimestamp
-              eventLogs {
-                logIndex
-                topics
-                data
+          aggregate {
+            count
+          }
+          nodes {
+            tokenId
+            tokenURI
+            owner
+            minter
+            transferEvents {
+              from
+              to
+              transaction {
+                value
+                hash
+                blockTimestamp
+                eventLogs {
+                  logIndex
+                  topics
+                  data
+                }
               }
             }
           }
@@ -325,9 +396,12 @@ export async function getStaticProps() {
     `,
   })
 
-  console.log({ tokenDataReq })
+  let props = {
+    tokens: [],
+    totalSupply: tokenDataReq.data['Token_aggregate'].aggregate.count,
+  }
 
-  let tokenData = tokenDataReq.data['Token'].map((token) => {
+  let tokenData = tokenDataReq.data['Token_aggregate'].nodes.map((token) => {
     const transferEvents = token.transferEvents.map((tx) => {
       if (
         Number(tx.transaction.from) > 0 &&
@@ -338,7 +412,6 @@ export async function getStaticProps() {
       }
       try {
         const wethSaleLog = getWethSaleFromLogs(token, tx.transaction.eventLogs)
-        // console.log({ wethSaleLog });
         return {
           ...tx,
           transaction: {

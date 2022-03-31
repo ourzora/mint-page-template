@@ -9,12 +9,22 @@ export const Box = styled('div', {
   'dt, dd': { margin: 0, padding: 0 },
 })
 
+export const Flex = styled(Box, {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '16px',
+  '> *': {
+    flex: 1,
+  },
+})
+
 export const HR = styled('hr')
 
 export const Span = styled('span')
 
 export const Text = styled('p', {
   marginBottom: '1.4em',
+  maxWidth: '50em',
   a: {
     textUnderlineOffset: '0.1em',
     textDecoration: 'underline',
@@ -26,6 +36,8 @@ export const Text = styled('p', {
     center: {
       true: {
         textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       },
     },
     error: {

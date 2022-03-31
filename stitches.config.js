@@ -73,6 +73,9 @@ export const globalStyles = globalCss({
     padding: '0',
     margin: '0',
   },
+  h1: {
+    fontWeight: 'bold',
+  },
   em: {
     fontStyle: 'italic',
   },
