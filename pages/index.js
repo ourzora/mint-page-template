@@ -19,7 +19,7 @@ import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 import {
   title,
-  description,
+  descriptionText,
   baseUrl,
   launchTime,
   presaleLaunchTime,
@@ -96,10 +96,9 @@ const Home = ({ contractData }) => {
   return (
     <HomeGrid>
       <Box>
-        <Text>
-          <strong>{title}</strong>
-        </Text>
-        <Text>{description}</Text>
+        <h1>{title}</h1>
+        <br />
+        <Text>{descriptionText}</Text>
         <hr />
         <ConnectWallet />
         <hr />
