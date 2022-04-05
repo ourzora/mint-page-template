@@ -32,7 +32,7 @@ const Home = ({ contractData }) => {
   let [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
   const nothingMinted = Number(totalSupply) === 0
   // Fallbacks for totalSupply - show 12 samples if nothing is minted yet
-  totalSupply = +totalSupply || +contractData.totalSupply || 12
+  let localTotalSupply = Number(totalSupply) || Number(contractData.totalSupply) || 12
   // HOOKS
   const [{ data: accountData }] = useAccount()
   // Countdown & presale countdown
@@ -68,8 +68,8 @@ const Home = ({ contractData }) => {
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
     url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
     reverse: false,
-    start: Math.max(0, totalSupply - 12),
-    end: totalSupply,
+    start: Math.max(0, localTotalSupply - 12),
+    end: localTotalSupply,
   })
 
   // EFFECTS
@@ -79,9 +79,9 @@ const Home = ({ contractData }) => {
     () =>
       updateRecentTokens({
         start: Math.max(0, totalSupply - 12),
-        end: totalSupply,
+        end: localTotalSupply,
       }),
-    [totalSupply]
+    [localTotalSupply, nothingMinted]
   )
   // Redirect after successful mint
   useMemo(() => {
@@ -117,9 +117,9 @@ const Home = ({ contractData }) => {
               </>
             )}
             <br />
-            {nothingMinted ? '0' : totalSupply} / {contractData.maxSupply - 1}
+            {nothingMinted ? '0' : totalSupply} / {contractData.maxSupply}
             <br />
-            {contractData.MAX_MINT_COUNT - 1} per transaction
+            {contractData.MAX_MINT_COUNT} per transaction
           </>
         )}
         {/*
@@ -127,7 +127,7 @@ const Home = ({ contractData }) => {
             SOLD OUT!
 
         */}
-        {!nothingMinted && totalSupply >= contractData.maxSupply - 1 && (
+        {!nothingMinted && totalSupply >= contractData.maxSupply && (
           <>
             <hr />
             <Text css={{ marginBottom: '0' }}>Sold out!</Text>
@@ -153,7 +153,7 @@ const Home = ({ contractData }) => {
             Not Sold Out
 
         */}
-        {nothingMinted || totalSupply < contractData.maxSupply - 1 ? (
+        {nothingMinted || totalSupply < contractData.maxSupply ? (
           <>
             <hr />
             <strong>Presale</strong>
@@ -194,7 +194,7 @@ const Home = ({ contractData }) => {
             )}
           </>
         ) : null}
-        {nothingMinted || totalSupply < contractData.maxSupply - 1 ? (
+        {nothingMinted || totalSupply < contractData.maxSupply ? (
           <>
             {contractData &&
               accountData &&
@@ -247,7 +247,7 @@ const Home = ({ contractData }) => {
                   isAwaitingApproval={isAwaitingApproval}
                   isMinting={isMinting}
                   mintPrice={contractData.ETH_PRICE}
-                  maxQuantity={contractData.MAX_MINT_COUNT - 1}
+                  maxQuantity={contractData.MAX_MINT_COUNT}
                   onClick={(mintQuantity) =>
                     mint({
                       mintPrice: contractData.ETH_PRICE,
