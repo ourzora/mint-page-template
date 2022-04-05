@@ -28,9 +28,9 @@ describe('YourContract', function () {
     adminRole = await contract.DEFAULT_ADMIN_ROLE()
     mintPrice = await contract.ETH_PRICE()
     presaleMintPrice = await contract.PRESALE_ETH_PRICE()
-    maxMintCount = (await contract.MAX_MINT_COUNT()) - 1
-    artistProofCount = (await contract.ARTIST_PROOF_COUNT()) - 1
-    maxSupply = (await contract.maxSupply()) - 1
+    maxMintCount = await contract.MAX_MINT_COUNT()
+    artistProofCount = await contract.TEAM_MINT_COUNT()
+    maxSupply = await contract.maxSupply()
     _baseURI = await contract._baseURIextended()
     // Test Splitter contract
     const Splitter = await ethers.getContractFactory('TestSplitter')
@@ -344,11 +344,11 @@ describe('YourContract', function () {
     // Unpause contract
     await contract.connect(owner).setSaleActive(true)
 
-    await contract.connect(alice).mint(maxMintCount - 1, {
-      value: mintPrice.mul(maxMintCount - 1),
+    await contract.connect(alice).mint(maxMintCount, {
+      value: mintPrice.mul(maxMintCount),
     })
-    const data = await contract.tokenURI(maxMintCount - 1)
-    expect(data).to.equal(`${_baseURI}${maxMintCount - 1}.json`)
+    const data = await contract.tokenURI(maxMintCount)
+    expect(data).to.equal(`${_baseURI}${maxMintCount}.json`)
   })
 
   it(`Can't mint more than MAX_MINT_COUNT at once`, async function () {
@@ -501,22 +501,22 @@ describe('YourContract', function () {
     await contract.grantRole(managerRole, bob.address)
 
     // Mint from Bob to Alice
-    await contract.connect(bob).artistMint(1, alice.address)
+    await contract.connect(bob).teamMint(1, alice.address)
     const data = await contract.tokenURI(1)
     expect(data).to.equal(`${_baseURI}1.json`)
 
     // Ensure non-manager can't mint
-    await expect(contract.connect(alice).artistMint(1, alice.address)).to.be.revertedWith(
+    await expect(contract.connect(alice).teamMint(1, alice.address)).to.be.revertedWith(
       `AccessControl: account ${alice.address.toLowerCase()} is missing role ${managerRole}`
     )
   })
 
-  it('Admins can only mint ARTIST_PROOF_COUNT of artist proofs', async function () {
-    await contract.connect(owner).artistMint(artistProofCount - 5, bob.address)
-    await contract.connect(owner).artistMint(1, alice.address)
+  it('Admins can only mint TEAM_MINT_COUNT of artist proofs', async function () {
+    await contract.connect(owner).teamMint(artistProofCount - 5, bob.address)
+    await contract.connect(owner).teamMint(1, alice.address)
 
-    await expect(contract.connect(owner).artistMint(6, alice.address)).to.be.revertedWith(
-      'Exceeded max proofs'
+    await expect(contract.connect(owner).teamMint(6, alice.address)).to.be.revertedWith(
+      'Exceeded maximum'
     )
   })
 })
@@ -545,9 +545,9 @@ describe('YourContractMinimal', function () {
     managerRole = await contract.MANAGER_ROLE()
     adminRole = await contract.DEFAULT_ADMIN_ROLE()
     mintPrice = await contract.ETH_PRICE()
-    maxMintCount = (await contract.MAX_MINT_COUNT()) - 1
-    artistProofCount = (await contract.ARTIST_PROOF_COUNT()) - 1
-    maxSupply = (await contract.maxSupply()) - 1
+    maxMintCount = await contract.MAX_MINT_COUNT()
+    artistProofCount = await contract.TEAM_MINT_COUNT()
+    maxSupply = await contract.maxSupply()
     _baseURI = await contract._baseURIextended()
     // Test Splitter contract
     const Splitter = await ethers.getContractFactory('TestSplitter')
@@ -626,11 +626,11 @@ describe('YourContractMinimal', function () {
     // Unpause contract
     await contract.connect(owner).setSaleActive(true)
 
-    await contract.connect(alice).mint(maxMintCount - 1, {
-      value: mintPrice.mul(maxMintCount - 1),
+    await contract.connect(alice).mint(maxMintCount, {
+      value: mintPrice.mul(maxMintCount),
     })
-    const data = await contract.tokenURI(maxMintCount - 1)
-    expect(data).to.equal(`${_baseURI}${maxMintCount - 1}.json`)
+    const data = await contract.tokenURI(maxMintCount)
+    expect(data).to.equal(`${_baseURI}${maxMintCount}.json`)
   })
 
   it(`Can't mint more than MAX_MINT_COUNT at once`, async function () {
@@ -783,22 +783,22 @@ describe('YourContractMinimal', function () {
     await contract.grantRole(managerRole, bob.address)
 
     // Mint from Bob to Alice
-    await contract.connect(bob).artistMint(1, alice.address)
+    await contract.connect(bob).teamMint(1, alice.address)
     const data = await contract.tokenURI(1)
     expect(data).to.equal(`${_baseURI}1.json`)
 
     // Ensure non-manager can't mint
-    await expect(contract.connect(alice).artistMint(1, alice.address)).to.be.revertedWith(
+    await expect(contract.connect(alice).teamMint(1, alice.address)).to.be.revertedWith(
       `AccessControl: account ${alice.address.toLowerCase()} is missing role ${managerRole}`
     )
   })
 
-  it('Admins can only mint ARTIST_PROOF_COUNT of artist proofs', async function () {
-    await contract.connect(owner).artistMint(artistProofCount - 5, bob.address)
-    await contract.connect(owner).artistMint(1, alice.address)
+  it('Admins can only mint TEAM_MINT_COUNT for free', async function () {
+    await contract.connect(owner).teamMint(artistProofCount - 5, bob.address)
+    await contract.connect(owner).teamMint(1, alice.address)
 
-    await expect(contract.connect(owner).artistMint(6, alice.address)).to.be.revertedWith(
-      'Exceeded max proofs'
+    await expect(contract.connect(owner).teamMint(6, alice.address)).to.be.revertedWith(
+      'Exceeded maximum'
     )
   })
 })
