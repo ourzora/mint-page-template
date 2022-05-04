@@ -299,14 +299,8 @@ const getContractData = async (...props) => {
 }
 
 export async function getStaticProps() {
-  const contractData = await getContractData(
-    'ETH_PRICE',
-    'PRESALE_ETH_PRICE',
-    'MAX_MINT_COUNT',
-    'PRESALE_MAX_MINT_COUNT',
-    'totalSupply',
-    'maxSupply'
-  )
+  const contractData = await getContractData('totalSupply', 'config', 'salesConfig')
+  console.log({ contractData })
 
   return {
     props: {
