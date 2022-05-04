@@ -107,19 +107,13 @@ const Home = ({ contractData }) => {
         {contractData && (
           <>
             Mint price:{' '}
-            {contractData.ETH_PRICE && ethers.utils.formatEther(contractData.ETH_PRICE)}{' '}
+            {contractData.salesConfig.publicSalePrice &&
+              ethers.utils.formatEther(contractData.salesConfig.publicSalePrice)}{' '}
             ETH
             <br />
-            {contractData.PRESALE_ETH_PRICE && (
-              <>
-                Presale mint price:{' '}
-                {ethers.utils.formatEther(contractData.PRESALE_ETH_PRICE)} ETH
-              </>
-            )}
+            {nothingMinted ? '0' : totalSupply} / {contractData.config.editionSize}
             <br />
-            {nothingMinted ? '0' : totalSupply} / {contractData.maxSupply}
-            <br />
-            {contractData.MAX_MINT_COUNT} per transaction
+            {contractData.salesConfig.maxSalePurchasePerAddress} per transaction
           </>
         )}
         {/*
@@ -127,7 +121,7 @@ const Home = ({ contractData }) => {
             SOLD OUT!
 
         */}
-        {!nothingMinted && totalSupply >= contractData.maxSupply && (
+        {!nothingMinted && totalSupply >= contractData.config.editionSize && (
           <>
             <hr />
             <Text css={{ marginBottom: '0' }}>Sold out!</Text>
@@ -153,7 +147,7 @@ const Home = ({ contractData }) => {
             Not Sold Out
 
         */}
-        {nothingMinted || totalSupply < contractData.maxSupply ? (
+        {nothingMinted || totalSupply < contractData.config.editionSize ? (
           <>
             <hr />
             <strong>Presale</strong>
@@ -194,7 +188,7 @@ const Home = ({ contractData }) => {
             )}
           </>
         ) : null}
-        {nothingMinted || totalSupply < contractData.maxSupply ? (
+        {nothingMinted || totalSupply < contractData.config.editionSize ? (
           <>
             {contractData &&
               accountData &&
