@@ -1,4 +1,4 @@
-import Contract from '../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
+import ABI from '@lib/abi.json'
 
 import { ethers } from 'ethers'
 import { useMemo } from 'react'
@@ -29,7 +29,7 @@ import {
 
 const Home = ({ contractData }) => {
   // Get and update total supply
-  let [{ totalSupply }, updateTotalSupply] = useTotalSupply(Contract.abi)
+  let [{ totalSupply }, updateTotalSupply] = useTotalSupply(ABI)
   const nothingMinted = Number(totalSupply) === 0
   // Fallbacks for totalSupply - show 12 samples if nothing is minted yet
   let localTotalSupply = Number(totalSupply) || Number(contractData.totalSupply) || 12
@@ -43,12 +43,12 @@ const Home = ({ contractData }) => {
     contractData: saleIsActive,
     contractError: saleStateError,
     contractLoading: saleStateLoading,
-  } = useContractMethod(Contract.abi, 'saleActive')
+  } = useContractMethod(ABI)
   const {
     contractData: presaleIsActive,
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
-  } = useContractMethod(Contract.abi, 'presaleActive')
+  } = useContractMethod(ABI)
 
   // Mint function
   const [
@@ -63,7 +63,7 @@ const Home = ({ contractData }) => {
       error: mintError,
     },
     mint,
-  ] = useContractMint(Contract.abi)
+  ] = useContractMint(ABI)
   // Load initial state for recent tokens
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
     url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
@@ -287,7 +287,7 @@ const getContractData = async (...props) => {
     const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
     const contract = new ethers.Contract(
       contractAddress,
-      Contract.abi,
+      ABI,
       new ethers.providers.StaticJsonRpcProvider(chain)
     )
 
