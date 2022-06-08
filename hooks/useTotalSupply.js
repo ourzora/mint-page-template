@@ -1,25 +1,28 @@
-import { BigNumber } from 'ethers'
-import { useProvider, useContractRead } from 'wagmi'
-import { contractAddress } from '@lib/constants'
+import { useEffect, useState } from 'react'
+import { getContractData } from '@lib/helpers'
 
-export const useTotalSupply = (abi) => {
-  const provider = useProvider()
-  const [{ data, error: contractError, loading: contractLoading }, read] =
-    useContractRead(
-      {
-        addressOrName: contractAddress,
-        contractInterface: abi,
-        signerOrProvider: provider,
-      },
-      'totalSupply'
-    )
+export const useTotalSupply = () => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [data, setData] = useState()
+
+  const asyncFunc = async () => {
+    const data = await getContractData('totalSupply')
+    if (data.error) setError(data.error)
+    else setData(data)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    asyncFunc()
+  }, [])
 
   return [
     {
-      totalSupply: data && BigNumber.from(data).toString(),
-      contractError,
-      contractLoading,
+      totalSupply: !error && data?.totalSupply,
+      contractError: error,
+      contractLoading: loading,
     },
-    read,
+    asyncFunc,
   ]
 }

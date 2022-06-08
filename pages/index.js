@@ -1,17 +1,13 @@
-import ABI from '@lib/abi.json'
-
 import { ethers } from 'ethers'
 import { useMemo } from 'react'
 import { Box, Text } from '@components/primitives'
-import { Button, ButtonSet } from '@components/Button'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { Gallery } from '@components/Gallery'
-import { extractContractData } from '@lib/helpers'
-import { chains } from '@lib/chains'
+import { getContractData } from '@lib/helpers'
 import { useAccount } from 'wagmi'
 import { AllowlistCheck } from '@components/AllowlistCheck'
 import { HomeGrid } from '@components/Brand'
-import { MintButton } from '@components/MintButton'
+import { MintStatus } from '@components/MintStatus'
 import { useCountdown } from '@hooks/useCountdown'
 import { useRecentTokens } from '@hooks/useRecentTokens'
 import { useContractMethod } from '@hooks/useContractMethod'
@@ -19,22 +15,21 @@ import { useTotalSupply } from '@hooks/useTotalSupply'
 import { useContractMint } from '@hooks/useContractMint'
 import {
   title,
+  contractAddress,
   description,
   baseUrl,
   launchTime,
   presaleLaunchTime,
-  chainId,
-  contractAddress,
 } from '@lib/constants'
 
 const Home = ({ contractData }) => {
   // Get and update total supply
-  let [{ totalSupply }, updateTotalSupply] = useTotalSupply(ABI)
+  let [{ totalSupply }, updateTotalSupply] = useTotalSupply()
   const nothingMinted = Number(totalSupply) === 0
   // Fallbacks for totalSupply - show 12 samples if nothing is minted yet
   let localTotalSupply = Number(totalSupply) || Number(contractData.totalSupply) || 12
   // HOOKS
-  const [{ data: accountData }] = useAccount()
+  const { data: accountData } = useAccount()
   // Countdown & presale countdown
   const { countdownText } = useCountdown(launchTime)
   const { countdownText: presaleCountdownText } = useCountdown(presaleLaunchTime)
@@ -43,12 +38,12 @@ const Home = ({ contractData }) => {
     contractData: saleIsActive,
     contractError: saleStateError,
     contractLoading: saleStateLoading,
-  } = useContractMethod(ABI)
+  } = useContractMethod()
   const {
     contractData: presaleIsActive,
     contractError: presaleStateError,
     contractLoading: presaleStateLoading,
-  } = useContractMethod(ABI)
+  } = useContractMethod()
 
   // Mint function
   const [
@@ -63,7 +58,7 @@ const Home = ({ contractData }) => {
       error: mintError,
     },
     mint,
-  ] = useContractMint(ABI)
+  ] = useContractMint()
   // Load initial state for recent tokens
   const [{ isLoading: tokensLoading, tokens }, updateRecentTokens] = useRecentTokens({
     url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
@@ -103,161 +98,14 @@ const Home = ({ contractData }) => {
         <hr />
         <ConnectWallet />
         <hr />
-        {!saleIsActive && <AllowlistCheck />}
-        {contractData && (
-          <>
-            Mint price:{' '}
-            {contractData.salesConfig.publicSalePrice &&
-              ethers.utils.formatEther(contractData.salesConfig.publicSalePrice)}{' '}
-            ETH
-            <br />
-            {nothingMinted ? '0' : totalSupply} / {contractData.config.editionSize}
-            <br />
-            {contractData.salesConfig.maxSalePurchasePerAddress} per transaction
-          </>
-        )}
-        {/*
-
-            SOLD OUT!
-
-        */}
-        {!nothingMinted && totalSupply >= contractData.config.editionSize && (
-          <>
-            <hr />
-            <Text css={{ marginBottom: '0' }}>Sold out!</Text>
-            <Text>
-              But you can still pick up a piece on the secondary market at
-              <br />
-              <ButtonSet>
-                <Button>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://zora.co/collections/${contractAddress}`}
-                  >
-                    Zora
-                  </a>
-                </Button>
-              </ButtonSet>
-            </Text>
-          </>
-        )}
-        {/*
-
-            Not Sold Out
-
-        */}
-        {nothingMinted || totalSupply < contractData.config.editionSize ? (
-          <>
-            <hr />
-            <strong>Presale</strong>
-            <br />
-            {presaleIsActive ? (
-              <Text>Presale is Live now!</Text>
-            ) : (
-              <>
-                {presaleCountdownText ? (
-                  <>
-                    {presaleCountdownText}
-                    <br />
-                    {'' + new Date(presaleLaunchTime)}
-                  </>
-                ) : (
-                  'Presale finished'
-                )}
-              </>
-            )}
-            <br />
-            <br />
-            <strong>Public sale</strong>
-            <br />
-            {saleIsActive ? (
-              <Text>Sale is Live now!</Text>
-            ) : (
-              <>
-                {countdownText ? (
-                  <>
-                    {countdownText}
-                    <br />
-                    {'' + new Date(launchTime)}
-                  </>
-                ) : (
-                  'Sale finished'
-                )}
-              </>
-            )}
-          </>
-        ) : null}
-        {nothingMinted || totalSupply < contractData.config.editionSize ? (
-          <>
-            {contractData &&
-              accountData &&
-              presaleIsActive &&
-              allowlistIndex > -1 &&
-              (isMintLoading ? (
-                'Loading...'
-              ) : isSuccess && data ? (
-                'Minted successfully!'
-              ) : isMinting && txHash ? (
-                <>
-                  Minting...
-                  <br />
-                  <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
-                </>
-              ) : (
-                <MintButton
-                  buttonText="Presale Mint"
-                  isAwaitingApproval={isAwaitingApproval}
-                  isMinting={isMinting}
-                  mintPrice={contractData.PRESALE_ETH_PRICE}
-                  maxQuantity={contractData.PRESALE_MAX_MINT_COUNT}
-                  onClick={(mintQuantity) =>
-                    mint({
-                      mintPrice: contractData.PRESALE_ETH_PRICE,
-                      quantity: mintQuantity,
-                      method: 'presaleMint',
-                      args: [allowlistIndex, allowlistProof],
-                    })
-                  }
-                />
-              ))}
-
-            {contractData &&
-              accountData &&
-              saleIsActive &&
-              (isMintLoading ? (
-                'Loading...'
-              ) : isSuccess && data ? (
-                'Minted successfully!'
-              ) : isMinting && txHash ? (
-                <>
-                  Minting...
-                  <br />
-                  <a href={`https://etherscan.io/tx/${txHash}`}>View transaction</a>
-                </>
-              ) : (
-                <MintButton
-                  buttonText="Mint"
-                  isAwaitingApproval={isAwaitingApproval}
-                  isMinting={isMinting}
-                  mintPrice={contractData.ETH_PRICE}
-                  maxQuantity={contractData.MAX_MINT_COUNT}
-                  onClick={(mintQuantity) =>
-                    mint({
-                      mintPrice: contractData.ETH_PRICE,
-                      quantity: mintQuantity,
-                    })
-                  }
-                />
-              ))}
-            {mintError ? (
-              <>
-                <br />
-                <Text error>{mintError}</Text>
-              </>
-            ) : null}
-          </>
-        ) : null}
+        <MintStatus
+          collection={{
+            ...contractData,
+            address: contractAddress,
+            maxSupply: contractData.config.editionSize,
+            totalMinted: totalSupply,
+          }}
+        />
         <hr />
         <br />
       </Box>
@@ -276,26 +124,8 @@ const Home = ({ contractData }) => {
   )
 }
 
-const getContractData = async (...props) => {
-  try {
-    const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
-    const contract = new ethers.Contract(
-      contractAddress,
-      ABI,
-      new ethers.providers.StaticJsonRpcProvider(chain)
-    )
-
-    const data = await extractContractData(contract, ...props)
-    return data
-  } catch (e) {
-    return { error: e }
-  }
-}
-
 export async function getStaticProps() {
   const contractData = await getContractData('totalSupply', 'config', 'salesConfig')
-  console.log({ contractData })
-
   return {
     props: {
       contractData: !contractData.error ? contractData : null,
