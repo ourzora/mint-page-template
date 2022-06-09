@@ -11,6 +11,7 @@ import {
   Stack,
 } from '@zoralabs/zord'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
 import { useAccount, useBalance, useNetwork } from 'wagmi'
 import { formatCryptoVal } from '@lib/numbers'
@@ -56,7 +57,7 @@ const CountdownTimer: React.FC<{
 }
 
 const SaleStatus: React.FC<{
-  collection: any
+  collection: SubgraphERC721Drop
 }> = ({ collection }) => {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
