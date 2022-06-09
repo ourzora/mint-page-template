@@ -1,48 +1,45 @@
-import { chains } from '@lib/chains'
-import { chainId, title } from '@lib/constants'
+import '@rainbow-me/rainbowkit/styles.css'
 
-import { providers } from 'ethers'
-import { Provider } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
+import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
+import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { publicProvider } from 'wagmi/providers/public'
+import { contractAddress } from '@lib/constants'
+import ERC721DropContractProvider from 'providers/ERC721DropProvider'
+
+const { chains, provider } = configureChains(
+  [chain.mainnet, chain.rinkeby],
+  [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
+)
+
+const { connectors } = getDefaultWallets({
+  appName: 'Zora Create',
+  chains,
+})
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider,
+})
+
+import '@zoralabs/zord/index.css'
 
 function App({ Component, pageProps }) {
-  const provider = () => {
-    const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
-    return new providers.StaticJsonRpcProvider(chain)
-  }
-
-  // Set up connectors
-  const connectors = () => {
-    const rpcUrl = chains.find((x) => x.id == chainId)?.rpcUrls[0]
-    const rpcUrls = chains.reduce(
-      (obj, item) => Object.assign(obj, { [item.id]: item.rpcUrls[0] }),
-      {}
-    )
-    return [
-      new InjectedConnector({
-        chains: chains,
-        options: { shimDisconnect: true },
-      }),
-      new WalletConnectConnector({
-        options: {
-          qrcode: true,
-          rpc: rpcUrls,
-        },
-      }),
-      new WalletLinkConnector({
-        options: {
-          appName: title,
-          jsonRpcUrl: rpcUrl,
-        },
-      }),
-    ]
-  }
   return (
-    <Provider autoConnect provider={provider} connectors={connectors}>
-      <Component {...pageProps} />
-    </Provider>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider
+        chains={chains}
+        theme={lightTheme({
+          accentColor: 'black',
+          borderRadius: 'small',
+        })}
+      >
+        <ERC721DropContractProvider erc721DropAddress={contractAddress}>
+          <Component {...pageProps} />
+        </ERC721DropContractProvider>
+      </RainbowKitProvider>
+    </WagmiConfig>
   )
 }
 

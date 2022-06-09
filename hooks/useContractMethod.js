@@ -1,19 +1,23 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
+import abi from '@lib/abi.json'
 import { useProvider, useContractRead } from 'wagmi'
 
-export const useContractMethod = (abi, method) => {
+export const useContractMethod = (method) => {
   const provider = useProvider()
-  const [{ data: contractData, error: contractError, loading: contractLoading }, read] =
-    useContractRead(
-      {
-        addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-        contractInterface: abi,
-        signerOrProvider: provider,
-      },
-      method
-    )
+  const {
+    data: contractData,
+    error: contractError,
+    isLoading: contractLoading,
+  } = useContractRead(
+    {
+      addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+      contractInterface: abi,
+      signerOrProvider: provider,
+    },
+    method
+  )
 
-  useEffect(() => read(), [])
+  // useEffect(() => refetch(), [])
 
   return {
     contractData,

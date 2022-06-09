@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@zoralabs/zord": {
+      "signature": "a3708ed694e95cd789247dbbe1530489",
+      "file": true
+    }
+  }
+}

@@ -1,11 +1,1 @@
-{
-  "tokenId": 2,
-  "name": "YOURCONTRACT_002 (Sample)",
-  "description": "YOURCONTRACT is a series of 888 unique generative and hand-finished digital artworks.",
-  "image": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
-  "image_thumbnail": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
-  "image_original": "https://zora-nft-launch.vercel.app/images/2_nuxui--web.svg",
-  "external_url": "https://zora-nft-launch.vercel.app/token/2",
-  "attributes": []
-}
-
+{"tokenId":"2","name":"Demo Token #2","description":"Demo Token is an open, freely-usable demonstration token used for testing and development purposes.","image":"ipfs://bafybeidgebkqabsozdhttauz63kyuuxmbsdq2uzq3ccg6kkb5odo3mt6s4","attributes":[{"trait_type":"HUE","value":"272"}]}

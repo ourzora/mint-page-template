@@ -1,8 +1,7 @@
 {
-  "name": "YOURCONTRACT",
-  "description": "YOURCONTRACT is a series of 888 unique generative and hand-finished digital artworks. They are compositions of computer generated 3D fragments and layers, cast in a spectrum of materiality, tone and light, describing states of growth, change and decay.",
-  "image": "http://localhost:3000/images/sample/1.png",
-  "external_link": "https://localhost:3000",
-  "seller_fee_basis_points": 1000,
-  "fee_recipient": "0x24a1891178b0f4700A6F7D6b4e030Da0054683BA"
+  "name":"Demo Token",
+  "description":"Demo Token is an open, freely-usable demonstration token used for testing and development purposes.",
+  "image": "ipfs://bafybeibbkcvigammbtfu5jtl5mknopolf2647a42tsn2tjwfh7hpxuylsy",
+  "seller_fee_basis_points": 250,
+  "fee_recipient": "0xc8401F94DffAD64784b10F4Baa263f53Fd24131a"
 }
