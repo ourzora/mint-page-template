@@ -9,11 +9,6 @@ import { HomeGrid } from '@components/Brand'
 import { MintStatus } from '@components/MintStatus'
 import { GET_COLLECTION_QUERY, SUBGRAPH_URL } from 'constants/queries'
 import { useRecentTokens } from '@hooks/useRecentTokens'
-
-/*
-import { useCountdown } from '@hooks/useCountdown'
-*/
-
 import { contractAddress, baseUrl } from '@lib/constants'
 
 interface HomePageProps {
