@@ -15,9 +15,7 @@ const TokenPage = ({ tokens, errorMessage }) => {
     <>
       {tokens.map((token, idx) => (
         <TokenGrid key={idx}>
-          {tokens.map((data, idx) => (
-            <Token key={'token_' + idx} metadata={token} />
-          ))}
+          <Token key={'token_' + idx} metadata={token} />
         </TokenGrid>
       ))}
     </>
