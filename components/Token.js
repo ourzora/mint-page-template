@@ -82,21 +82,13 @@ export function Token({ metadata }) {
           },
         }}
       >
-        {/*<Box
-          as="img"
-          src={ipfsImage(image)}
-          css={{
-            width: '100%',
-            display: 'block',
-          }}
-        />*/}
         <iframe
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           frameBorder="0"
           height="100%"
-          src="/art/0x83eFc260Da533B0B03d88b2F00d59785277c4e71"
+          src={animation_url}
           width="100%"
-          sandbox="allow-scripts"
+          sandbox="allow-same-origin allow-scripts"
           style={{ minHeight: '500px' }}
         ></iframe>
       </Box>
