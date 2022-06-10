@@ -1,6 +1,6 @@
 import { Token } from '@components/Token'
 import { TokenGrid } from '@components/Brand'
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+import { baseUrl } from '@lib/constants'
 
 const TokenPage = ({ tokens, errorMessage }) => {
   if (!tokens) {
