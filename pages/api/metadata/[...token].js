@@ -57,7 +57,7 @@ export default function handler(req, res) {
             return {
               ...data,
               image: `${baseUrl}/api/render/${owner}`,
-              animationURI: `${baseUrl}/art/${owner}`,
+              animation_url: `${baseUrl}/art/${owner}`,
             }
           } else {
             return null
