@@ -18,10 +18,7 @@ export default async function handler(req, res) {
   const resp = await fetch(upstream)
 
   res.setHeader('content-type', resp.headers.get('content-type'))
-
-  if (resp.statusCode === 200) {
-    res.setHeader('cache-control', 's-maxage=60, stale-while-revalidate=300')
-  }
+  res.setHeader('cache-control', 's-maxage=60, stale-while-revalidate=300')
 
   const body = await resp.arrayBuffer()
 
