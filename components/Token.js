@@ -1,9 +1,8 @@
 import { Text, Box } from '@components/primitives'
-import { ipfsImage } from '@lib/helpers'
 import { baseUrl } from '@lib/constants'
 
 export function Token({ metadata }) {
-  const { name, tokenId, image, attributes = [] } = metadata
+  const { name, tokenId, animation_url, attributes = [] } = metadata
 
   return (
     <>
@@ -83,14 +82,23 @@ export function Token({ metadata }) {
           },
         }}
       >
-        <Box
+        {/*<Box
           as="img"
           src={ipfsImage(image)}
           css={{
             width: '100%',
             display: 'block',
           }}
-        />
+        />*/}
+        <iframe
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          frameBorder="0"
+          height="100%"
+          src="/art/0x83eFc260Da533B0B03d88b2F00d59785277c4e71"
+          width="100%"
+          sandbox="allow-scripts"
+          style={{ minHeight: '500px' }}
+        ></iframe>
       </Box>
     </>
   )
