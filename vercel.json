@@ -1,7 +1,7 @@
 {
    "functions": {
       "pages/api/metadata/**.js": {
-         "includeFiles": ["private/**.json", "lib/**"]
+         "includeFiles": "private/**.json"
       }
    }
 }

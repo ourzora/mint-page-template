@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
-import abi from 'abi.json'
+import abi from 'lib/abi.json'
 import { chains } from 'lib/chains'
 import { contractAddress, chainId } from 'lib/constants'
 
