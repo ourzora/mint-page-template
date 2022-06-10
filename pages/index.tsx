@@ -55,7 +55,7 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
 
 export default HomePage
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   if (!isAddress(contractAddress)) {
     return {
       notFound: true,
