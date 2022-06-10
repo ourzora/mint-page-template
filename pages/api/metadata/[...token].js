@@ -3,8 +3,8 @@ const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
 import abi from 'abi.json'
-import { chains } from '@lib/chains'
-import { contractAddress, chainId } from '@lib/constants'
+import { chains } from 'lib/chains'
+import { contractAddress, chainId } from 'lib/constants'
 
 const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
 const contract = new ethers.Contract(
