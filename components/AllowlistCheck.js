@@ -6,7 +6,7 @@ import { Box, Text } from '@components/primitives'
 
 export const AllowlistCheck = ({}) => {
   // HOOKS
-  const [{ data: accountData }] = useAccount()
+  const { data: accountData } = useAccount()
   const [
     {
       allowlistProof,

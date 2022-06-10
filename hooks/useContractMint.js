@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { utils, BigNumber } from 'ethers'
+import abi from '@lib/abi.json'
 import { useSigner, useContract } from 'wagmi'
 import { contractAddress, baseUrl } from '@lib/constants'
 
-export const useContractMint = (abi) => {
+export const useContractMint = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isAwaitingApproval, setIsAwaitingApproval] = useState()
   const [isMinting, setIsMinting] = useState()
@@ -13,7 +14,7 @@ export const useContractMint = (abi) => {
   const [error, setError] = useState()
   const [quantity, setQuantity] = useState(1)
 
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const contract = useContract({
     addressOrName: contractAddress,
     contractInterface: abi,
