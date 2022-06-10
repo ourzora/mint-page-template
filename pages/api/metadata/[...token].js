@@ -25,6 +25,7 @@ const validate = async (id, file) => {
       throw 'File missing'
     }
   } catch (e) {
+    console.log(e)
     return false
   }
   return true
