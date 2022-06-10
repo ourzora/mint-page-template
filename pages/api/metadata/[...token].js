@@ -4,7 +4,7 @@ const fsp = require('fs').promises
 import { existsSync } from 'fs'
 import abi from 'lib/abi.json'
 import { chains } from 'lib/chains'
-import { contractAddress, chainId } from 'lib/constants'
+import { baseUrl, contractAddress, chainId } from 'lib/constants'
 
 const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
 const contract = new ethers.Contract(
@@ -52,7 +52,13 @@ export default function handler(req, res) {
           const f = path.join(privateDirectory, ...dirs, `${id}.json`)
           if (await validate(id, f)) {
             const file = await fsp.readFile(f, 'utf8')
-            return JSON.parse(file)
+            const data = JSON.parse(file)
+            const owner = await contract.ownerOf(Number(id))
+            return {
+              ...data,
+              image: `https://aged-violet-9166.fly.dev/?url=${baseUrl}/art/${owner}`,
+              animationURI: `${baseUrl}/art/${owner}`,
+            }
           } else {
             return null
           }
