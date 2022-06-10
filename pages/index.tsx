@@ -18,7 +18,7 @@ interface HomePageProps {
 const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
   const nothingMinted = Number(contractData.totalMinted) === 0
   // Load initial state for recent tokens
-  const [{ isLoading: tokensLoading, tokens }] = useRecentTokens({
+  const { isLoading: tokensLoading, tokens } = useRecentTokens({
     url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
     reverse: false,
     start: Math.max(0, Number(contractData.totalMinted) - 12),

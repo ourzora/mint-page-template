@@ -22,11 +22,8 @@ export const useRecentTokens = ({ url, start = 0, end = 0, reverse = false }) =>
 
   const update = ({ start, end }) => getTokens({ url, start, end, reverse })
 
-  return [
-    {
-      isLoading,
-      tokens,
-    },
-    update,
-  ]
+  return {
+    isLoading,
+    tokens,
+  }
 }
