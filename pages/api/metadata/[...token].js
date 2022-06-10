@@ -56,7 +56,7 @@ export default function handler(req, res) {
             const owner = await contract.ownerOf(Number(id))
             return {
               ...data,
-              image: `https://aged-violet-9166.fly.dev/?url=${baseUrl}/art/${owner}`,
+              image: `${baseUrl}/api/render/${owner}`,
               animationURI: `${baseUrl}/art/${owner}`,
             }
           } else {
