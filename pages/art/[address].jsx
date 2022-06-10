@@ -58,7 +58,9 @@ function Jumbo({ text }) {
   )
   return (
     <group ref={ref}>
-      <Text hAlign="center" position={[0, 0, 0]} children={text} />
+      <Text hAlign="center" position={[0, 0, 0]}>
+        {text}
+      </Text>
     </group>
   )
 }

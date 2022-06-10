@@ -70,8 +70,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     collectionAddress: contractAddress,
   })) as Response
 
-  console.log(SUBGRAPH_URL, { erc721Drop })
-
   return {
     props: { contractData: erc721Drop },
     revalidate: 60, // every minute

@@ -2,16 +2,14 @@ import { ethers } from 'ethers'
 const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
-
+import abi from 'abi.json'
+import { chains } from '@lib/chains'
 import { contractAddress, chainId } from '@lib/constants'
-
-import Contract from '../../../contracts/artifacts/contracts/YourContract.sol/YourContract.json'
-import { chains } from '../../../lib/chains'
 
 const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
 const contract = new ethers.Contract(
   contractAddress,
-  Contract.abi,
+  abi,
   new ethers.providers.StaticJsonRpcProvider(chain)
 )
 
