@@ -67,7 +67,7 @@ function Jumbo({ text }) {
 
 export default function ArtPage({ address }) {
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100%', height: '100vh' }}>
       <Canvas camera={{ position: [0, 0, 35] }}>
         <ambientLight intensity={2} />
         <pointLight position={[40, 40, 40]} />

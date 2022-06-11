@@ -86,11 +86,9 @@ export function Token({ metadata }) {
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           frameBorder="0"
           height="100%"
-          src={`https://threejs.org/examples/webgl_geometry_text.html#00FF13111#${animation_url
-            .split('/')
-            .pop()}`}
+          src={animation_url}
           width="100%"
-          sandbox="allow-scripts"
+          sandbox="allow-same-origin allow-scripts"
           style={{ minHeight: '500px' }}
         ></iframe>
       </Box>
