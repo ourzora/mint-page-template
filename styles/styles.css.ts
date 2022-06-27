@@ -25,3 +25,10 @@ export const hideMobile = style({
     },
   },
 })
+
+export const priceDateHeading = style({
+  fontWeight: 600,
+  fontSize: '24px',
+  lineHeight: '32px',
+  letterSpacing: '-0.01em',
+})

@@ -58,14 +58,16 @@ function Jumbo({ text }) {
   )
   return (
     <group ref={ref}>
-      <Text hAlign="center" position={[0, 0, 0]} children={text} />
+      <Text hAlign="center" position={[0, 0, 0]}>
+        {text}
+      </Text>
     </group>
   )
 }
 
 export default function ArtPage({ address }) {
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100%', height: '100vh' }}>
       <Canvas camera={{ position: [0, 0, 35] }}>
         <ambientLight intensity={2} />
         <pointLight position={[40, 40, 40]} />

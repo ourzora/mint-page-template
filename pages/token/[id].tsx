@@ -1,24 +1,21 @@
 import { Token } from '@components/Token'
-import { TokenGrid } from '@components/Brand'
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+import { baseUrl } from '@lib/constants'
 
 const TokenPage = ({ tokens, errorMessage }) => {
   if (!tokens) {
-    return <TokenGrid>Loading...</TokenGrid>
+    return <div>Loading...</div>
   }
 
   if (errorMessage) {
-    return <TokenGrid>404, token not found.</TokenGrid>
+    return <div>404, token not found.</div>
   }
 
   return (
     <>
-      {tokens.map((token) => (
-        <TokenGrid key={token.id}>
-          {tokens.map((data) => (
-            <Token metadata={token} key={data.tokenId} />
-          ))}
-        </TokenGrid>
+      {tokens.map((token, idx) => (
+        <div key={idx}>
+          <Token key={'token_' + idx} metadata={token} />
+        </div>
       ))}
     </>
   )
