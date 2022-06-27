@@ -1,24 +1,25 @@
-import { Text, Box } from '@components/primitives'
-import { baseUrl } from '@lib/constants'
+import { Text, Box } from "@zoralabs/zord";
+import { baseUrl } from "@lib/constants";
+import { ipfsImage } from "@lib/helpers";
 
 export function Token({ metadata }) {
-  const { name, tokenId, animation_url, attributes = [] } = metadata
+  const { name, tokenId, animation_url, attributes = [] } = metadata;
 
   return (
     <>
       <Box
-        css={{
+        style={{
           flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Box>
-          <Box css={{ display: 'grid', gridTemplateColumns: '10em 1fr' }}>
+          <Box style={{ display: "grid", gridTemplateColumns: "10em 1fr" }}>
             <Box>ID:</Box>
             <Box>{tokenId}</Box>
           </Box>
-          <Box css={{ display: 'grid', gridTemplateColumns: '10em 1fr' }}>
+          <Box style={{ display: "grid", gridTemplateColumns: "10em 1fr" }}>
             <Box>Name:</Box>
             <Box>{name}</Box>
           </Box>
@@ -26,7 +27,7 @@ export function Token({ metadata }) {
           <Box>
             {attributes.map(({ trait_type, value }) => (
               <Box
-                css={{ display: 'grid', gridTemplateColumns: '10em 1fr' }}
+                style={{ display: "grid", gridTemplateColumns: "10em 1fr" }}
                 key={trait_type}
               >
                 <Box>{trait_type}:</Box>
@@ -73,25 +74,28 @@ export function Token({ metadata }) {
         </Box>
       </Box>
       <Box
-        css={{
-          display: 'flex',
-          maxHeight: 'calc(100vh - 8rem)',
-          width: '100%',
-          img: {
-            objectFit: 'contain',
-          },
+        style={{
+          display: "flex",
+          maxHeight: "calc(100vh - 8rem)",
+          width: "100%",
         }}
       >
-        <iframe
+        <img
+          style={{ objectFit: "contain" }}
+          src={ipfsImage(image)}
+          alt={name}
+        />
+        {/*<iframe
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           frameBorder="0"
           height="100%"
           src={animation_url}
           width="100%"
           sandbox="allow-same-origin allow-scripts"
+          sandbox="allow-scripts"
           style={{ minHeight: '500px' }}
-        ></iframe>
+        ></iframe>*/}
       </Box>
     </>
-  )
+  );
 }

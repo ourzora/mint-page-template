@@ -9415,6 +9415,11 @@ declare const buttonVariants: {
         true: string;
     };
     size: {
+        xs: (string | {
+            width: string;
+            fontSize: "14px";
+            fontWeight: number;
+        })[];
         sm: (string | {
             width: string;
             fontSize: "14px";
@@ -9845,6 +9850,10 @@ interface IconProps extends BoxProps {
 }
 declare function Icon({ id, size, ...props }: IconProps): JSX.Element;
 
+interface SpinnerProps extends IconProps {
+}
+declare function Spinner({ ...props }: SpinnerProps): JSX.Element;
+
 declare const inputVariants: {
     sizeVariant: {
         lg: {
@@ -10023,7 +10032,7 @@ interface ThemeProviderProps extends BoxProps {
 declare function themeClass({ theme }: {
     theme: ClassValue;
 }, className?: ClassValue): string;
-declare function ThemeProvider({ theme, className, ...props }: ThemeProviderProps): JSX.Element;
+declare const ThemeProvider: PolymorphicForwardRefExoticComponent<ThemeProviderProps, typeof BoxDefaultElement>;
 
 declare const color: {
     black100: string;
@@ -10183,4 +10192,4 @@ declare namespace typography {
   };
 }
 
-export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Stack, StackProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, colorTheme, darkTheme, ease, fontWeight, icons, inputField, inputFieldBaseInput, inputFieldLabel, lightTheme, media, mixins, radii, root, size$1 as size, space, textVariants, themeBreakpoints, themeClass, transitions, typography, vars };
+export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Spinner, SpinnerProps, Stack, StackProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, colorTheme, darkTheme, ease, fontWeight, icons, inputField, inputFieldBaseInput, inputFieldLabel, lightTheme, media, mixins, radii, root, size$1 as size, space, textVariants, themeBreakpoints, themeClass, transitions, typography, vars };

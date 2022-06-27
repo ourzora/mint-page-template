@@ -18,7 +18,7 @@
   "scripts": {
     "test": "jest --coverage --passWithNoTests",
     "build": "yarn build-icons && tsup",
-    "build-icons": "svgr --out-dir src/icons --icon --typescript icons",
+    "build-icons": "svgr --out-dir src/icons --icon --replace-attr-values '#000=currentColor' --typescript icons ",
     "dev": "tsup --watch",
     "lint": "eslint src --fix",
     "clean": "rm -rf .turbo node_modules dist"
@@ -43,5 +43,5 @@
   "jest": {
     "preset": "scripts/jest/node"
   },
-  "yalcSig": "a3708ed694e95cd789247dbbe1530489"
+  "yalcSig": "5427a255663b16891c5cfffbe5ff7d00"
 }

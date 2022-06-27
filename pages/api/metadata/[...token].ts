@@ -1,3 +1,4 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { ethers } from 'ethers'
 const path = require('path')
 const fsp = require('fs').promises
@@ -14,7 +15,7 @@ const contract = new ethers.Contract(
 )
 
 const privateDirectory = path.resolve(process.cwd(), 'private')
-const validate = async (id, file) => {
+const validate = async (id: string, file: string) => {
   try {
     if (file.indexOf('metadata.json') < 0 && file.indexOf('sample') < 0) {
       // Verify token exists
@@ -31,33 +32,33 @@ const validate = async (id, file) => {
   return true
 }
 
-export default function handler(req, res) {
-  const { token } = req.query
-  const ids = token.pop()
-  const dirs = token.splice(-1)
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  let { token } = req.query
+  if (Array.isArray(token)) token = token[0]
 
   let idsArr = []
-  if (ids.indexOf('...') > -1) {
-    const [start, end] = ids.split('...')
-    idsArr = Array.from({ length: end - start + 1 }, (_, i) => String(i + Number(start)))
+  if (token.indexOf('...') > -1) {
+    const [start, end] = token.split('...')
+    idsArr = Array.from({ length: Number(end) - Number(start) + 1 }, (_, i) =>
+      String(i + Number(start))
+    )
   } else {
-    idsArr = ids.split(',').map((x) => x.replace('.json', ''))
+    idsArr = token.split(',').map((x: string) => x.replace('.json', ''))
   }
 
   return new Promise(async () => {
-    let data
+    let data: any
     try {
       data = await Promise.all(
         idsArr.map(async (id) => {
-          const f = path.join(privateDirectory, ...dirs, `${id}.json`)
+          const f = path.join(privateDirectory, `${id}.json`)
           if (await validate(id, f)) {
             const file = await fsp.readFile(f, 'utf8')
             const data = JSON.parse(file)
-            const owner = await contract.ownerOf(Number(id))
             return {
               ...data,
-              image: `${baseUrl}/api/render/${owner}`,
-              animation_url: `${baseUrl}/art/${owner}`,
+              // image: `${baseUrl}/api/render/${owner}`,
+              // animation_url: `https://meltyverse.vercel.app/?address=${owner}`,
             }
           } else {
             return null
@@ -67,7 +68,7 @@ export default function handler(req, res) {
     } catch (e) {
       console.log(e)
     }
-    let result = data.filter((x) => x !== null)
+    let result = data.filter((x: any) => x !== null)
 
     if (!!result.length) {
       res.setHeader('Cache-Control', `public, max-age=5000`)

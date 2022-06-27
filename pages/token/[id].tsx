@@ -1,22 +1,21 @@
 import { Token } from '@components/Token'
-import { TokenGrid } from '@components/Brand'
 import { baseUrl } from '@lib/constants'
 
 const TokenPage = ({ tokens, errorMessage }) => {
   if (!tokens) {
-    return <TokenGrid>Loading...</TokenGrid>
+    return <div>Loading...</div>
   }
 
   if (errorMessage) {
-    return <TokenGrid>404, token not found.</TokenGrid>
+    return <div>404, token not found.</div>
   }
 
   return (
     <>
       {tokens.map((token, idx) => (
-        <TokenGrid key={idx}>
+        <div key={idx}>
           <Token key={'token_' + idx} metadata={token} />
-        </TokenGrid>
+        </div>
       ))}
     </>
   )

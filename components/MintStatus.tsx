@@ -13,52 +13,101 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { useAccount, useBalance, useNetwork } from 'wagmi'
-import { formatCryptoVal } from '@lib/numbers'
-import { OPEN_EDITION_SIZE } from '@lib/constants'
+import { useAccount, useNetwork } from 'wagmi'
+import { formatCryptoVal } from 'lib/numbers'
+import { OPEN_EDITION_SIZE } from 'lib/constants'
 import { intervalToDuration } from 'date-fns'
-import { parseInt } from 'lodash'
-import { waitingApproval } from 'styles/styles.css'
+import { waitingApproval, priceDateHeading } from 'styles/styles.css'
+import type { ContractTransaction } from 'ethers'
 
-const CountdownTimer: React.FC<{
-  targetTime: number
-  refresh?: boolean
-}> = ({ targetTime, refresh = false }) => {
-  const date = useMemo(() => new Date(targetTime), [targetTime])
-  const [now, setNow] = useState(new Date())
-
-  if (refresh && date <= now) {
-    location.reload()
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date())
-    }, 1000)
-
-    return () => clearInterval(interval)
-  })
-
-  const countdownText = useMemo(() => {
-    const { days, hours, minutes, seconds } = intervalToDuration({
-      start: now,
-      end: date,
-    })
-
-    return [
-      days ? days + 'd' : '',
-      hours + 'h',
-      minutes + 'm',
-      days && days > 0 ? '' : seconds + 's',
-    ].join(' ')
-  }, [date, now])
-
-  return <>{countdownText}</>
+function isValidDate(date: Date) {
+  return date instanceof Date && isFinite(date.getTime())
 }
 
-const SaleStatus: React.FC<{
-  collection: SubgraphERC721Drop
-}> = ({ collection }) => {
+function useCountdown(
+  end: number,
+  { onElapse }: { onElapse?: () => void }
+): { countdownText: string | null; countdownTooLarge: boolean } {
+  const date = useMemo(() => new Date(end), [end])
+  const [now, setNow] = useState(new Date())
+
+  const countdownTooLarge = useMemo(
+    () => !isValidDate(date) || date.getTime() > now.getTime() + 31536000000,
+    [date, now]
+  )
+
+  const tick = useCallback(() => {
+    setNow(new Date())
+
+    const nextTick = setTimeout(() => {
+      if (!countdownTooLarge) tick()
+    }, 1000)
+
+    return () => clearTimeout(nextTick)
+  }, [countdownTooLarge])
+
+  useEffect(() => {
+    tick()
+  }, [tick])
+
+  useEffect(() => {
+    if (onElapse && Number(date) <= Number(now)) {
+      onElapse()
+    }
+  }, [onElapse, date, now])
+
+  const duration = countdownTooLarge
+    ? null
+    : intervalToDuration({
+        start: now,
+        end: date,
+      })
+
+  const countdownText = useMemo(
+    () =>
+      duration
+        ? [
+            duration.days ? duration.days + 'd' : '',
+            duration.hours + 'h',
+            duration.minutes + 'm',
+            duration.days && duration.days > 0 ? '' : duration.seconds + 's',
+          ].join(' ')
+        : null,
+    [duration]
+  )
+
+  return { countdownText, countdownTooLarge }
+}
+
+function CountdownTimer({
+  targetTime,
+  refresh,
+  hideLargeCountdown = true,
+  appendText = '',
+  prependText = '',
+}: {
+  targetTime: number
+  refresh?: boolean
+  hideLargeCountdown?: boolean
+  appendText?: string
+  prependText?: string
+}) {
+  const { countdownText, countdownTooLarge } = useCountdown(targetTime, {
+    onElapse: refresh ? () => location.reload() : undefined,
+  })
+
+  return (
+    <>
+      {!countdownTooLarge
+        ? prependText + countdownText + appendText
+        : hideLargeCountdown
+        ? ''
+        : prependText + '> 1 year' + appendText}
+    </>
+  )
+}
+
+function SaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
   const dropProvider = useERC721DropContract()
@@ -85,24 +134,28 @@ const SaleStatus: React.FC<{
     setAwaitingApproval(true)
     setErrors(undefined)
     try {
-      const tx: any = await dropProvider.purchase(1)
+      const tx: ContractTransaction | undefined = await dropProvider.purchase(1)
       console.log({ tx })
       setAwaitingApproval(false)
       setIsMinting(true)
-      await tx.wait(1)
-      setIsMinting(false)
-      setIsMinted(true)
+      if (tx) {
+        await tx.wait(1)
+        setIsMinting(false)
+        setIsMinted(true)
+      } else {
+        throw 'Error creating transaction! Please try again'
+      }
     } catch (e: any) {
-      setErrors(e.message)
+      // Suppress error message if user rejected tx request (code 4001)
+      if (e.code !== 4001) {
+        setErrors(e.message)
+      }
       setAwaitingApproval(false)
       setIsMinting(false)
     }
   }, [dropProvider])
 
-  if (
-    saleIsFinished ||
-    parseInt(collection.totalMinted) >= parseInt(collection.maxSupply)
-  ) {
+  if (saleIsFinished || Number(collection.totalMinted) >= Number(collection.maxSupply)) {
     return (
       <>
         <Box style={{ borderTop: '2px solid #F2F2F2' }} />
@@ -124,18 +177,15 @@ const SaleStatus: React.FC<{
 
   return (
     <>
-      {/* TODO: Handle integer overflow for open editions */}
-      <SaleProgressBar
-        sold={parseInt(collection.totalMinted)}
-        total={parseInt(collection.maxSupply)}
-      />
       <ConnectButton.Custom>
         {({ openChainModal, openConnectModal }) => (
           <Button
-            icon={isMinted ? 'Check' : ''}
+            icon={isMinted ? 'Check' : undefined}
             iconSize="sm"
             size="lg"
-            variant={account == null ? null : !correctNetwork ? 'destructive' : null}
+            variant={
+              account == null ? undefined : !correctNetwork ? 'destructive' : undefined
+            }
             onClick={
               account == null
                 ? openConnectModal
@@ -143,10 +193,14 @@ const SaleStatus: React.FC<{
                 ? openChainModal
                 : handleMint
             }
-            loading={isMinting}
             style={{ backgroundColor: isMinted ? '#1CB687' : '' }}
             className={awaitingApproval ? waitingApproval : ''}
-            disabled={isMinting || awaitingApproval || saleNotStarted}
+            loading={isMinting}
+            disabled={
+              isMinting ||
+              awaitingApproval ||
+              (account && correctNetwork && saleNotStarted)
+            }
           >
             {!isMinting &&
               (account == null
@@ -164,12 +218,12 @@ const SaleStatus: React.FC<{
         )}
       </ConnectButton.Custom>
       {saleIsActive && collection.salesConfig.publicSaleEnd.length < 16 && (
-        <Text align="center" size="sm" color="tertiary">
+        <Text variant="paragraph-sm" align="center" color="tertiary">
           <CountdownTimer
             targetTime={Number(collection.salesConfig.publicSaleEnd) * 1000}
             refresh={true}
-          />{' '}
-          left
+            appendText=" left"
+          />
         </Text>
       )}
       {errors && (
@@ -181,52 +235,45 @@ const SaleStatus: React.FC<{
   )
 }
 
-export const MintStatus: React.FC<{
-  collection: any
-}> = ({ collection }) => {
-  const dropProvider = useERC721DropContract()
-  const { data: account } = useAccount()
-  const { data: balance } = useBalance({
-    addressOrName: collection.address,
-  })
-
+export function MintStatus({ collection }: { collection: SubgraphERC721Drop }) {
   const saleNotStarted =
     Number(collection.salesConfig.publicSaleStart) * 1000 > Date.now()
 
   // TODO: handle integer overflows for when we do open mints
   const formattedMintedCount = Intl.NumberFormat('en', {
     notation: 'compact',
-  }).format(parseInt(collection.totalMinted))
+  }).format(Number(collection.totalMinted))
   const formattedTotalSupplyCount = Intl.NumberFormat('en', {
     notation: 'compact',
-  }).format(parseInt(collection.maxSupply))
+  }).format(Number(collection.maxSupply))
 
   return (
     <Well gap="x4" p="x5" style={{ width: '100%', height: 'max-content' }}>
       <Flex gap="x3" flexChildren justify="space-between" wrap="wrap">
         <Stack gap="x1" style={{ flex: 'none' }}>
           <Eyebrow>Price</Eyebrow>
-          <Heading size="sm">
+          <Heading size="sm" className={priceDateHeading}>
             {formatCryptoVal(collection.salesConfig.publicSalePrice)}&nbsp;ETH
           </Heading>
         </Stack>
 
-        {saleNotStarted && collection.salesConfig.publicSaleStart.length < 16 ? (
+        {saleNotStarted && collection.salesConfig.publicSaleStart.length < 14 ? (
           <Stack gap="x1" style={{ textAlign: 'right' }}>
             <Eyebrow>Starts</Eyebrow>
-            <Heading size="sm">
+            <Heading size="sm" className={priceDateHeading}>
               <CountdownTimer
                 targetTime={Number(collection.salesConfig.publicSaleStart) * 1000}
                 refresh={true}
+                hideLargeCountdown={false}
               />
             </Heading>
           </Stack>
         ) : (
           <Stack gap="x1" style={{ textAlign: 'right' }}>
             <Eyebrow>Sold</Eyebrow>
-            <Heading size="sm">
-              {formattedMintedCount === 'NaN' ? '' : formattedMintedCount}
-              {parseInt(collection.maxSupply) > OPEN_EDITION_SIZE ? (
+            <Heading size="sm" className={priceDateHeading}>
+              {formattedMintedCount}
+              {Number(collection.maxSupply) > OPEN_EDITION_SIZE ? (
                 ' NFTs'
               ) : (
                 <Box display="inline" color="tertiary" style={{ lineHeight: 'inherit' }}>
@@ -240,36 +287,5 @@ export const MintStatus: React.FC<{
 
       <SaleStatus collection={collection} />
     </Well>
-  )
-}
-
-const SaleProgressBar: React.FC<{ sold: number; total: number }> = ({ sold, total }) => {
-  const progress = useMemo(
-    () => Math.max(0, Math.min(100, (sold / total) * 100)),
-    [sold, total]
-  )
-
-  return (
-    <Box
-      backgroundColor="secondary"
-      style={{ height: 10 }}
-      role="progressbar"
-      aria-label="NFT sale progress"
-      aria-valuemin={0}
-      aria-valuemax={total}
-      aria-valuenow={sold}
-    >
-      <Box
-        style={{
-          backgroundColor: 'black',
-          height: 10,
-          width: `${progress}%`,
-
-          ...(progress < 100
-            ? { clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 100%, 0% 100%)' }
-            : {}),
-        }}
-      />
-    </Box>
   )
 }

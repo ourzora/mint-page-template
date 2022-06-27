@@ -1,14 +1,13 @@
 import request from 'graphql-request'
-import { Box, Text } from '@components/primitives'
+import { Grid, Box, Heading, Paragraph } from '@zoralabs/zord'
 import { ConnectWallet } from '@components/ConnectWallet'
-import { Gallery } from '@components/Gallery'
-import { isAddress } from 'ethers/lib/utils'
+import { utils } from 'ethers'
 import { GetStaticProps, NextPage } from 'next'
 import { SubgraphERC721Drop } from 'models/subgraph'
-import { HomeGrid } from '@components/Brand'
 import { MintStatus } from '@components/MintStatus'
 import { GET_COLLECTION_QUERY, SUBGRAPH_URL } from 'constants/queries'
 import { useRecentTokens } from '@hooks/useRecentTokens'
+import { ipfsImage } from '@lib/helpers'
 import { contractAddress, baseUrl } from '@lib/constants'
 
 interface HomePageProps {
@@ -26,11 +25,9 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
   })
 
   return (
-    <HomeGrid>
+    <Grid>
       <Box>
-        <Text>
-          <strong>{contractData.name}</strong>
-        </Text>
+        <Paragraph>{contractData.name}</Paragraph>
         <hr />
         <ConnectWallet />
         <hr />
@@ -39,24 +36,27 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
         <br />
       </Box>
       <Box>
-        <h1>
-          <strong>Gallery</strong>
-        </h1>
+        <Heading size="md">Gallery</Heading>
         <br />
-        {tokensLoading ? (
-          'Loading...'
-        ) : (
-          <Gallery preview={nothingMinted} tokens={tokens} />
-        )}
+        <Grid>
+          {tokensLoading
+            ? 'Loading...'
+            : tokens.map((token: any) => (
+                <Box>
+                  <img src={ipfsImage(token.image)} alt="" />
+                  {token.name}
+                </Box>
+              ))}
+        </Grid>
       </Box>
-    </HomeGrid>
+    </Grid>
   )
 }
 
 export default HomePage
 
 export const getStaticProps: GetStaticProps = async () => {
-  if (!isAddress(contractAddress)) {
+  if (!utils.isAddress(contractAddress)) {
     return {
       notFound: true,
     }
