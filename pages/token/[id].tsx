@@ -1,3 +1,5 @@
+export {}
+/*
 import { Token } from '@components/Token'
 import { baseUrl } from '@lib/constants'
 
@@ -51,3 +53,4 @@ export async function getStaticProps({ params }) {
 }
 
 export default TokenPage
+ */

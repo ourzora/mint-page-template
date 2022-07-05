@@ -1,3 +1,5 @@
+export {}
+/*
 import * as THREE from 'three'
 import React, { useMemo, useRef, useLayoutEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
@@ -94,3 +96,4 @@ export async function getStaticProps({ params }) {
     revalidate: 10,
   }
 }
+*/
