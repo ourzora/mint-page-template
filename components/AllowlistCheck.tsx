@@ -1,3 +1,5 @@
+export {}
+/*
 import { useMemo } from 'react'
 import { Button } from '@components/Button'
 import { useAccount } from 'wagmi'
@@ -64,3 +66,4 @@ export const AllowlistCheck = ({}) => {
     </>
   )
 }
+ */

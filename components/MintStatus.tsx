@@ -235,7 +235,13 @@ function SaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
   )
 }
 
-export function MintStatus({ collection }: { collection: SubgraphERC721Drop }) {
+export function MintStatus({
+  collection,
+  className,
+}: {
+  collection: SubgraphERC721Drop
+  className?: string
+}) {
   const saleNotStarted =
     Number(collection.salesConfig.publicSaleStart) * 1000 > Date.now()
 
@@ -248,7 +254,12 @@ export function MintStatus({ collection }: { collection: SubgraphERC721Drop }) {
   }).format(Number(collection.maxSupply))
 
   return (
-    <Well gap="x4" p="x5" style={{ width: '100%', height: 'max-content' }}>
+    <Well
+      className={className}
+      gap="x4"
+      p="x5"
+      style={{ width: '100%', height: 'max-content' }}
+    >
       <Flex gap="x3" flexChildren justify="space-between" wrap="wrap">
         <Stack gap="x1" style={{ flex: 'none' }}>
           <Eyebrow>Price</Eyebrow>

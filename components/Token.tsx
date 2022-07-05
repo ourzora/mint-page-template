@@ -1,3 +1,5 @@
+export {}
+/*
 import { Text, Box } from "@zoralabs/zord";
 import { baseUrl } from "@lib/constants";
 import { ipfsImage } from "@lib/helpers";
@@ -85,7 +87,7 @@ export function Token({ metadata }) {
           src={ipfsImage(image)}
           alt={name}
         />
-        {/*<iframe
+        {<iframe
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           frameBorder="0"
           height="100%"
@@ -94,8 +96,9 @@ export function Token({ metadata }) {
           sandbox="allow-same-origin allow-scripts"
           sandbox="allow-scripts"
           style={{ minHeight: '500px' }}
-        ></iframe>*/}
+        ></iframe>}
       </Box>
     </>
   );
 }
+  */

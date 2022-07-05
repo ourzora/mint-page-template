@@ -1,3 +1,5 @@
+export {}
+/*
 import { useState, useCallback } from 'react'
 import { Box, Button, Figure } from '@zoralabs/zord'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -173,7 +175,6 @@ function TokenGallery({ css, preview, tokens, ...props }) {
             right: '$margin',
           }}
         >
-          {/* prettier-ignore */}
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M0.514709 0.404724L17.4853 17.3753" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/> <path d="M17.4853 0.404724L0.514727 17.3753" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/> </svg>
         </Box>
         <AnimatePresence>
@@ -256,5 +257,6 @@ function TokenGallery({ css, preview, tokens, ...props }) {
         ))}
       </Box>
     </>
-  )
+)
 }
+  */
