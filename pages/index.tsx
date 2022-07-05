@@ -68,7 +68,7 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
           </Text>
         </Box>
         <Box p="x4" className={maxWidth} style={{ maxWidth: 400 }}>
-          <Flex as="p" align="center" justify="space-between">
+          <Flex gap="x3" as="p" align="center" justify="space-between">
             <a href="https://twitter.com/ourZORA">Twitter</a>
             <a href="https://discord.com/invite/Va58aMrcwk">Discord</a>
             <a href={`https://etherscan.io/address/${contractAddress}`}>Etherscan</a>
