@@ -1,4 +1,6 @@
-export {}
+const ArtPage = () => null
+export default ArtPage
+
 /*
 import * as THREE from 'three'
 import React, { useMemo, useRef, useLayoutEffect, Suspense } from 'react'

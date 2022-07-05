@@ -1,4 +1,5 @@
-export {}
+const TokenPage = () => null
+export default TokenPage
 /*
 import { Token } from '@components/Token'
 import { baseUrl } from '@lib/constants'
