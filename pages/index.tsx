@@ -1,4 +1,5 @@
 import request from 'graphql-request'
+import Head from 'next/head'
 import { Box, Stack, Flex, Well, Text } from '@zoralabs/zord'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { utils } from 'ethers'
@@ -25,8 +26,42 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
   //   end: Number(contractData.totalMinted),
   // })
 
+  const ogImage = ipfsImage(contractData.editionMetadata.imageURI)
+
   return (
     <>
+      <Head>
+        <title>{contractData.name}</title>
+        <meta name="title" content={`${contractData.name}`} />
+        <meta
+          name="description"
+          content={
+            contractData.editionMetadata?.description ||
+            "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
+          }
+        />
+        <meta name="og:title" content={`${contractData.name}`} />
+        <meta
+          name="og:url"
+          content={`https://create.zora.co/editions/${contractData.address}`}
+        />
+        <meta
+          name="og:description"
+          content={
+            contractData.editionMetadata?.description ||
+            "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
+          }
+        />
+        <meta name="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${contractData.name}`} />
+        <meta
+          name="twitter:url"
+          content={`https://create.zora.co/editions/${contractData.address}`}
+        />
+        <meta name="twitter:image" content={ogImage} />
+      </Head>
+
       <Flex justify="flex-end" p="x4" className={header}>
         <ConnectWallet />
       </Flex>
