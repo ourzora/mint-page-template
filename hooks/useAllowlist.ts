@@ -1,5 +1,7 @@
+export {}
+/*
 import { useState } from 'react'
-import { allowlist } from '@lib/allowlist'
+import allowlist from 'public/allowlist.csv'
 import { getProof, generateMerkleTree } from '@lib/merkle-proof.js'
 
 export const useAllowlist = () => {
@@ -31,3 +33,4 @@ export const useAllowlist = () => {
     checkAllowlist,
   ]
 }
+*/
