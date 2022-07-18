@@ -3,5 +3,6 @@
   "description":"Demo Token is an open, freely-usable demonstration token used for testing and development purposes.",
   "image": "ipfs://bafybeibbkcvigammbtfu5jtl5mknopolf2647a42tsn2tjwfh7hpxuylsy",
   "seller_fee_basis_points": 250,
-  "fee_recipient": "0xc8401F94DffAD64784b10F4Baa263f53Fd24131a"
+  "fee_recipient": "0xc8401F94DffAD64784b10F4Baa263f53Fd24131a",
+  "allowlist_uri": "ipfs://bafkreidncpwhdbhucbo2s3kpm2xyylgqjiiwy5yvowfx5z6gu54b4ndc6q"
 }
