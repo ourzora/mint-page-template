@@ -13,7 +13,8 @@ Adding to your project boils down to;
 ```tsx
 // pages/_app.tsx
 
-import '@fontsource/inter'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/600.css'
 import '@zoralabs/zord/index.css'
 import { ThemeProvider, lightTheme } from '@zoralabs/zord'
 import type { AppProps } from 'next/app'

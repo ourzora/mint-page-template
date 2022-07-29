@@ -3,37 +3,70 @@ import * as _vanilla_extract_sprinkles_dist_declarations_src_createSprinkles fro
 import { ClassValue } from 'clsx';
 import React, { ReactNode, CSSProperties, ElementType, SVGProps, Dispatch, SetStateAction, MouseEventHandler } from 'react';
 import { PolymorphicPropsWithRef, PolymorphicForwardRefExoticComponent } from 'react-polymorphic-types';
+import * as next_dist_client_with_router from 'next/dist/client/with-router';
+import { WithRouterProps } from 'next/dist/client/with-router';
+import { LinkProps as LinkProps$1 } from 'next/link';
+import { ReactElementLike } from 'prop-types';
 import * as _vanilla_extract_recipes_dist_declarations_src_types from '@vanilla-extract/recipes/dist/declarations/src/types';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { RadioGroupProps } from '@radix-ui/react-radio-group';
 import * as Dialog from '@radix-ui/react-dialog';
+import { Placement } from '@popperjs/core';
 
 declare const colorTheme: _vanilla_extract_private.MapLeafNodes<{
     foreground: {
         primary: string;
         secondary: string;
         tertiary: string;
+        success: string;
+        destructive: string;
+        warning: string;
         reverse: string;
+        transparent: string;
     };
     background: {
         primary: string;
         secondary: string;
         tertiary: string;
+        success: string;
+        warning: string;
         destructive: string;
+        reverse: string;
+        transparent: string;
     };
     border: {
         primary: string;
         secondary: string;
         tertiary: string;
+        success: string;
+        warning: string;
+        destructive: string;
+        transparent: string;
     };
     text: {
         primary: string;
         secondary: string;
         tertiary: string;
+        success: string;
+        warning: string;
+        destructive: string;
         primaryInverse: string;
+        transparent: string;
     };
     error: {
+        light: string;
+        default: string;
+        dark: string;
+        background: string;
+    };
+    success: {
+        light: string;
+        default: string;
+        dark: string;
+        background: string;
+    };
+    warning: {
         light: string;
         default: string;
         dark: string;
@@ -49,26 +82,54 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
             primary: string;
             secondary: string;
             tertiary: string;
+            success: string;
+            destructive: string;
+            warning: string;
             reverse: string;
+            transparent: string;
         };
         background: {
             primary: string;
             secondary: string;
             tertiary: string;
+            success: string;
+            warning: string;
             destructive: string;
+            reverse: string;
+            transparent: string;
         };
         border: {
             primary: string;
             secondary: string;
             tertiary: string;
+            success: string;
+            warning: string;
+            destructive: string;
+            transparent: string;
         };
         text: {
             primary: string;
             secondary: string;
             tertiary: string;
+            success: string;
+            warning: string;
+            destructive: string;
             primaryInverse: string;
+            transparent: string;
         };
         error: {
+            light: string;
+            default: string;
+            dark: string;
+            background: string;
+        };
+        success: {
+            light: string;
+            default: string;
+            dark: string;
+            background: string;
+        };
+        warning: {
             light: string;
             default: string;
             dark: string;
@@ -107,6 +168,8 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         x28: string;
         x29: string;
         x30: string;
+        x32: string;
+        x64: string;
         auto: string;
     };
     size: {
@@ -145,9 +208,12 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         readonly x28: string;
         readonly x29: string;
         readonly x30: string;
+        readonly x32: string;
+        readonly x64: string;
         readonly auto: string;
     };
     radii: {
+        readonly tiny: "2px";
         readonly small: "4px";
         readonly normal: "5px";
         readonly curved: "10px";
@@ -180,6 +246,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
     styles: {
         color: {
             values: {
+                transparent: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -187,6 +256,15 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 tertiary: {
+                    defaultClass: string;
+                };
+                success: {
+                    defaultClass: string;
+                };
+                destructive: {
+                    defaultClass: string;
+                };
+                warning: {
                     defaultClass: string;
                 };
                 reverse: {
@@ -196,6 +274,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         backgroundColor: {
             values: {
+                transparent: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -205,7 +286,16 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 tertiary: {
                     defaultClass: string;
                 };
+                success: {
+                    defaultClass: string;
+                };
                 destructive: {
+                    defaultClass: string;
+                };
+                warning: {
+                    defaultClass: string;
+                };
+                reverse: {
                     defaultClass: string;
                 };
             };
@@ -213,6 +303,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         borderRadius: {
             values: {
                 small: {
+                    defaultClass: string;
+                };
+                tiny: {
                     defaultClass: string;
                 };
                 normal: {
@@ -231,6 +324,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         borderColor: {
             values: {
+                transparent: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -238,6 +334,15 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 tertiary: {
+                    defaultClass: string;
+                };
+                success: {
+                    defaultClass: string;
+                };
+                destructive: {
+                    defaultClass: string;
+                };
+                warning: {
                     defaultClass: string;
                 };
             };
@@ -933,6 +1038,35 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 };
             };
         };
+        textDecoration: {
+            responsiveArray: ("@initial" | "@480" | "@576" | "@768" | "@1024" | "@1440")[] & {
+                length: 6;
+            };
+            values: {
+                none: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                underline: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+            };
+        };
         fontFamily: {
             responsiveArray: ("@initial" | "@480" | "@576" | "@768" | "@1024" | "@1440")[] & {
                 length: 6;
@@ -1355,6 +1489,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         top: {
@@ -1704,6 +1860,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -2073,6 +2251,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         bottom: {
@@ -2422,6 +2622,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -2791,6 +3013,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         paddingTop: {
@@ -3140,6 +3384,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -3509,6 +3775,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         paddingLeft: {
@@ -3858,6 +4146,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -4227,6 +4537,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         marginTop: {
@@ -4576,6 +4908,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -4945,6 +5299,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         marginLeft: {
@@ -5304,6 +5680,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         marginRight: {
@@ -5653,6 +6051,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -6066,6 +6486,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         height: {
@@ -6459,6 +6901,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -6872,6 +7336,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         minHeight: {
@@ -7265,6 +7751,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -7678,6 +8186,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         maxHeight: {
@@ -8081,6 +8611,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
             };
         };
         inset: {
@@ -8430,6 +8982,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     };
                 };
                 x30: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x32: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                x64: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -9203,6 +9777,9 @@ declare const translateY: {
 declare const translate: {
     '-50%': string;
 };
+declare const shadow: {
+    small: string;
+};
 declare const center: {
     x: string;
     y: string;
@@ -9285,6 +9862,7 @@ declare const styles_top: typeof top;
 declare const styles_translateX: typeof translateX;
 declare const styles_translateY: typeof translateY;
 declare const styles_translate: typeof translate;
+declare const styles_shadow: typeof shadow;
 declare const styles_center: typeof center;
 declare const styles_display: typeof display;
 declare const styles_objectFit: typeof objectFit;
@@ -9306,6 +9884,7 @@ declare namespace styles {
     styles_translateX as translateX,
     styles_translateY as translateY,
     styles_translate as translate,
+    styles_shadow as shadow,
     styles_center as center,
     styles_display as display,
     styles_objectFit as objectFit,
@@ -9402,6 +9981,7 @@ interface BoxProps {
     overflowY?: Atoms['overflowY'];
     pointerEvents?: Atoms['pointerEvents'];
     wordBreak?: Atoms['wordBreak'];
+    id?: string;
 }
 declare const BoxDefaultElement = "div";
 declare type BoxComponentProps<E extends ElementType = typeof BoxDefaultElement> = PolymorphicPropsWithRef<BoxProps, E>;
@@ -9436,54 +10016,61 @@ declare const buttonVariants: {
         })[];
     };
     variant: {
-        primary: {
-            color: _vanilla_extract_private.CSSVarFunction;
-            backgroundColor: _vanilla_extract_private.CSSVarFunction;
+        primary: (string | {
             selectors: {
                 '&:not([disabled]):hover': {
+                    cursor: string;
                     backgroundColor: _vanilla_extract_private.CSSVarFunction;
                 };
             };
-        };
-        secondary: {
-            color: _vanilla_extract_private.CSSVarFunction;
-            backgroundColor: _vanilla_extract_private.CSSVarFunction;
+        })[];
+        secondary: (string | {
             selectors: {
                 '&:not([disabled]):hover': {
+                    cursor: string;
                     backgroundColor: _vanilla_extract_private.CSSVarFunction;
                 };
             };
-        };
-        destructive: {
-            color: _vanilla_extract_private.CSSVarFunction;
-            backgroundColor: _vanilla_extract_private.CSSVarFunction;
+        })[];
+        destructive: (string | {
             selectors: {
                 '&:not([disabled]):hover': {
+                    cursor: string;
                     backgroundColor: _vanilla_extract_private.CSSVarFunction;
                 };
             };
-        };
-        outline: {
-            color: _vanilla_extract_private.CSSVarFunction;
-            borderColor: _vanilla_extract_private.CSSVarFunction;
-            borderWidth: _vanilla_extract_private.CSSVarFunction;
-            backgroundColor: string;
+        })[];
+        outline: (string | {
             selectors: {
                 '&:not([disabled]):hover': {
+                    cursor: string;
                     backgroundColor: _vanilla_extract_private.CSSVarFunction;
                 };
             };
-        };
-        ghost: {
-            color: _vanilla_extract_private.CSSVarFunction;
-            borderColor: string;
-            backgroundColor: string;
+        })[];
+        circle: (string | {
+            aspectRatio: string;
+            minWidth: number;
+            height: string;
+            selectors: {
+                '&[disabled]': {
+                    color: _vanilla_extract_private.CSSVarFunction;
+                    backgroundColor: string;
+                };
+                '&:not([disabled]):hover': {
+                    cursor: string;
+                    borderColor: _vanilla_extract_private.CSSVarFunction;
+                };
+            };
+        })[];
+        ghost: (string | {
             selectors: {
                 '&:hover, &:not([disabled]):hover': {
+                    cursor: string;
                     backgroundColor: _vanilla_extract_private.CSSVarFunction;
                 };
             };
-        };
+        })[];
         unset: {
             backgroundColor: string;
             gap: string;
@@ -9516,6 +10103,10 @@ declare const iconVariants: {
             width: _vanilla_extract_private.CSSVarFunction;
             height: _vanilla_extract_private.CSSVarFunction;
         };
+        xl: {
+            width: _vanilla_extract_private.CSSVarFunction;
+            height: _vanilla_extract_private.CSSVarFunction;
+        };
     };
     rotate: {
         true: string[];
@@ -9527,6 +10118,7 @@ interface ButtonProps extends FlexProps {
     variant?: keyof typeof buttonVariants['variant'];
     size?: keyof typeof buttonVariants['size'];
     icon?: IconProps['id'];
+    iconAlign?: 'left' | 'right';
     type?: 'submit' | 'reset' | 'button';
     iconSize?: keyof typeof iconVariants['size'];
     loading?: boolean;
@@ -9561,6 +10153,12 @@ declare const Flex: PolymorphicForwardRefExoticComponent<FlexProps, typeof BoxDe
 interface StackProps extends FlexProps {
 }
 declare const Stack: PolymorphicForwardRefExoticComponent<StackProps, typeof BoxDefaultElement>;
+
+interface LinkProps extends WithRouterProps, LinkProps$1 {
+    children: ReactElementLike;
+    activeClassName?: string;
+}
+declare const Link: React.ComponentType<next_dist_client_with_router.ExcludeRouterProps<LinkProps>>;
 
 declare const textVariants: {
     readonly textAlign: {
@@ -9786,6 +10384,8 @@ declare const SvgLogout: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
 declare const SvgMetamask: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
+declare const SvgPencil: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+
 declare const SvgPlus: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
 declare const SvgQuestion: (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -9829,6 +10429,7 @@ declare namespace iconComponents {
     SvgKebab as Kebab,
     SvgLogout as Logout,
     SvgMetamask as Metamask,
+    SvgPencil as Pencil,
     SvgPlus as Plus,
     SvgQuestion as Question,
     SvgRainbow as Rainbow,
@@ -9843,8 +10444,8 @@ declare namespace iconComponents {
 }
 
 declare type IconType = keyof typeof iconComponents;
-declare const icons: ("ArrowRightAngle" | "ArrowRight" | "Auction" | "Bell" | "Check" | "ChevronDown" | "ChevronLeft" | "ChevronRight" | "ChevronUp" | "Close" | "Coinbase" | "Copy" | "Create" | "Discord" | "Download" | "Ellipsis" | "Embed" | "Instagram" | "Kebab" | "Logout" | "Metamask" | "Plus" | "Question" | "Rainbow" | "Search" | "Shield" | "Spinner" | "Tag" | "Twitter" | "WalletConnect" | "Warning")[];
-interface IconProps extends BoxProps {
+declare const icons: ("ArrowRightAngle" | "ArrowRight" | "Auction" | "Bell" | "Check" | "ChevronDown" | "ChevronLeft" | "ChevronRight" | "ChevronUp" | "Close" | "Coinbase" | "Copy" | "Create" | "Discord" | "Download" | "Ellipsis" | "Embed" | "Instagram" | "Kebab" | "Logout" | "Metamask" | "Pencil" | "Plus" | "Question" | "Rainbow" | "Search" | "Shield" | "Spinner" | "Tag" | "Twitter" | "WalletConnect" | "Warning")[];
+interface IconProps extends FlexProps {
     id?: IconType;
     size?: keyof typeof iconVariants['size'];
 }
@@ -9872,7 +10473,7 @@ interface InputProps extends BoxProps {
     size?: keyof typeof inputVariants['sizeVariant'];
 }
 declare type InputComponentProps<E extends ElementType> = PolymorphicPropsWithRef<InputProps, E>;
-declare function Input<E extends ElementType = 'input'>({ className, sizeVariant, ...props }: InputComponentProps<E>): JSX.Element;
+declare const Input: PolymorphicForwardRefExoticComponent<InputProps, 'input'>;
 
 interface InputFieldProps extends BoxComponentProps<'input'> {
     name: string;
@@ -9887,20 +10488,34 @@ interface InputFieldProps extends BoxComponentProps<'input'> {
     icon?: IconProps['id'];
     className?: string;
     disabled?: boolean;
+    indentFields?: boolean;
     error?: string;
     description?: string;
+    descriptionVariant?: keyof typeof textVariants['variant'];
+    lowProfile?: boolean;
 }
-declare function InputField({ value, label, name, icon, type, description, error, step, min, max, className, placeholder, affix, disabled, ...props }: InputFieldProps): JSX.Element;
+declare const InputField: PolymorphicForwardRefExoticComponent<InputFieldProps, 'input'>;
 
 declare const inputField: string;
 declare const inputFieldLabel: _vanilla_extract_recipes_dist_declarations_src_types.RuntimeFn<{
     disabled: {
         true: {
-            cursor: string;
+            cursor: "not-allowed";
+        };
+    };
+    indentFields: {
+        true: {
+            marginLeft: _vanilla_extract_private.CSSVarFunction;
         };
     };
 }>;
 declare const inputFieldBaseInput: _vanilla_extract_recipes_dist_declarations_src_types.RuntimeFn<{
+    lowProfile: {
+        true: {
+            backgroundColor: _vanilla_extract_private.CSSVarFunction;
+            borderColor: _vanilla_extract_private.CSSVarFunction;
+        };
+    };
     icon: {
         true: {
             paddingLeft: _vanilla_extract_private.CSSVarFunction;
@@ -9922,10 +10537,11 @@ interface TextAreaProps extends BoxComponentProps<'textarea'> {
     className?: string;
     initialHeight?: number;
     disabled?: boolean;
+    indentFields?: boolean;
     error?: string;
     description?: string;
 }
-declare function TextArea({ value, label, name, description, error, className, placeholder, disabled, initialHeight, ...props }: TextAreaProps): JSX.Element;
+declare function TextArea({ value, label, name, description, error, className, placeholder, disabled, indentFields, initialHeight, ...props }: TextAreaProps): JSX.Element;
 
 declare const selectVariants: {
     size: {
@@ -9974,6 +10590,18 @@ interface CheckboxProps {
     onClick?: () => void;
 }
 declare function Checkbox({ label, id, name, className, checked, defaultChecked, disabled, onClick, onChange, ...props }: CheckboxProps): JSX.Element;
+
+interface SwitchProps {
+    id?: string;
+    value?: string;
+    label?: string;
+    textVariant?: keyof typeof textVariants['variant'];
+    disabled?: boolean;
+    checked?: boolean;
+    defaultChecked?: boolean;
+    onChange?: () => void;
+}
+declare function Switch({ id, value, label, defaultChecked, checked, disabled, onChange, textVariant, }: SwitchProps): JSX.Element;
 
 interface RadioButtonGroupProps extends RadioGroupProps {
     items: Omit<RadioButtonProps, 'id'>[];
@@ -10026,6 +10654,25 @@ interface WellProps extends StackProps {
 }
 declare function Well({ label, className, children, ...props }: WellProps): JSX.Element;
 
+interface PopUpProps {
+    trigger?: React.ReactNode;
+    children?: React.ReactNode;
+    open?: boolean;
+    offsetX?: number;
+    offsetY?: number;
+    placement?: Placement;
+    padding?: Atoms['padding'];
+    triggerClassName?: string;
+    onOpenChange?: (state: boolean) => void;
+}
+declare function PopUp({ trigger, children, open, placement, padding, offsetX, offsetY, triggerClassName, onOpenChange, }: PopUpProps): JSX.Element;
+
+interface SpinnerOGProps {
+    size?: number | string;
+    className?: string;
+}
+declare function SpinnerOG({ size, className }: SpinnerOGProps): JSX.Element;
+
 interface ThemeProviderProps extends BoxProps {
     theme?: ClassValue;
 }
@@ -10045,6 +10692,7 @@ declare const color: {
     white70: string;
     white50: string;
     white30: string;
+    white20: string;
     white10: string;
     white5: string;
     transparent: string;
@@ -10054,9 +10702,11 @@ declare const color: {
     errorBackground: string;
     successLight: string;
     successDefault: string;
+    successBackground: string;
     successDark: string;
     warningLight: string;
     warningDefault: string;
+    warningBackground: string;
     warningDark: string;
 };
 
@@ -10092,6 +10742,8 @@ declare const space: {
     x28: string;
     x29: string;
     x30: string;
+    x32: string;
+    x64: string;
     auto: string;
 };
 declare const size$1: {
@@ -10130,6 +10782,8 @@ declare const size$1: {
     readonly x28: string;
     readonly x29: string;
     readonly x30: string;
+    readonly x32: string;
+    readonly x64: string;
     readonly auto: string;
 };
 
@@ -10144,6 +10798,7 @@ declare const themeBreakpoints: {
 };
 
 declare const radii: {
+    readonly tiny: "2px";
     readonly small: "4px";
     readonly normal: "5px";
     readonly curved: "10px";
@@ -10192,4 +10847,4 @@ declare namespace typography {
   };
 }
 
-export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Spinner, SpinnerProps, Stack, StackProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, colorTheme, darkTheme, ease, fontWeight, icons, inputField, inputFieldBaseInput, inputFieldLabel, lightTheme, media, mixins, radii, root, size$1 as size, space, textVariants, themeBreakpoints, themeClass, transitions, typography, vars };
+export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, Link, LinkProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, PopUp, PopUpProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Spinner, SpinnerOG, SpinnerOGProps, SpinnerProps, Stack, StackProps, Switch, SwitchProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, colorTheme, darkTheme, ease, fontWeight, icons, inputField, inputFieldBaseInput, inputFieldLabel, lightTheme, media, mixins, radii, root, size$1 as size, space, textVariants, themeBreakpoints, themeClass, transitions, typography, vars };

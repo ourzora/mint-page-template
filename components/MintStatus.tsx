@@ -1,7 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
   Box,
-  Well,
   Button,
   Eyebrow,
   Paragraph,
@@ -9,169 +8,109 @@ import {
   Heading,
   Text,
   Stack,
+  SpinnerOG,
 } from '@zoralabs/zord'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
 import { useAccount, useNetwork } from 'wagmi'
 import { formatCryptoVal } from 'lib/numbers'
 import { OPEN_EDITION_SIZE } from 'lib/constants'
-import { intervalToDuration } from 'date-fns'
-import { waitingApproval, priceDateHeading } from 'styles/styles.css'
+import { parseInt } from 'lodash'
+import { waitingApproval, priceDateHeading, mintCounterInput } from 'styles/styles.css'
+import { useSaleStatus } from 'hooks/useSaleStatus'
+import { CountdownTimer } from 'components/CountdownTimer'
+import { cleanErrors } from 'lib/errors'
+import { AllowListEntry } from 'lib/merkle-proof'
 import type { ContractTransaction } from 'ethers'
 
-function isValidDate(date: Date) {
-  return date instanceof Date && isFinite(date.getTime())
-}
-
-function useCountdown(
-  end: number,
-  { onElapse }: { onElapse?: () => void }
-): { countdownText: string | null; countdownTooLarge: boolean } {
-  const date = useMemo(() => new Date(end), [end])
-  const [now, setNow] = useState(new Date())
-
-  const countdownTooLarge = useMemo(
-    () => !isValidDate(date) || date.getTime() > now.getTime() + 31536000000,
-    [date, now]
-  )
-
-  const tick = useCallback(() => {
-    setNow(new Date())
-
-    const nextTick = setTimeout(() => {
-      if (!countdownTooLarge) tick()
-    }, 1000)
-
-    return () => clearTimeout(nextTick)
-  }, [countdownTooLarge])
-
-  useEffect(() => {
-    tick()
-  }, [tick])
-
-  useEffect(() => {
-    if (onElapse && Number(date) <= Number(now)) {
-      onElapse()
-    }
-  }, [onElapse, date, now])
-
-  const duration = countdownTooLarge
-    ? null
-    : intervalToDuration({
-        start: now,
-        end: date,
-      })
-
-  const countdownText = useMemo(
-    () =>
-      duration
-        ? [
-            duration.days ? duration.days + 'd' : '',
-            duration.hours + 'h',
-            duration.minutes + 'm',
-            duration.days && duration.days > 0 ? '' : duration.seconds + 's',
-          ].join(' ')
-        : null,
-    [duration]
-  )
-
-  return { countdownText, countdownTooLarge }
-}
-
-function CountdownTimer({
-  targetTime,
-  refresh,
-  hideLargeCountdown = true,
-  appendText = '',
-  prependText = '',
+function SaleStatus({
+  collection,
+  isMinted,
+  setIsMinted,
+  presale,
+  mintCounter = 1,
+  availableMints,
+  allowlistEntry,
 }: {
-  targetTime: number
-  refresh?: boolean
-  hideLargeCountdown?: boolean
-  appendText?: string
-  prependText?: string
+  collection: SubgraphERC721Drop
+  isMinted: boolean
+  setIsMinted: (state: boolean) => void
+  presale: boolean
+  mintCounter: number
+  availableMints: number
+  allowlistEntry?: AllowListEntry
 }) {
-  const { countdownText, countdownTooLarge } = useCountdown(targetTime, {
-    onElapse: refresh ? () => location.reload() : undefined,
-  })
-
-  return (
-    <>
-      {!countdownTooLarge
-        ? prependText + countdownText + appendText
-        : hideLargeCountdown
-        ? ''
-        : prependText + '> 1 year' + appendText}
-    </>
-  )
-}
-
-function SaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
   const dropProvider = useERC721DropContract()
   const [awaitingApproval, setAwaitingApproval] = useState<boolean>(false)
   const [isMinting, setIsMinting] = useState<boolean>(false)
-  const [isMinted, setIsMinted] = useState<boolean>(false)
   const [errors, setErrors] = useState<string>()
+
+  const { startDate, endDate, isSoldOut, saleIsActive, saleNotStarted, saleIsFinished } =
+    useSaleStatus({
+      collection,
+      presale,
+    })
 
   const correctNetwork = useMemo(
     () => process.env.NEXT_PUBLIC_CHAIN_ID === activeChain?.id.toString(),
     [activeChain]
   )
 
-  const saleIsActive =
-    Number(collection.salesConfig.publicSaleStart) * 1000 <= Date.now() &&
-    Number(collection.salesConfig.publicSaleEnd) * 1000 > Date.now()
-
-  const saleNotStarted =
-    Number(collection.salesConfig.publicSaleStart) * 1000 > Date.now()
-  const saleIsFinished = Number(collection.salesConfig.publicSaleEnd) * 1000 < Date.now()
-
   const handleMint = useCallback(async () => {
     setIsMinted(false)
     setAwaitingApproval(true)
     setErrors(undefined)
     try {
-      const tx: ContractTransaction | undefined = await dropProvider.purchase(1)
+      const tx: ContractTransaction | undefined = presale
+        ? await dropProvider.purchasePresale(mintCounter, allowlistEntry)
+        : await dropProvider.purchase(mintCounter)
       console.log({ tx })
       setAwaitingApproval(false)
       setIsMinting(true)
       if (tx) {
-        await tx.wait(1)
+        await tx.wait(2)
         setIsMinting(false)
         setIsMinted(true)
       } else {
         throw 'Error creating transaction! Please try again'
       }
     } catch (e: any) {
-      // Suppress error message if user rejected tx request (code 4001)
-      if (e.code !== 4001) {
-        setErrors(e.message)
-      }
+      setErrors(cleanErrors(e))
       setAwaitingApproval(false)
       setIsMinting(false)
     }
-  }, [dropProvider])
+  }, [dropProvider, mintCounter, allowlistEntry])
 
-  if (saleIsFinished || Number(collection.totalMinted) >= Number(collection.maxSupply)) {
+  if (saleIsFinished || isSoldOut) {
     return (
-      <>
-        <Box style={{ borderTop: '2px solid #F2F2F2' }} />
-        <Heading size="xs">{saleIsFinished ? 'Minting complete' : 'Sold out'}</Heading>
-        <Paragraph color="secondary">
+      <Box>
+        <Heading align="center" size="xs">
+          {saleIsFinished ? 'Minting complete' : 'Sold out'}
+        </Heading>
+        <Paragraph
+          mt="x1"
+          align="center"
+          size="sm"
+          color="secondary"
+          maxW="x64"
+          mx="auto"
+        >
           There may be NFTs for sale on the secondary&nbsp;market.
         </Paragraph>
         <Button
           as="a"
           href={`https://zora.co/collections/${collection.address}`}
           target="_blank"
+          rel="noreferrer"
           size="lg"
+          mt="x3"
         >
           View on Zora Marketplace
         </Button>
-      </>
+      </Box>
     )
   }
 
@@ -184,45 +123,57 @@ function SaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
             iconSize="sm"
             size="lg"
             variant={
-              account == null ? undefined : !correctNetwork ? 'destructive' : undefined
+              account == null
+                ? undefined
+                : !correctNetwork
+                ? 'destructive'
+                : saleNotStarted || availableMints < 1
+                ? 'secondary'
+                : undefined
             }
             onClick={
-              account == null
-                ? openConnectModal
-                : !correctNetwork
-                ? openChainModal
-                : handleMint
+              !account ? openConnectModal : !correctNetwork ? openChainModal : handleMint
             }
-            style={{ backgroundColor: isMinted ? '#1CB687' : '' }}
+            style={isMinted ? { backgroundColor: '#1CB687' } : {}}
             className={awaitingApproval ? waitingApproval : ''}
-            loading={isMinting}
             disabled={
               isMinting ||
               awaitingApproval ||
-              (account && correctNetwork && saleNotStarted)
+              (account && correctNetwork && saleNotStarted) ||
+              (account && correctNetwork && availableMints < 1)
             }
           >
-            {!isMinting &&
-              (account == null
-                ? 'Connect wallet'
-                : !correctNetwork
-                ? 'Wrong network'
-                : awaitingApproval
-                ? 'Confirm in wallet'
-                : isMinted
-                ? 'Minted'
-                : saleNotStarted
-                ? 'Not started'
-                : 'Mint')}
+            {isMinting ? (
+              <SpinnerOG />
+            ) : !account ? (
+              'Connect wallet'
+            ) : !correctNetwork ? (
+              'Wrong network'
+            ) : awaitingApproval ? (
+              'Confirm in wallet'
+            ) : isMinted ? (
+              'Minted'
+            ) : saleNotStarted ? (
+              'Not started'
+            ) : availableMints < 1 ? (
+              'Mint limit reached'
+            ) : (
+              'Mint'
+            )}
           </Button>
         )}
       </ConnectButton.Custom>
-      {saleIsActive && collection.salesConfig.publicSaleEnd.length < 16 && (
+      {saleIsActive && (
+        <Text variant="paragraph-sm" align="center" color="tertiary">
+          <CountdownTimer targetTime={endDate} refresh={true} appendText=" left" />
+        </Text>
+      )}
+      {saleNotStarted && (
         <Text variant="paragraph-sm" align="center" color="tertiary">
           <CountdownTimer
-            targetTime={Number(collection.salesConfig.publicSaleEnd) * 1000}
+            targetTime={startDate}
             refresh={true}
-            appendText=" left"
+            prependText="Starts in "
           />
         </Text>
       )}
@@ -237,66 +188,141 @@ function SaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
 
 export function MintStatus({
   collection,
-  className,
+  presale = false,
+  showPrice = true,
+  allowlistEntry,
 }: {
   collection: SubgraphERC721Drop
-  className?: string
+  presale?: boolean
+  showPrice?: boolean
+  allowlistEntry?: AllowListEntry
 }) {
-  const saleNotStarted =
-    Number(collection.salesConfig.publicSaleStart) * 1000 > Date.now()
+  const { userMintedCount, totalMinted, updateMintCounters } = useERC721DropContract()
+  const { isSoldOut, saleIsActive, saleIsFinished } = useSaleStatus({
+    collection,
+    presale,
+  })
+  const maxPerWallet = parseInt(
+    presale
+      ? allowlistEntry?.maxCount || '0'
+      : collection.salesConfig.maxSalePurchasePerAddress
+  )
+  const [isMinted, setIsMinted] = useState<boolean>(false)
+  const [mintCounter, setMintCounter] = useState(1)
+  const availableMints = maxPerWallet - (userMintedCount || 0)
+  const internalPrice = allowlistEntry?.price || collection.salesConfig.publicSalePrice
+
+  useEffect(() => {
+    updateMintCounters()
+  }, [updateMintCounters, isMinted])
+
+  function handleMintCounterUpdate(value: any) {
+    setMintCounter(value)
+    setIsMinted(false)
+  }
+
+  const clampMintCounter = useCallback(() => {
+    if (mintCounter > availableMints) setMintCounter(Math.max(1, availableMints))
+    else if (mintCounter < 1) setMintCounter(1)
+    else setMintCounter(Math.round(mintCounter))
+  }, [mintCounter, isMinted])
 
   // TODO: handle integer overflows for when we do open mints
   const formattedMintedCount = Intl.NumberFormat('en', {
-    notation: 'compact',
-  }).format(Number(collection.totalMinted))
+    notation: 'standard',
+  }).format(totalMinted || parseInt(collection.totalMinted))
+
   const formattedTotalSupplyCount = Intl.NumberFormat('en', {
-    notation: 'compact',
-  }).format(Number(collection.maxSupply))
+    notation: 'standard',
+  }).format(parseInt(collection.maxSupply))
 
   return (
-    <Well
-      className={className}
-      gap="x4"
-      p="x5"
-      style={{ width: '100%', height: 'max-content' }}
-    >
-      <Flex gap="x3" flexChildren justify="space-between" wrap="wrap">
-        <Stack gap="x1" style={{ flex: 'none' }}>
-          <Eyebrow>Price</Eyebrow>
-          <Heading size="sm" className={priceDateHeading}>
-            {formatCryptoVal(collection.salesConfig.publicSalePrice)}&nbsp;ETH
-          </Heading>
-        </Stack>
-
-        {saleNotStarted && collection.salesConfig.publicSaleStart.length < 14 ? (
-          <Stack gap="x1" style={{ textAlign: 'right' }}>
-            <Eyebrow>Starts</Eyebrow>
+    <Stack gap="x4">
+      {showPrice && !saleIsFinished && !isSoldOut && (
+        <Flex gap="x3" flexChildren justify="space-between" align="flex-end" wrap="wrap">
+          <Stack gap="x1" style={{ flex: 'none' }}>
+            <Eyebrow>Price</Eyebrow>
             <Heading size="sm" className={priceDateHeading}>
-              <CountdownTimer
-                targetTime={Number(collection.salesConfig.publicSaleStart) * 1000}
-                refresh={true}
-                hideLargeCountdown={false}
-              />
+              {internalPrice === '0'
+                ? 'Free'
+                : `${formatCryptoVal(Number(internalPrice) * (mintCounter || 1))} ETH`}
             </Heading>
           </Stack>
-        ) : (
-          <Stack gap="x1" style={{ textAlign: 'right' }}>
-            <Eyebrow>Sold</Eyebrow>
-            <Heading size="sm" className={priceDateHeading}>
-              {formattedMintedCount}
-              {Number(collection.maxSupply) > OPEN_EDITION_SIZE ? (
-                ' NFTs'
-              ) : (
-                <Box display="inline" color="tertiary" style={{ lineHeight: 'inherit' }}>
-                  /{formattedTotalSupplyCount}
-                </Box>
-              )}
-            </Heading>
-          </Stack>
-        )}
-      </Flex>
 
-      <SaleStatus collection={collection} />
-    </Well>
+          {saleIsActive && !isSoldOut ? (
+            <Stack gap="x1" style={{ textAlign: 'right' }}>
+              <Flex gap="x2" justify="flex-end" align="center">
+                <Button
+                  w="x12"
+                  variant="circle"
+                  disabled={mintCounter <= 1}
+                  onClick={() =>
+                    handleMintCounterUpdate((state: number) =>
+                      state > 0 ? state - 1 : state
+                    )
+                  }
+                >
+                  <Heading size="sm" className={priceDateHeading}>
+                    –
+                  </Heading>
+                </Button>
+                <Heading display="flex" size="sm" className={priceDateHeading}>
+                  <input
+                    type="number"
+                    min={1}
+                    placeholder="1"
+                    value={mintCounter || ''}
+                    onBlur={clampMintCounter}
+                    onChange={(e) => handleMintCounterUpdate(Number(e.target.value))}
+                    className={mintCounterInput}
+                  />
+                </Heading>
+                <Button
+                  w="x12"
+                  disabled={mintCounter >= availableMints}
+                  variant="circle"
+                  onClick={() =>
+                    setMintCounter((state) => (state < maxPerWallet ? state + 1 : state))
+                  }
+                >
+                  <Heading size="sm" className={priceDateHeading}>
+                    +
+                  </Heading>
+                </Button>
+              </Flex>
+            </Stack>
+          ) : saleIsFinished ? (
+            <Stack gap="x1" style={{ flex: 'none' }}>
+              <Eyebrow>Sold</Eyebrow>
+              <Heading size="sm" className={priceDateHeading}>
+                {formattedMintedCount}
+                {parseInt(collection.maxSupply) > OPEN_EDITION_SIZE ? (
+                  ' NFTs'
+                ) : (
+                  <Box
+                    display="inline"
+                    color="tertiary"
+                    style={{ lineHeight: 'inherit' }}
+                  >
+                    /{formattedTotalSupplyCount}
+                  </Box>
+                )}
+              </Heading>
+            </Stack>
+          ) : null}
+        </Flex>
+      )}
+
+      <SaleStatus
+        collection={collection}
+        mintCounter={mintCounter}
+        isMinted={isMinted}
+        presale={presale}
+        setIsMinted={setIsMinted}
+        allowlistEntry={allowlistEntry}
+        availableMints={availableMints}
+      />
+    </Stack>
   )
 }
+

@@ -1,6 +1,6 @@
 {
   "name": "@zoralabs/zord",
-  "version": "1.0.6",
+  "version": "0.2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -37,11 +37,12 @@
     "clsx": "^1.1.1",
     "react": "^17.0.2"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "jest": {
     "preset": "scripts/jest/node"
   },
-  "yalcSig": "5427a255663b16891c5cfffbe5ff7d00"
+  "dependencies": {
+    "@radix-ui/react-switch": "^0.1.5",
+    "uuid": "^8.3.2"
+  },
+  "yalcSig": "1f1de61bb8978459621fd4020519b4ef"
 }

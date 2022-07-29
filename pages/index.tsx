@@ -1,63 +1,69 @@
 import request from 'graphql-request'
 import Head from 'next/head'
-import { Box, Stack, Flex, Well, Text } from '@zoralabs/zord'
+import { useState } from 'react'
+import {
+  Box,
+  Stack,
+  Flex,
+  Well,
+  Text,
+  Button,
+  Paragraph,
+  SpinnerOG,
+} from '@zoralabs/zord'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { utils } from 'ethers'
 import { GetStaticProps, NextPage } from 'next'
+import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { MintStatus } from '@components/MintStatus'
+import { MintDetails } from '@components/MintDetails'
+import { PresaleStatus } from '@components/PresaleStatus'
 import { GET_COLLECTION_QUERY, SUBGRAPH_URL } from 'constants/queries'
-// import { useRecentTokens } from '@hooks/useRecentTokens'
 import { ipfsImage } from '@lib/helpers'
-import { contractAddress, baseUrl } from '@lib/constants'
+import { contractAddress } from '@lib/constants'
 import { header, maxWidth, border, heroImage } from 'styles/styles.css'
+import { useSaleStatus } from 'hooks/useSaleStatus'
 
 interface HomePageProps {
-  contractData: SubgraphERC721Drop
+  collection: SubgraphERC721Drop
 }
 
-const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
-  // const nothingMinted = Number(contractData.totalMinted) === 0
-  // Load initial state for recent tokens
-  // const { isLoading: tokensLoading, tokens } = useRecentTokens({
-  //   url: `${baseUrl}/api/metadata/${nothingMinted ? 'sample/' : ''}`,
-  //   reverse: false,
-  //   start: Math.max(0, Number(contractData.totalMinted) - 12),
-  //   end: Number(contractData.totalMinted),
-  // })
-
-  const ogImage = ipfsImage(contractData.editionMetadata.imageURI)
+const HomePage: NextPage<HomePageProps> = ({ collection }) => {
+  const ogImage = ipfsImage(collection.editionMetadata.imageURI)
+  const { presaleExists, saleNotStarted, saleIsFinished } = useSaleStatus({ collection })
+  const [showPresale, setShowPresale] = useState(saleNotStarted && !saleIsFinished)
 
   return (
     <>
       <Head>
-        <title>{contractData.name}</title>
-        <meta name="title" content={`${contractData.name}`} />
+        <title>{collection.name}</title>
+        <meta name="title" content={`${collection.name}`} />
         <meta
           name="description"
           content={
-            contractData.editionMetadata?.description ||
+            collection.editionMetadata?.description ||
             "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
           }
         />
-        <meta name="og:title" content={`${contractData.name}`} />
+        <meta name="og:title" content={`${collection.name}`} />
         <meta
           name="og:url"
-          content={`https://create.zora.co/editions/${contractData.address}`}
+          content={`https://create.zora.co/editions/${collection.address}`}
         />
         <meta
           name="og:description"
           content={
-            contractData.editionMetadata?.description ||
+            collection.editionMetadata?.description ||
             "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
           }
         />
         <meta name="og:image" content={ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${contractData.name}`} />
+        <meta name="twitter:title" content={`${collection.name}`} />
         <meta
           name="twitter:url"
-          content={`https://create.zora.co/editions/${contractData.address}`}
+          content={`https://create.zora.co/editions/${collection.address}`}
         />
         <meta name="twitter:image" content={ogImage} />
       </Head>
@@ -68,18 +74,62 @@ const HomePage: NextPage<HomePageProps> = ({ contractData }) => {
       <Stack mt="x3" gap="x3">
         <Box className={maxWidth} p="x4">
           <Text variant="display-md" mb="x8" align="center">
-            {contractData.name}
+            {collection.name}
           </Text>
-          <Text>{contractData?.editionMetadata?.description}</Text>
+          <Text>{collection?.editionMetadata?.description}</Text>
           <Box mt="x8" mx="auto" style={{ maxWidth: 560 }}>
             <Well className={border} p="x6" style={{ borderBottom: 0 }}>
               <img
                 className={heroImage}
-                src={ipfsImage(contractData.editionMetadata.imageURI)}
-                alt={contractData.name}
+                src={ipfsImage(collection.editionMetadata.imageURI)}
+                alt={collection.name}
               />
             </Well>
-            <MintStatus className={border} collection={contractData} />
+            <Well className={border} p="x6">
+              <ERC721DropContractProvider erc721DropAddress={collection.address}>
+                <Box>
+                  {collection != null ? (
+                    <>
+                      {presaleExists ? (
+                        <>
+                          <Flex flexChildren gap="x3" mb="x2">
+                            <Button
+                              pill
+                              variant={showPresale ? 'primary' : 'ghost'}
+                              color={showPresale ? 'primary' : 'tertiary'}
+                              onClick={() => setShowPresale(true)}
+                            >
+                              Presale
+                            </Button>
+                            <Button
+                              pill
+                              variant={!showPresale ? 'primary' : 'ghost'}
+                              color={!showPresale ? 'primary' : 'tertiary'}
+                              onClick={() => setShowPresale(false)}
+                            >
+                              Public sale
+                            </Button>
+                          </Flex>
+                          <Box style={{ display: showPresale ? 'block' : 'none' }}>
+                            <PresaleStatus collection={collection} />
+                          </Box>
+                          <Box style={{ display: !showPresale ? 'block' : 'none' }}>
+                            <MintStatus collection={collection} />
+                          </Box>
+                        </>
+                      ) : (
+                        <MintStatus collection={collection} />
+                      )}
+                      <MintDetails collection={collection} showPresale={false} />
+                    </>
+                  ) : (
+                    <Paragraph align="center" mt="x8">
+                      <SpinnerOG />
+                    </Paragraph>
+                  )}
+                </Box>
+              </ERC721DropContractProvider>
+            </Well>
           </Box>
         </Box>
         <Box p="x4" className={maxWidth}>
@@ -133,7 +183,7 @@ export const getStaticProps: GetStaticProps = async () => {
   })) as Response
 
   return {
-    props: { contractData: erc721Drop },
+    props: { collection: erc721Drop },
     revalidate: 60, // every minute
   }
 }

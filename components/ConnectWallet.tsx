@@ -1,35 +1,35 @@
 import { ConnectButton as RKConnectButton } from '@rainbow-me/rainbowkit'
-import { Button, Flex, Box, Text } from '@zoralabs/zord'
-import { hideMobile } from 'styles/styles.css'
+import {
+  Button,
+  Flex,
+  Box,
+  Text,
+  Stack,
+  Paragraph,
+  PopUp,
+  Separator,
+} from '@zoralabs/zord'
+import { menuItem, hideMobile } from 'styles/styles.css'
 import { Zorb } from 'components/Zorb'
+import Link from 'next/link'
+import { shortenAddress } from 'lib/helpers'
+import { useDisconnect } from 'wagmi'
 
-export const ConnectWallet = () => {
+export const ConnectWallet = ({ connectText = 'Connect wallet', ...props }) => {
+  const { disconnect } = useDisconnect()
   return (
     <RKConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        mounted,
-      }) => {
+      {({ account, chain, openChainModal, openConnectModal, mounted }) => {
         return (
-          <div
-            {...(!mounted && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
-          >
+          <>
             {(() => {
+              if (!mounted) {
+                return null
+              }
               if (!mounted || !account || !chain) {
                 return (
-                  <Button size="sm" px="x4" onClick={openConnectModal}>
-                    Connect Wallet
+                  <Button size="sm" px="x4" onClick={openConnectModal} {...props}>
+                    {connectText}
                   </Button>
                 )
               }
@@ -45,6 +45,7 @@ export const ConnectWallet = () => {
                     px="x4"
                     onClick={openChainModal}
                     style={{ gap: 4, gridGap: 4 }}
+                    {...props}
                   >
                     <Text
                       as="span"
@@ -60,57 +61,51 @@ export const ConnectWallet = () => {
 
               return (
                 <Flex gap="x3">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={openChainModal}
-                    style={{ gap: 8, minWidth: 0 }}
-                  >
-                    {chain.hasIcon && (
-                      <Box
-                        w="x6"
-                        h="x6"
-                        overflow="hidden"
-                        borderRadius="round"
-                        mr="x0"
-                        style={{
-                          background: chain.iconBackground,
-                        }}
+                  <PopUp
+                    padding="x0"
+                    placement="bottom-end"
+                    trigger={
+                      <Button
+                        size="sm"
+                        pill
+                        variant="ghost"
+                        type="button"
+                        style={{ gap: 8, minWidth: 0 }}
                       >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? 'Chain icon'}
-                            src={chain.iconUrl}
-                            style={{ width: 24, height: 24 }}
-                          />
-                        )}
-                      </Box>
-                    )}
-                    <Box as="span" className={hideMobile}>
-                      {chain.name}
-                    </Box>{' '}
-                    &#x25BE;
-                  </Button>
-
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={openAccountModal}
-                    type="button"
-                    style={{ gap: 8, minWidth: 0 }}
+                        <Zorb size={24} address={account.address} />
+                        <Box as="span" className={hideMobile}>
+                          {account.displayName}
+                        </Box>
+                      </Button>
+                    }
                   >
-                    <Zorb size={24} address={account.address} />
-                    <Box as="span" className={hideMobile}>
-                      {account.displayName}
-                    </Box>{' '}
-                    &#x25BE;
-                  </Button>
+                    <Stack gap="x0" style={{ minWidth: 180 }}>
+                      <Link passHref href={"https://etherscan.io/address/"+account.address}>
+                        <Button as="a" size="sm" variant="ghost" className={menuItem}>
+                          <span>{account.displayName}</span>
+                          <Paragraph size="sm" color="tertiary">
+                            {shortenAddress(account.address)}
+                          </Paragraph>
+                        </Button>
+                      </Link>
+                      <Separator />
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className={menuItem}
+                        onClick={() => disconnect()}
+                      >
+                        Disconnect
+                      </Button>
+                    </Stack>
+                  </PopUp>
                 </Flex>
               )
             })()}
-          </div>
+          </>
         )
       }}
     </RKConnectButton.Custom>
   )
 }
+

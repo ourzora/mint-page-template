@@ -1,4 +1,5 @@
 import { style, keyframes } from '@vanilla-extract/css'
+import { vars, atoms } from '@zoralabs/zord'
 
 export const MAXWIDTH = 700
 const maxWidthQuery = `(max-width: ${MAXWIDTH}px)`
@@ -28,6 +29,47 @@ export const hideMobile = style({
     },
   },
 })
+
+export const menuItem = style([
+  {
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    width: '100%',
+    height: 'auto',
+    gap: 0,
+  },
+  atoms({
+    px: 'x6',
+    py: 'x3',
+  }),
+])
+
+
+export const mintCounterInput = style([
+  {
+    width: '3em',
+    minWidth: 0,
+    outline: 0,
+    selectors: {
+      '&:focus': {
+        borderColor: vars.color.border.secondary,
+      },
+      '&:hover:not(:focus)': {
+        borderColor: vars.color.border.tertiary,
+      },
+    },
+  },
+  atoms({
+    color: 'primary',
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderRadius: 'small',
+    borderWidth: 'normal',
+    borderStyle: 'solid',
+    textAlign: 'center',
+    height: 'x11',
+  }),
+])
 
 export const priceDateHeading = style({
   fontWeight: 600,
