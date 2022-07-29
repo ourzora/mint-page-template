@@ -83,7 +83,7 @@ export function MintDetails({
                 Presale start
               </Text>
               <Text variant="paragraph-sm" align="right">
-                {presaleStartDate.toLocaleString(...dateOptions)}
+                {presaleStartDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
               </Text>
             </Flex>
             <Flex gap="x2" justify="space-between">
@@ -92,7 +92,7 @@ export function MintDetails({
               </Text>
               <Text variant="paragraph-sm" align="right">
                 {!isNaN(presaleEndDate.getTime())
-                  ? presaleEndDate.toLocaleString(...dateOptions)
+                  ? presaleEndDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])
                   : 'Never'}
               </Text>
             </Flex>
@@ -103,7 +103,7 @@ export function MintDetails({
             Public sale start
           </Text>
           <Text variant="paragraph-sm" align="right">
-            {startDate.toLocaleString(...dateOptions)}
+            {startDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
           </Text>
         </Flex>
         <Flex gap="x2" justify="space-between">
@@ -111,7 +111,7 @@ export function MintDetails({
             Public sale end
           </Text>
           <Text variant="paragraph-sm" align="right">
-            {!isNaN(endDate.getTime()) ? endDate.toLocaleString(...dateOptions) : 'Never'}
+            {!isNaN(endDate.getTime()) ? endDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions]) : 'Never'}
           </Text>
         </Flex>
       </Stack>
