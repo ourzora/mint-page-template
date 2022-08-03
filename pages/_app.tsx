@@ -1,5 +1,6 @@
 import '@rainbow-me/rainbowkit/styles.css'
 import '@zoralabs/zord/index.css'
+import 'styles/theme.css'
 import 'styles/global.css'
 
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'

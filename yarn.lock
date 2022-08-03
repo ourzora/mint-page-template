@@ -1911,10 +1911,8 @@
     base64-sol "^1.0.1"
     ethers "^5.4.1"
 
-"@zoralabs/zord@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@zoralabs/zord/-/zord-0.1.0.tgz#d317c2eb9172145cbb740cdfd13c0e8fee5974f7"
-  integrity sha512-4F1vYTYwogdKBmmvxIXH4ru3Rj3hz4kLDqXLreRWbZJ3ACE+fMZA4R7YKE9o368qcJ2DfnOGJxrfQENnug0m6Q==
+"@zoralabs/zord@file:.yalc/@zoralabs/zord":
+  version "0.1.1-a"
   dependencies:
     "@radix-ui/react-switch" "^0.1.5"
     uuid "^8.3.2"
@@ -4657,6 +4655,11 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+shade-blend-color@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/shade-blend-color/-/shade-blend-color-1.0.0.tgz#cfa10d3673a22ba31d552a0e793b708bc24be0bc"
+  integrity sha512-Tnp/ppF5h3YhPCpeHiZJ2DRnvmo4luu9qpMhuksCT+QInIXJ9alA3Vd9klfEi+RY8Oh7MaK5vzH/qcLo892L1g==
 
 shebang-command@^2.0.0:
   version "2.0.0"
