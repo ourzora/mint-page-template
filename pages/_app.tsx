@@ -3,7 +3,7 @@ import '@zoralabs/zord/index.css'
 import 'styles/global.css'
 
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
-import { defaultChains, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { defaultChains, configureChains, createClient, WagmiConfig, chain } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import { contractAddress } from '@lib/constants'
@@ -11,9 +11,7 @@ import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 
 const { chains, provider } = configureChains(
   [
-    defaultChains.find(
-      (chain) => chain.id.toString() === process.env.NEXT_PUBLIC_CHAIN_ID
-    )!,
+    chain.goerli, chain.mainnet
   ],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
 )

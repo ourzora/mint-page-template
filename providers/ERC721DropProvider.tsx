@@ -1,4 +1,4 @@
-import { useSigner } from 'wagmi'
+import { defaultChains, useNetwork, useSigner } from 'wagmi'
 import React, {
   ReactNode,
   useCallback,
@@ -9,10 +9,11 @@ import React, {
 } from 'react'
 import { ERC721Drop__factory } from '../constants/typechain'
 import { EditionSaleDetails, EditionSalesConfig } from '../models/edition'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { AllowListEntry } from 'lib/merkle-proof'
 import type { ContractTransaction } from 'ethers'
+import abi from '@lib/ERC721Drop-abi.json'
 
 export interface ERC721DropProviderState {
   purchase: (quantity: number) => Promise<ContractTransaction | undefined>
@@ -35,6 +36,7 @@ export interface ERC721DropProviderState {
   revokeAdmin: (address: string | undefined) => Promise<boolean>
   isAdmin: (address: string | undefined) => Promise<boolean | undefined>
   withdraw: () => Promise<ContractTransaction | undefined>
+  correctNetwork?: boolean 
 }
 
 export const ERC721DropContext = React.createContext<ERC721DropProviderState>(
@@ -44,16 +46,27 @@ export const ERC721DropContext = React.createContext<ERC721DropProviderState>(
 function ERC721DropContractProvider({
   children,
   erc721DropAddress,
+  chainId
 }: {
   erc721DropAddress: string
   children?: ReactNode
+  chainId?: number
 }) {
   const { data: signer } = useSigner()
+  const { activeChain } = useNetwork()
   const [userMintedCount, setUserMintedCount] = useState<number>()
   const [totalMinted, setTotalMinted] = useState<number>()
   const [saleDetails, setSaleDetails] = useState<EditionSaleDetails>()
+  const chain = defaultChains.find(
+    (chain) => chain.id == chainId
+  )
+  const provider = chainId ? ethers.getDefaultProvider({chainId, name: chain.network}) : null;
+  const correctNetwork = useMemo(
+    () => (chainId || process.env.NEXT_PUBLIC_CHAIN_ID) == activeChain?.id.toString(),
+    [activeChain, chainId]
+  )
   const drop = useMemo(
-    () => (signer ? new ERC721Drop__factory(signer).attach(erc721DropAddress) : null),
+    () => (new ethers.Contract(erc721DropAddress, abi, correctNetwork ? signer : provider)),
     [signer, erc721DropAddress]
   )
 
@@ -244,6 +257,7 @@ function ERC721DropContractProvider({
         purchase,
         purchasePresale,
         isAdmin,
+        correctNetwork,
         setFundsRecipient,
         setOwner,
         grantAdmin,

@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { useAccount, useNetwork } from 'wagmi'
+import { chain, useAccount, useNetwork } from 'wagmi'
 import { formatCryptoVal } from 'lib/numbers'
 import { OPEN_EDITION_SIZE } from 'lib/constants'
 import { parseInt } from 'lodash'
@@ -44,6 +44,7 @@ function SaleStatus({
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
   const dropProvider = useERC721DropContract()
+  const { correctNetwork } = useERC721DropContract()
   const [awaitingApproval, setAwaitingApproval] = useState<boolean>(false)
   const [isMinting, setIsMinting] = useState<boolean>(false)
   const [errors, setErrors] = useState<string>()
@@ -53,11 +54,6 @@ function SaleStatus({
       collection,
       presale,
     })
-
-  const correctNetwork = useMemo(
-    () => process.env.NEXT_PUBLIC_CHAIN_ID === activeChain?.id.toString(),
-    [activeChain]
-  )
 
   const handleMint = useCallback(async () => {
     setIsMinted(false)
