@@ -1,5 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
+  vars,
   Box,
   Button,
   Eyebrow,
@@ -124,17 +125,17 @@ function SaleStatus({
             size="lg"
             variant={
               account == null
-                ? undefined
+                ? 'primary'
                 : !correctNetwork
                 ? 'destructive'
                 : saleNotStarted || availableMints < 1
                 ? 'secondary'
-                : undefined
+                : 'primary'
             }
             onClick={
               !account ? openConnectModal : !correctNetwork ? openChainModal : handleMint
             }
-            style={isMinted ? { backgroundColor: '#1CB687' } : {}}
+            style={isMinted ? { backgroundColor: vars.color.background.positive } : {}}
             className={awaitingApproval ? waitingApproval : ''}
             disabled={
               isMinting ||
@@ -325,4 +326,3 @@ export function MintStatus({
     </Stack>
   )
 }
-
