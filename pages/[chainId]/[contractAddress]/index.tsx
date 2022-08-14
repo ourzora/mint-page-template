@@ -135,31 +135,6 @@ const HomePage: NextPage<HomePageProps> = ({ collection, chainId }) => {
             </Well>
           </Box>
         </Box>
-        <Box p="x4" className={maxWidth}>
-          <Text as="h2" mt="x0" mb="x2" variant="heading-sm">
-            About
-          </Text>
-          <Text as="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et gravida
-            dolor, non finibus nibh. Nullam sollicitudin molestie sem vel fermentum.
-            Suspendisse vitae tincidunt justo. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Phasellus et gravida dolor, non finibus nibh. Nullam
-            sollicitudin molestie sem vel fermentum. Suspendisse vitae tincidunt justo.
-          </Text>
-
-          <Text as="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et gravida
-            dolor, non finibus nibh. Nullam sollicitudin molestie sem vel fermentum.
-            Suspendisse vitae tincidunt justo. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Phasellus et gravida dolor, non finibus nibh. Nullam
-            sollicitudin molestie sem vel fermentum. Suspendisse vitae tincidunt justo.
-          </Text>
-        </Box>
-        <Box p="x4" className={maxWidth} style={{ maxWidth: 400 }}>
-          <Flex gap="x3" as="p" align="center" justify="space-between">
-            <a href={`https://etherscan.io/address/${collection.address}`}>Etherscan</a>
-          </Flex>
-        </Box>
       </Stack>
     </>
   )
