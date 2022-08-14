@@ -3,10 +3,6 @@ import * as _vanilla_extract_sprinkles_dist_declarations_src_createSprinkles fro
 import { ClassValue } from 'clsx';
 import React, { ReactNode, CSSProperties, ElementType, SVGProps, Dispatch, SetStateAction, MouseEventHandler } from 'react';
 import { PolymorphicPropsWithRef, PolymorphicForwardRefExoticComponent } from 'react-polymorphic-types';
-import * as next_dist_client_with_router from 'next/dist/client/with-router';
-import { WithRouterProps } from 'next/dist/client/with-router';
-import { LinkProps as LinkProps$1 } from 'next/link';
-import { ReactElementLike } from 'prop-types';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { RadioGroupProps } from '@radix-ui/react-radio-group';
@@ -66,58 +62,68 @@ declare const theme: _vanilla_extract_private.MapLeafNodes<{
             primary: string;
             secondary: string;
             tertiary: string;
-            success: string;
-            destructive: string;
+            quaternary: string;
+            accent: string;
+            ghost: string;
+            positive: string;
             warning: string;
-            reverse: string;
+            negative: string;
+            onGhost: string;
+            onGhostDisabled: string;
+            onAccent: string;
+            onAccentDisabled: string;
+            onPositive: string;
+            onPositiveDisabled: string;
+            onWarning: string;
+            onWarningDisabled: string;
+            onNegative: string;
+            onNegativeDisabled: string;
             transparent: string;
+            border: string;
+            borderOnImage: string;
         };
         background: {
             primary: string;
             secondary: string;
             tertiary: string;
-            success: string;
+            accent: string;
+            ghost: string;
+            positive: string;
             warning: string;
-            destructive: string;
-            reverse: string;
+            negative: string;
             transparent: string;
+            backdrop: string;
+            border: string;
+            borderOnImage: string;
         };
-        border: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            success: string;
-            warning: string;
-            destructive: string;
-            transparent: string;
+        accent: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        text: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            success: string;
-            warning: string;
-            destructive: string;
-            primaryInverse: string;
-            transparent: string;
+        positive: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        error: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        negative: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        success: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        ghost: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        warning: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        neutral: {
+            hover: string;
+            active: string;
+            disabled: string;
+        };
+        shadows: {
+            small: string;
+            medium: string;
         };
     };
 }, _vanilla_extract_private.CSSVarFunction>;
@@ -130,58 +136,68 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
             primary: string;
             secondary: string;
             tertiary: string;
-            success: string;
-            destructive: string;
+            quaternary: string;
+            accent: string;
+            ghost: string;
+            positive: string;
             warning: string;
-            reverse: string;
+            negative: string;
+            onGhost: string;
+            onGhostDisabled: string;
+            onAccent: string;
+            onAccentDisabled: string;
+            onPositive: string;
+            onPositiveDisabled: string;
+            onWarning: string;
+            onWarningDisabled: string;
+            onNegative: string;
+            onNegativeDisabled: string;
             transparent: string;
+            border: string;
+            borderOnImage: string;
         };
         background: {
             primary: string;
             secondary: string;
             tertiary: string;
-            success: string;
+            accent: string;
+            ghost: string;
+            positive: string;
             warning: string;
-            destructive: string;
-            reverse: string;
+            negative: string;
             transparent: string;
+            backdrop: string;
+            border: string;
+            borderOnImage: string;
         };
-        border: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            success: string;
-            warning: string;
-            destructive: string;
-            transparent: string;
+        accent: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        text: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            success: string;
-            warning: string;
-            destructive: string;
-            primaryInverse: string;
-            transparent: string;
+        positive: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        error: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        negative: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        success: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        ghost: {
+            hover: string;
+            active: string;
+            disabled: string;
         };
-        warning: {
-            light: string;
-            default: string;
-            dark: string;
-            background: string;
+        neutral: {
+            hover: string;
+            active: string;
+            disabled: string;
+        };
+        shadows: {
+            small: string;
+            medium: string;
         };
     }, _vanilla_extract_private.CSSVarFunction>;
     fonts: _vanilla_extract_private.MapLeafNodes<{
@@ -339,6 +355,18 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
     styles: {
         color: {
             values: {
+                accent: {
+                    defaultClass: string;
+                };
+                positive: {
+                    defaultClass: string;
+                };
+                negative: {
+                    defaultClass: string;
+                };
+                warning: {
+                    defaultClass: string;
+                };
                 transparent: {
                     defaultClass: string;
                 };
@@ -351,22 +379,64 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 tertiary: {
                     defaultClass: string;
                 };
-                success: {
+                quaternary: {
                     defaultClass: string;
                 };
-                destructive: {
+                ghost: {
                     defaultClass: string;
                 };
-                warning: {
+                onGhost: {
                     defaultClass: string;
                 };
-                reverse: {
+                onGhostDisabled: {
+                    defaultClass: string;
+                };
+                onAccent: {
+                    defaultClass: string;
+                };
+                onAccentDisabled: {
+                    defaultClass: string;
+                };
+                onPositive: {
+                    defaultClass: string;
+                };
+                onPositiveDisabled: {
+                    defaultClass: string;
+                };
+                onWarning: {
+                    defaultClass: string;
+                };
+                onWarningDisabled: {
+                    defaultClass: string;
+                };
+                onNegative: {
+                    defaultClass: string;
+                };
+                onNegativeDisabled: {
+                    defaultClass: string;
+                };
+                border: {
+                    defaultClass: string;
+                };
+                borderOnImage: {
                     defaultClass: string;
                 };
             };
         };
         backgroundColor: {
             values: {
+                accent: {
+                    defaultClass: string;
+                };
+                positive: {
+                    defaultClass: string;
+                };
+                negative: {
+                    defaultClass: string;
+                };
+                warning: {
+                    defaultClass: string;
+                };
                 transparent: {
                     defaultClass: string;
                 };
@@ -379,16 +449,16 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 tertiary: {
                     defaultClass: string;
                 };
-                success: {
+                ghost: {
                     defaultClass: string;
                 };
-                destructive: {
+                border: {
                     defaultClass: string;
                 };
-                warning: {
+                borderOnImage: {
                     defaultClass: string;
                 };
-                reverse: {
+                backdrop: {
                     defaultClass: string;
                 };
             };
@@ -417,6 +487,18 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         borderColor: {
             values: {
+                accent: {
+                    defaultClass: string;
+                };
+                positive: {
+                    defaultClass: string;
+                };
+                negative: {
+                    defaultClass: string;
+                };
+                warning: {
+                    defaultClass: string;
+                };
                 transparent: {
                     defaultClass: string;
                 };
@@ -429,13 +511,46 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 tertiary: {
                     defaultClass: string;
                 };
-                success: {
+                quaternary: {
                     defaultClass: string;
                 };
-                destructive: {
+                ghost: {
                     defaultClass: string;
                 };
-                warning: {
+                onGhost: {
+                    defaultClass: string;
+                };
+                onGhostDisabled: {
+                    defaultClass: string;
+                };
+                onAccent: {
+                    defaultClass: string;
+                };
+                onAccentDisabled: {
+                    defaultClass: string;
+                };
+                onPositive: {
+                    defaultClass: string;
+                };
+                onPositiveDisabled: {
+                    defaultClass: string;
+                };
+                onWarning: {
+                    defaultClass: string;
+                };
+                onWarningDisabled: {
+                    defaultClass: string;
+                };
+                onNegative: {
+                    defaultClass: string;
+                };
+                onNegativeDisabled: {
+                    defaultClass: string;
+                };
+                border: {
+                    defaultClass: string;
+                };
+                borderOnImage: {
                     defaultClass: string;
                 };
             };
@@ -9769,6 +9884,35 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 };
             };
         };
+        boxShadow: {
+            responsiveArray: ("@initial" | "@480" | "@576" | "@768" | "@1024" | "@1440")[] & {
+                length: 6;
+            };
+            values: {
+                small: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                medium: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+            };
+        };
         cursor: {
             responsiveArray: ("@initial" | "@480" | "@576" | "@768" | "@1024" | "@1440")[] & {
                 length: 6;
@@ -10170,6 +10314,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         pr: {
             mappings: "paddingRight"[];
         };
+        shadow: {
+            mappings: "boxShadow"[];
+        };
         w: {
             mappings: "width"[];
         };
@@ -10212,9 +10359,6 @@ declare const translateY: {
 };
 declare const translate: {
     '-50%': string;
-};
-declare const shadow: {
-    small: string;
 };
 declare const center: {
     x: string;
@@ -10298,7 +10442,6 @@ declare const styles_top: typeof top;
 declare const styles_translateX: typeof translateX;
 declare const styles_translateY: typeof translateY;
 declare const styles_translate: typeof translate;
-declare const styles_shadow: typeof shadow;
 declare const styles_center: typeof center;
 declare const styles_display: typeof display;
 declare const styles_objectFit: typeof objectFit;
@@ -10320,7 +10463,6 @@ declare namespace styles {
     styles_translateX as translateX,
     styles_translateY as translateY,
     styles_translate as translate,
-    styles_shadow as shadow,
     styles_center as center,
     styles_display as display,
     styles_objectFit as objectFit,
@@ -10454,6 +10596,14 @@ declare const buttonVariants: {
                 };
             };
         })[];
+        positive: (string | {
+            selectors: {
+                '&:not([disabled]):hover': {
+                    cursor: string;
+                    backgroundColor: _vanilla_extract_private.CSSVarFunction;
+                };
+            };
+        })[];
         destructive: (string | {
             selectors: {
                 '&:not([disabled]):hover': {
@@ -10473,7 +10623,6 @@ declare const buttonVariants: {
         circle: (string | {
             aspectRatio: string;
             minWidth: number;
-            height: string;
             selectors: {
                 '&[disabled]': {
                     color: _vanilla_extract_private.CSSVarFunction;
@@ -10578,12 +10727,6 @@ declare const Flex: PolymorphicForwardRefExoticComponent<FlexProps, typeof BoxDe
 interface StackProps extends FlexProps {
 }
 declare const Stack: PolymorphicForwardRefExoticComponent<StackProps, typeof BoxDefaultElement>;
-
-interface LinkProps extends WithRouterProps, LinkProps$1 {
-    children: ReactElementLike;
-    activeClassName?: string;
-}
-declare const Link: React.ComponentType<next_dist_client_with_router.ExcludeRouterProps<LinkProps>>;
 
 declare const textVariants: {
     readonly textAlign: {
@@ -10971,38 +11114,138 @@ interface ThemeProviderProps extends BoxProps {
 }
 declare function themeClass({ theme, baseTheme, root, }: {
     theme: ClassValue;
-    baseTheme: ClassValue;
-    root: ClassValue;
+    baseTheme?: ClassValue;
+    root?: ClassValue;
 }, className?: ClassValue): string;
 declare const ThemeProvider: PolymorphicForwardRefExoticComponent<ThemeProviderProps, typeof BoxDefaultElement>;
 
 declare const color: {
-    black100: string;
-    black70: string;
-    black50: string;
-    black30: string;
-    black10: string;
-    black5: string;
-    white100: string;
-    white90: string;
-    white70: string;
-    white50: string;
-    white30: string;
-    white10: string;
-    white5: string;
-    transparent: string;
-    errorLight: string;
-    errorDefault: string;
-    errorDark: string;
-    errorBackground: string;
-    successLight: string;
-    successDefault: string;
-    successBackground: string;
-    successDark: string;
-    warningLight: string;
-    warningDefault: string;
-    warningBackground: string;
-    warningDark: string;
+    background1: string;
+    background2: string;
+    text1: string;
+    text2: string;
+    text3: string;
+    text4: string;
+    icon1: string;
+    icon2: string;
+    border: string;
+    borderOnImage: string;
+    elevation1: string;
+    elevation2: string;
+    backdrop: string;
+    accent: string;
+    accentHover: string;
+    accentActive: string;
+    accentDisabled: string;
+    onAccent: string;
+    onAccentDisabled: string;
+    neutral: string;
+    neutralHover: string;
+    neutralActive: string;
+    neutralDisabled: string;
+    onNeutral: string;
+    onNeutralDisabled: string;
+    ghost: string;
+    ghostHover: string;
+    ghostActive: string;
+    ghostDisabled: string;
+    onGhost: string;
+    onGhostDisabled: string;
+    positive: string;
+    positiveHover: string;
+    positiveActive: string;
+    positiveDisabled: string;
+    onPositive: string;
+    onPositiveDisabled: string;
+    negative: string;
+    negativeHover: string;
+    negativeActive: string;
+    negativeDisabled: string;
+    onNegative: string;
+    onNegativeDisabled: string;
+    warning: string;
+    warningHover: string;
+    warningActive: string;
+    warningDisabled: string;
+    onWarning: string;
+    onWarningDisabled: string;
+};
+
+declare function colorTheme({ foreground, background, accent, positive, negative, warning, }: {
+    foreground?: string | undefined;
+    background?: string | undefined;
+    accent?: string | undefined;
+    positive?: string | undefined;
+    negative?: string | undefined;
+    warning?: string | undefined;
+}): {
+    foreground: {
+        primary: string;
+        secondary: string;
+        tertiary: string;
+        quaternary: string;
+        accent: string;
+        ghost: string;
+        positive: string;
+        warning: string;
+        negative: string;
+        onGhost: string;
+        onGhostDisabled: string;
+        onAccent: string;
+        onAccentDisabled: string;
+        onPositive: string;
+        onPositiveDisabled: string;
+        onWarning: string;
+        onWarningDisabled: string;
+        onNegative: string;
+        onNegativeDisabled: string;
+        transparent: string;
+        border: string;
+        borderOnImage: string;
+    };
+    background: {
+        primary: string;
+        secondary: string;
+        tertiary: string;
+        accent: string;
+        ghost: string;
+        positive: string;
+        warning: string;
+        negative: string;
+        transparent: string;
+        backdrop: string;
+        border: string;
+        borderOnImage: string;
+    };
+    accent: {
+        hover: string;
+        active: string;
+        disabled: string;
+    };
+    positive: {
+        hover: string;
+        active: string;
+        disabled: string;
+    };
+    negative: {
+        hover: string;
+        active: string;
+        disabled: string;
+    };
+    ghost: {
+        hover: string;
+        active: string;
+        disabled: string;
+    };
+    neutral: {
+        hover: string;
+        active: string;
+        disabled: string;
+    };
+    shadows: {
+        small: string;
+        medium: string;
+    };
 };
 
 declare const space: {
@@ -11180,4 +11423,4 @@ declare namespace typography {
   };
 }
 
-export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, Link, LinkProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, PopUp, PopUpProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Spinner, SpinnerOG, SpinnerOGProps, SpinnerProps, Stack, StackProps, Switch, SwitchProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, darkTheme, ease, icons, inputContainer, inputField, inputFieldBaseInput, lightTheme, media, mixins, radii, root, size, space, textVariants, theme, themeBreakpoints, themeClass, transitions, typography, vars };
+export { Accordion, AccordionProps, Atoms, Box, BoxComponentProps, BoxProps, Button, ButtonProps, Checkbox, CheckboxProps, Display, DisplayProps, Eyebrow, EyebrowProps, Flex, FlexProps, Grid, GridProps, Heading, HeadingProps, Icon, IconProps, IconType, Input, InputComponentProps, InputField, InputFieldProps, InputProps, Label, LabelProps, MAX_GRID_WIDTH, MODAL_BACKDROP_LAYER, MenuProps, MenuText, Mixins, MixinsProp, Modal, ModalContent, ModalProps, Paragraph, ParagraphProps, PopUp, PopUpProps, RadioButtonGroup, RadioButtonProps, Select, SelectProps, Separator, SeparatorProps, Slider, SliderProps, Spinner, SpinnerOG, SpinnerOGProps, SpinnerProps, Stack, StackProps, Switch, SwitchProps, Tag, TagProps, Text, TextArea, TextAreaProps, TextProps, ThemeProvider, ThemeProviderProps, Well, WellProps, atoms, baseTheme, border, breakpoints, color, colorTheme, darkTheme, ease, icons, inputContainer, inputField, inputFieldBaseInput, lightTheme, media, mixins, radii, root, size, space, textVariants, theme, themeBreakpoints, themeClass, transitions, typography, vars };

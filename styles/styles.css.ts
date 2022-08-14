@@ -1,5 +1,5 @@
 import { style, keyframes } from '@vanilla-extract/css'
-import { vars, atoms } from '@zoralabs/zord'
+import { vars, atoms, ease } from '@zoralabs/zord'
 
 export const MAXWIDTH = 700
 const maxWidthQuery = `(max-width: ${MAXWIDTH}px)`
@@ -16,7 +16,7 @@ export const waitingApproval = style({
     '&:after': {
       content: '•',
       fontSize: '20px',
-      color: '#F5A623',
+      color: vars.color.foreground.warning,
       animation: `1s ${waiting} infinite ease-in-out`,
     },
   },
@@ -52,10 +52,10 @@ export const mintCounterInput = style([
     outline: 0,
     selectors: {
       '&:focus': {
-        borderColor: vars.color.border.secondary,
+        borderColor: vars.color.foreground.secondary,
       },
       '&:hover:not(:focus)': {
-        borderColor: vars.color.border.tertiary,
+        borderColor: vars.color.foreground.tertiary,
       },
     },
   },
@@ -90,12 +90,12 @@ export const maxWidth = style({
 })
 
 export const border = style({
-  border: '1px solid #808080',
+  border: `1px solid ${vars.color.foreground.border}`,
   borderRadius: 0,
 })
 
 export const header = style({
-  borderBottom: '1px solid #f3f3f3',
+  borderBottom: `1px solid ${vars.color.foreground.border}`,
 })
 
 export const heroImage = style({
@@ -103,4 +103,22 @@ export const heroImage = style({
   height: '100%',
   width: '100%',
   maxHeight: '80vh',
+})
+
+const collapsibleOpen = keyframes({
+  '0%': { height: 0 },
+  '100%': { height: 'var(--radix-collapsible-content-height)' },
+})
+
+const collapsibleClose = keyframes({
+  '0%': { height: 'var(--radix-collapsible-content-height)' },
+  '100%': { height: 0 },
+})
+
+export const collapsibleContent = style({
+  overflow: 'hidden',
+  selectors: {
+    '&[data-state="open"]': { animation: `${collapsibleOpen} 260ms ${ease.in}` },
+    '&[data-state="closed"]': { animation: `${collapsibleClose} 260ms ${ease.out}` },
+  },
 })
