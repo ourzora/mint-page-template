@@ -40,19 +40,19 @@ const HomePage: NextPage<HomePageProps> = ({ collection, chainId }) => {
           name="description"
           content={
             collection.editionMetadata?.description ||
-            "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
+            "VolFM's creator toolkit makes it easy to create a music NFT collection, with tooling that scales with your creative ambitions"
           }
         />
         <meta name="og:title" content={`${collection.name}`} />
         <meta
           name="og:url"
-          content={`https://create.zora.co/editions/${collection.address}`}
+          content="https://www.vol.fm/#/"
         />
         <meta
           name="og:description"
           content={
             collection.editionMetadata?.description ||
-            "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
+            "VolFM's creator toolkit makes it easy to create a music NFT collection, with tooling that scales with your creative ambitions"
           }
         />
         <meta name="og:image" content={ogImage} />
@@ -60,7 +60,7 @@ const HomePage: NextPage<HomePageProps> = ({ collection, chainId }) => {
         <meta name="twitter:title" content={`${collection.name}`} />
         <meta
           name="twitter:url"
-          content={`https://create.zora.co/editions/${collection.address}`}
+          content="https://www.vol.fm/#/"
         />
         <meta name="twitter:image" content={ogImage} />
       </Head>
