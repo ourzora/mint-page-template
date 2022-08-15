@@ -40,48 +40,16 @@ const ERC721_DROP_FRAGMENT = gql`
       presaleEnd
       presaleMerkleRoot
     }
-    salesConfigHistory {
-      id
-      publicSalePrice
-      maxSalePurchasePerAddress
-      publicSaleStart
-      publicSaleEnd
-      presaleStart
-      presaleEnd
-      presaleMerkleRoot
-    }
-    sales {
-      id
-      pricePerToken
-      priceTotal
-      count
-      purchaser
-      firstPurchasedTokenId
-      txn {
-        id
-        block
-        timestamp
-      }
-    }
-    transfers {
-      id
-      tokenId
-      to
-      from
-      txn {
-        id
-        block
-        timestamp
-      }
-    }
     totalMinted
     maxSupply
   }
 `
 
-export const GET_COLLECTION_QUERY = gql`
-  query GetCollection($collectionAddress: String!) {
-    erc721Drop(id: $collectionAddress) {
+export const GET_COLLECTIONS_QUERY = gql`
+  query GetCollection($collectionAddresses: [String]!) {
+    erc721Drops(
+      where: { address_in: $collectionAddresses }
+    ) {
       ...ERC721Fields
     }
   }

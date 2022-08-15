@@ -7,8 +7,6 @@ import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/r
 import { defaultChains, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
-import { contractAddress } from '@lib/constants'
-import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 
 const { chains, provider } = configureChains(
   [
@@ -20,7 +18,7 @@ const { chains, provider } = configureChains(
 )
 
 const { connectors } = getDefaultWallets({
-  appName: 'Zora Create',
+  appName: 'Zora Create Minting Page',
   chains,
 })
 
@@ -40,9 +38,7 @@ function App({ Component, pageProps }) {
           borderRadius: 'small',
         })}
       >
-        <ERC721DropContractProvider erc721DropAddress={contractAddress}>
-          <Component {...pageProps} />
-        </ERC721DropContractProvider>
+        <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
   )

@@ -93,7 +93,7 @@ function ERC721DropContractProvider({
       )
       return tx
     },
-    [drop, saleDetails]
+    [drop]
   )
 
   const isAdmin = useCallback(
@@ -173,7 +173,6 @@ function ERC721DropContractProvider({
       await tx.wait(2)
 
       const updatedConfig = (await drop.saleDetails()) as unknown
-
       setSaleDetails(updatedConfig as EditionSaleDetails)
     },
     [drop]
@@ -219,7 +218,7 @@ function ERC721DropContractProvider({
       return undefined
     }
     const address = await signer?.getAddress()
-    return (await drop.mintedPerAddress(address)).totalMints.toNumber()
+    return address ? (await drop.mintedPerAddress(address)).totalMints.toNumber() : undefined
   }
 
   const fetchTotalMinted = async () => {
