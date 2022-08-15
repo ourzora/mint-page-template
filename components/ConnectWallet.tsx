@@ -35,8 +35,7 @@ export const ConnectWallet = ({ connectText = 'Connect wallet', ...props }) => {
               }
 
               if (
-                chain.unsupported ||
-                String(chain.id) !== process.env.NEXT_PUBLIC_CHAIN_ID
+                chain.unsupported
               ) {
                 return (
                   <Button
