@@ -11,7 +11,7 @@ import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 
 const { chains, provider } = configureChains(
   [
-    chain.goerli, chain.mainnet
+    chain.goerli, chain.mainnet, chain.polygonMumbai
   ],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
 )

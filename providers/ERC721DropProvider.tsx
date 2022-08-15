@@ -1,4 +1,4 @@
-import { defaultChains, useNetwork, useSigner } from 'wagmi'
+import { allChains, useNetwork, useSigner } from 'wagmi'
 import React, {
   ReactNode,
   useCallback,
@@ -11,6 +11,7 @@ import { EditionSaleDetails, EditionSalesConfig } from '../models/edition'
 import { BigNumber, ethers } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { AllowListEntry } from 'lib/merkle-proof'
+import getDefaultProvider from 'lib/getDefaultProvider'
 import type { ContractTransaction } from 'ethers'
 import abi from '@lib/ERC721Drop-abi.json'
 
@@ -35,7 +36,8 @@ export interface ERC721DropProviderState {
   revokeAdmin: (address: string | undefined) => Promise<boolean>
   isAdmin: (address: string | undefined) => Promise<boolean | undefined>
   withdraw: () => Promise<ContractTransaction | undefined>
-  correctNetwork?: boolean 
+  correctNetwork?: boolean,
+  chainId: number
 }
 
 export const ERC721DropContext = React.createContext<ERC721DropProviderState>(
@@ -56,10 +58,11 @@ function ERC721DropContractProvider({
   const [userMintedCount, setUserMintedCount] = useState<number>()
   const [totalMinted, setTotalMinted] = useState<number>()
   const [saleDetails, setSaleDetails] = useState<EditionSaleDetails>()
-  const chain = defaultChains.find(
+  const chain = allChains.find(
     (chain) => chain.id == chainId
   )
-  const provider = chainId ? ethers.getDefaultProvider({chainId, name: chain.network}) : null;
+
+  const provider = getDefaultProvider(chain?.network, chainId)
   const correctNetwork = useMemo(
     () => (chainId || process.env.NEXT_PUBLIC_CHAIN_ID) == activeChain?.id.toString(),
     [activeChain, chainId]
@@ -256,6 +259,7 @@ function ERC721DropContractProvider({
         purchase,
         purchasePresale,
         isAdmin,
+        chainId,
         correctNetwork,
         setFundsRecipient,
         setOwner,

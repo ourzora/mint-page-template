@@ -3,7 +3,8 @@ import { GetStaticProps } from 'next'
 import { ipfsImage } from '@lib/helpers'
 import abi from '@lib/ERC721Drop-abi.json'
 import metadataRendererAbi from '@lib/MetadataRenderer-abi.json'
-import { defaultChains } from 'wagmi'
+import getDefaultProvider from '@lib/getDefaultProvider'
+import { allChains } from 'wagmi'
 import HomePage from '@components/HomePage/HomePage'
 
 const MintPage = ({collection, chainId}) => <HomePage collection={collection} chainId={chainId} />
@@ -18,10 +19,10 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   }
 
   // Create Ethers Contract
-  const chain = defaultChains.find(
+  const chain = allChains.find(
     (chain) => chain.id.toString() === chainId
   )
-  const provider = ethers.getDefaultProvider({chainId: parseInt(chainId.toString()), name: chain.network});
+  const provider = getDefaultProvider(chain.network, chainId);
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
 
   // Get metadata renderer
@@ -34,9 +35,7 @@ export const getServerSideProps: GetStaticProps = async (context) => {
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
-console.log("SALE DETAILS", saleDetails)
 
-  console.log("METADATA", metadata);
   const maxSalePurchasePerAddress = saleDetails.maxSalePurchasePerAddress.toString() === "0" ? 1000001 : saleDetails.maxSalePurchasePerAddress.toString()
   const erc721Drop = {
     id: "string",
@@ -112,7 +111,6 @@ console.log("SALE DETAILS", saleDetails)
       timestamp: "string"
     }
   }
-  console.log("ERC721DROP", erc721Drop)
 
   return {
     props: { collection: erc721Drop, chainId: chain.id },
