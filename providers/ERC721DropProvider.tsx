@@ -7,7 +7,6 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { ERC721Drop__factory } from '../constants/typechain'
 import { EditionSaleDetails, EditionSalesConfig } from '../models/edition'
 import { BigNumber, ethers } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
