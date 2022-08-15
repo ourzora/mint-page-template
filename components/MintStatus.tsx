@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { chain, useAccount, useNetwork } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { formatCryptoVal } from 'lib/numbers'
 import { OPEN_EDITION_SIZE } from 'lib/constants'
 import { parseInt } from 'lodash'
