@@ -42,7 +42,7 @@ function SaleStatus({
   allowlistEntry?: AllowListEntry
 }) {
   const { data: account } = useAccount()
-  const { activeChain, switchNetwork, chains } = useNetwork()
+  const { switchNetwork } = useNetwork()
 
   const dropProvider = useERC721DropContract()
   const { chainId, correctNetwork } = useERC721DropContract()
