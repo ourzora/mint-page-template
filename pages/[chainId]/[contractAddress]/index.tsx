@@ -19,15 +19,10 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   }
 
   // Create Ethers Contract
-  console.log("CHAIN ID", chainId)
   const chain = allChains.find(
     (chain) => chain.id.toString() === chainId
   )
-  console.log("CHAIN", chain)
   const provider = getDefaultProvider(chain.network, chainId);
-  // ethers.getDefaultProvider("https://rpc-mumbai.maticvigil.com")
-  
-    //{chainId: parseInt(chainId.toString()), name: chain.network});
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
 
   // Get metadata renderer
@@ -40,9 +35,7 @@ export const getServerSideProps: GetStaticProps = async (context) => {
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
-console.log("SALE DETAILS", saleDetails)
 
-  console.log("METADATA", metadata);
   const maxSalePurchasePerAddress = saleDetails.maxSalePurchasePerAddress.toString() === "0" ? 1000001 : saleDetails.maxSalePurchasePerAddress.toString()
   const erc721Drop = {
     id: "string",
@@ -118,7 +111,6 @@ console.log("SALE DETAILS", saleDetails)
       timestamp: "string"
     }
   }
-  console.log("ERC721DROP", erc721Drop)
 
   return {
     props: { collection: erc721Drop, chainId: chain.id },
