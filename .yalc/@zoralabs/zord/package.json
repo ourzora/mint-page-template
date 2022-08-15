@@ -1,6 +1,6 @@
 {
   "name": "@zoralabs/zord",
-  "version": "0.2.0c",
+  "version": "0.2.0f",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -44,5 +44,5 @@
     "@radix-ui/react-switch": "^0.1.5",
     "uuid": "^8.3.2"
   },
-  "yalcSig": "b5942f665d4b17cee5233bab0fd560c9"
+  "yalcSig": "b83ea88c87952e14afa899fb5f20dbb5"
 }
