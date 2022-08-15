@@ -3,7 +3,8 @@ import { GetStaticProps } from 'next'
 import { ipfsImage } from '@lib/helpers'
 import abi from '@lib/ERC721Drop-abi.json'
 import metadataRendererAbi from '@lib/MetadataRenderer-abi.json'
-import { defaultChains } from 'wagmi'
+import getDefaultProvider from '@lib/getDefaultProvider'
+import { allChains } from 'wagmi'
 import HomePage from '@components/HomePage/HomePage'
 
 const MintPage = ({collection, chainId}) => <HomePage collection={collection} chainId={chainId} />
@@ -18,10 +19,15 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   }
 
   // Create Ethers Contract
-  const chain = defaultChains.find(
+  console.log("CHAIN ID", chainId)
+  const chain = allChains.find(
     (chain) => chain.id.toString() === chainId
   )
-  const provider = ethers.getDefaultProvider({chainId: parseInt(chainId.toString()), name: chain.network});
+  console.log("CHAIN", chain)
+  const provider = getDefaultProvider(chain.network, chainId);
+  // ethers.getDefaultProvider("https://rpc-mumbai.maticvigil.com")
+  
+    //{chainId: parseInt(chainId.toString()), name: chain.network});
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
 
   // Get metadata renderer
