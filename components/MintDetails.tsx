@@ -108,7 +108,7 @@ export function MintDetails({
                         Presale start
                       </Text>
                       <Text variant="paragraph-sm" align="right">
-                        {presaleStartDate.toLocaleString(...dateOptions)}
+                        {presaleStartDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
                       </Text>
                     </Flex>
                     <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
@@ -117,7 +117,7 @@ export function MintDetails({
                       </Text>
                       <Text variant="paragraph-sm" align="right">
                         {!isNaN(presaleEndDate.getTime())
-                          ? presaleEndDate.toLocaleString(...dateOptions)
+                          ? presaleEndDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])
                           : 'Never'}
                       </Text>
                     </Flex>
