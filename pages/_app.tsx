@@ -7,7 +7,9 @@ import { configureChains, createClient, WagmiConfig, chain } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import { contractAddress } from '@lib/constants'
+import { ThemeProvider } from 'degen'
 import ERC721DropContractProvider from 'providers/ERC721DropProvider'
+import 'degen/styles'
 
 const { chains, provider } = configureChains(
   [
@@ -29,19 +31,21 @@ const wagmiClient = createClient({
 
 function App({ Component, pageProps }) {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        chains={chains}
-        theme={lightTheme({
-          accentColor: 'black',
-          borderRadius: 'small',
-        })}
-      >
-        <ERC721DropContractProvider erc721DropAddress={contractAddress}>
-          <Component {...pageProps} />
-        </ERC721DropContractProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ThemeProvider>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={lightTheme({
+            accentColor: 'black',
+            borderRadius: 'small',
+          })}
+        >
+          <ERC721DropContractProvider erc721DropAddress={contractAddress}>
+            <Component {...pageProps} />
+          </ERC721DropContractProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>    
+    </ThemeProvider>
   )
 }
 
