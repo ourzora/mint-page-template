@@ -4,8 +4,6 @@ import { ethers } from 'ethers'
 import abi from '@lib/ZoraNFTCreatorV1-abi.json'
 import getZoraNFTCreatorV1Address from '@lib/getZoraNFTCreatorV1Address'
 
-// import getFactoryAddress from '@/utils/getFactoryAddress'
-
 const CreateDropButton = () => {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
@@ -15,8 +13,9 @@ const CreateDropButton = () => {
   const contract = new ethers.Contract(contractAddress, abi, signer)
 
   const handleClick = async () => {
-    const receipt = await createDrop()
+    await createDrop()
   }
+
   const createDrop = () => {
     const name = 'sweets the engineer'
     const symbol = 'MUSIC'
