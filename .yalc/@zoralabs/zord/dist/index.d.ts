@@ -160,73 +160,60 @@ declare const theme: _vanilla_extract_private.MapLeafNodes<{
         };
     };
     colors: {
-        foreground: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            quaternary: string;
-            accent: string;
-            ghost: string;
-            positive: string;
-            warning: string;
-            negative: string;
-            onGhost: string;
-            onGhostDisabled: string;
-            onAccent: string;
-            onAccentDisabled: string;
-            onPositive: string;
-            onPositiveDisabled: string;
-            onWarning: string;
-            onWarningDisabled: string;
-            onNegative: string;
-            onNegativeDisabled: string;
-            transparent: string;
-            border: string;
-            borderOnImage: string;
-        };
-        background: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            accent: string;
-            ghost: string;
-            positive: string;
-            warning: string;
-            negative: string;
-            transparent: string;
-            backdrop: string;
-            border: string;
-            borderOnImage: string;
-        };
-        accent: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        positive: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        negative: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        ghost: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        neutral: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        shadows: {
-            small: string;
-            medium: string;
-        };
+        backdrop: string;
+        border: string;
+        borderOnImage: string;
+        background: string;
+        background2: string;
+        text1: string;
+        text2: string;
+        text3: string;
+        text4: string;
+        primary: string;
+        secondary: string;
+        tertiary: string;
+        quaternary: string;
+        transparent: string;
+        accent: string;
+        accentHover: string;
+        accentActive: string;
+        accentDisabled: string;
+        onAccent: string;
+        onAccentDisabled: string;
+        positive: string;
+        positiveHover: string;
+        positiveActive: string;
+        positiveDisabled: string;
+        onPositive: string;
+        onPositiveDisabled: string;
+        warning: string;
+        warningHover: string;
+        warningActive: string;
+        warningDisabled: string;
+        onWarning: string;
+        onWarningDisabled: string;
+        negative: string;
+        negativeHover: string;
+        negativeActive: string;
+        negativeDisabled: string;
+        onNegative: string;
+        onNegativeDisabled: string;
+        ghost: string;
+        ghostHover: string;
+        ghostActive: string;
+        ghostDisabled: string;
+        onGhost: string;
+        onGhostDisabled: string;
+        neutral: string;
+        neutralHover: string;
+        neutralActive: string;
+        neutralDisabled: string;
+        onNeutral: string;
+        onNeutralDisabled: string;
+    };
+    shadows: {
+        small: string;
+        medium: string;
     };
 }, _vanilla_extract_private.CSSVarFunction>;
 declare const lightTheme: string;
@@ -234,73 +221,56 @@ declare const darkTheme: string;
 declare const baseTheme: string;
 declare const vars: _vanilla_extract_private.MapLeafNodes<{
     color: _vanilla_extract_private.MapLeafNodes<{
-        foreground: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            quaternary: string;
-            accent: string;
-            ghost: string;
-            positive: string;
-            warning: string;
-            negative: string;
-            onGhost: string;
-            onGhostDisabled: string;
-            onAccent: string;
-            onAccentDisabled: string;
-            onPositive: string;
-            onPositiveDisabled: string;
-            onWarning: string;
-            onWarningDisabled: string;
-            onNegative: string;
-            onNegativeDisabled: string;
-            transparent: string;
-            border: string;
-            borderOnImage: string;
-        };
-        background: {
-            primary: string;
-            secondary: string;
-            tertiary: string;
-            accent: string;
-            ghost: string;
-            positive: string;
-            warning: string;
-            negative: string;
-            transparent: string;
-            backdrop: string;
-            border: string;
-            borderOnImage: string;
-        };
-        accent: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        positive: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        negative: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        ghost: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        neutral: {
-            hover: string;
-            active: string;
-            disabled: string;
-        };
-        shadows: {
-            small: string;
-            medium: string;
-        };
+        backdrop: string;
+        border: string;
+        borderOnImage: string;
+        background: string;
+        background2: string;
+        text1: string;
+        text2: string;
+        text3: string;
+        text4: string;
+        primary: string;
+        secondary: string;
+        tertiary: string;
+        quaternary: string;
+        transparent: string;
+        accent: string;
+        accentHover: string;
+        accentActive: string;
+        accentDisabled: string;
+        onAccent: string;
+        onAccentDisabled: string;
+        positive: string;
+        positiveHover: string;
+        positiveActive: string;
+        positiveDisabled: string;
+        onPositive: string;
+        onPositiveDisabled: string;
+        warning: string;
+        warningHover: string;
+        warningActive: string;
+        warningDisabled: string;
+        onWarning: string;
+        onWarningDisabled: string;
+        negative: string;
+        negativeHover: string;
+        negativeActive: string;
+        negativeDisabled: string;
+        onNegative: string;
+        onNegativeDisabled: string;
+        ghost: string;
+        ghostHover: string;
+        ghostActive: string;
+        ghostDisabled: string;
+        onGhost: string;
+        onGhostDisabled: string;
+        neutral: string;
+        neutralHover: string;
+        neutralActive: string;
+        neutralDisabled: string;
+        onNeutral: string;
+        onNeutralDisabled: string;
     }, _vanilla_extract_private.CSSVarFunction>;
     fonts: _vanilla_extract_private.MapLeafNodes<{
         heading: string;
@@ -354,6 +324,10 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         curved: string;
         phat: string;
         round: string;
+    }, _vanilla_extract_private.CSSVarFunction>;
+    shadows: _vanilla_extract_private.MapLeafNodes<{
+        small: string;
+        medium: string;
     }, _vanilla_extract_private.CSSVarFunction>;
     size: _vanilla_extract_private.MapLeafNodes<{
         x0: string;
@@ -457,6 +431,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
     styles: {
         color: {
             values: {
+                background: {
+                    defaultClass: string;
+                };
                 accent: {
                     defaultClass: string;
                 };
@@ -473,6 +450,27 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 border: {
+                    defaultClass: string;
+                };
+                backdrop: {
+                    defaultClass: string;
+                };
+                borderOnImage: {
+                    defaultClass: string;
+                };
+                background2: {
+                    defaultClass: string;
+                };
+                text1: {
+                    defaultClass: string;
+                };
+                text2: {
+                    defaultClass: string;
+                };
+                text3: {
+                    defaultClass: string;
+                };
+                text4: {
                     defaultClass: string;
                 };
                 primary: {
@@ -487,13 +485,13 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 quaternary: {
                     defaultClass: string;
                 };
-                ghost: {
+                accentHover: {
                     defaultClass: string;
                 };
-                onGhost: {
+                accentActive: {
                     defaultClass: string;
                 };
-                onGhostDisabled: {
+                accentDisabled: {
                     defaultClass: string;
                 };
                 onAccent: {
@@ -502,10 +500,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 onAccentDisabled: {
                     defaultClass: string;
                 };
+                positiveHover: {
+                    defaultClass: string;
+                };
+                positiveActive: {
+                    defaultClass: string;
+                };
+                positiveDisabled: {
+                    defaultClass: string;
+                };
                 onPositive: {
                     defaultClass: string;
                 };
                 onPositiveDisabled: {
+                    defaultClass: string;
+                };
+                warningHover: {
+                    defaultClass: string;
+                };
+                warningActive: {
+                    defaultClass: string;
+                };
+                warningDisabled: {
                     defaultClass: string;
                 };
                 onWarning: {
@@ -514,19 +530,64 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 onWarningDisabled: {
                     defaultClass: string;
                 };
+                negativeHover: {
+                    defaultClass: string;
+                };
+                negativeActive: {
+                    defaultClass: string;
+                };
+                negativeDisabled: {
+                    defaultClass: string;
+                };
                 onNegative: {
                     defaultClass: string;
                 };
                 onNegativeDisabled: {
                     defaultClass: string;
                 };
-                borderOnImage: {
+                ghost: {
+                    defaultClass: string;
+                };
+                ghostHover: {
+                    defaultClass: string;
+                };
+                ghostActive: {
+                    defaultClass: string;
+                };
+                ghostDisabled: {
+                    defaultClass: string;
+                };
+                onGhost: {
+                    defaultClass: string;
+                };
+                onGhostDisabled: {
+                    defaultClass: string;
+                };
+                neutral: {
+                    defaultClass: string;
+                };
+                neutralHover: {
+                    defaultClass: string;
+                };
+                neutralActive: {
+                    defaultClass: string;
+                };
+                neutralDisabled: {
+                    defaultClass: string;
+                };
+                onNeutral: {
+                    defaultClass: string;
+                };
+                onNeutralDisabled: {
                     defaultClass: string;
                 };
             };
         };
         backgroundColor: {
             values: {
+                background: {
+                    defaultClass: string;
+                };
                 accent: {
                     defaultClass: string;
                 };
@@ -545,6 +606,27 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 border: {
                     defaultClass: string;
                 };
+                backdrop: {
+                    defaultClass: string;
+                };
+                borderOnImage: {
+                    defaultClass: string;
+                };
+                background2: {
+                    defaultClass: string;
+                };
+                text1: {
+                    defaultClass: string;
+                };
+                text2: {
+                    defaultClass: string;
+                };
+                text3: {
+                    defaultClass: string;
+                };
+                text4: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -554,13 +636,103 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 tertiary: {
                     defaultClass: string;
                 };
+                quaternary: {
+                    defaultClass: string;
+                };
+                accentHover: {
+                    defaultClass: string;
+                };
+                accentActive: {
+                    defaultClass: string;
+                };
+                accentDisabled: {
+                    defaultClass: string;
+                };
+                onAccent: {
+                    defaultClass: string;
+                };
+                onAccentDisabled: {
+                    defaultClass: string;
+                };
+                positiveHover: {
+                    defaultClass: string;
+                };
+                positiveActive: {
+                    defaultClass: string;
+                };
+                positiveDisabled: {
+                    defaultClass: string;
+                };
+                onPositive: {
+                    defaultClass: string;
+                };
+                onPositiveDisabled: {
+                    defaultClass: string;
+                };
+                warningHover: {
+                    defaultClass: string;
+                };
+                warningActive: {
+                    defaultClass: string;
+                };
+                warningDisabled: {
+                    defaultClass: string;
+                };
+                onWarning: {
+                    defaultClass: string;
+                };
+                onWarningDisabled: {
+                    defaultClass: string;
+                };
+                negativeHover: {
+                    defaultClass: string;
+                };
+                negativeActive: {
+                    defaultClass: string;
+                };
+                negativeDisabled: {
+                    defaultClass: string;
+                };
+                onNegative: {
+                    defaultClass: string;
+                };
+                onNegativeDisabled: {
+                    defaultClass: string;
+                };
                 ghost: {
                     defaultClass: string;
                 };
-                borderOnImage: {
+                ghostHover: {
                     defaultClass: string;
                 };
-                backdrop: {
+                ghostActive: {
+                    defaultClass: string;
+                };
+                ghostDisabled: {
+                    defaultClass: string;
+                };
+                onGhost: {
+                    defaultClass: string;
+                };
+                onGhostDisabled: {
+                    defaultClass: string;
+                };
+                neutral: {
+                    defaultClass: string;
+                };
+                neutralHover: {
+                    defaultClass: string;
+                };
+                neutralActive: {
+                    defaultClass: string;
+                };
+                neutralDisabled: {
+                    defaultClass: string;
+                };
+                onNeutral: {
+                    defaultClass: string;
+                };
+                onNeutralDisabled: {
                     defaultClass: string;
                 };
             };
@@ -589,6 +761,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         borderColor: {
             values: {
+                background: {
+                    defaultClass: string;
+                };
                 accent: {
                     defaultClass: string;
                 };
@@ -607,6 +782,27 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 border: {
                     defaultClass: string;
                 };
+                backdrop: {
+                    defaultClass: string;
+                };
+                borderOnImage: {
+                    defaultClass: string;
+                };
+                background2: {
+                    defaultClass: string;
+                };
+                text1: {
+                    defaultClass: string;
+                };
+                text2: {
+                    defaultClass: string;
+                };
+                text3: {
+                    defaultClass: string;
+                };
+                text4: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -619,13 +815,13 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 quaternary: {
                     defaultClass: string;
                 };
-                ghost: {
+                accentHover: {
                     defaultClass: string;
                 };
-                onGhost: {
+                accentActive: {
                     defaultClass: string;
                 };
-                onGhostDisabled: {
+                accentDisabled: {
                     defaultClass: string;
                 };
                 onAccent: {
@@ -634,10 +830,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 onAccentDisabled: {
                     defaultClass: string;
                 };
+                positiveHover: {
+                    defaultClass: string;
+                };
+                positiveActive: {
+                    defaultClass: string;
+                };
+                positiveDisabled: {
+                    defaultClass: string;
+                };
                 onPositive: {
                     defaultClass: string;
                 };
                 onPositiveDisabled: {
+                    defaultClass: string;
+                };
+                warningHover: {
+                    defaultClass: string;
+                };
+                warningActive: {
+                    defaultClass: string;
+                };
+                warningDisabled: {
                     defaultClass: string;
                 };
                 onWarning: {
@@ -646,13 +860,55 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 onWarningDisabled: {
                     defaultClass: string;
                 };
+                negativeHover: {
+                    defaultClass: string;
+                };
+                negativeActive: {
+                    defaultClass: string;
+                };
+                negativeDisabled: {
+                    defaultClass: string;
+                };
                 onNegative: {
                     defaultClass: string;
                 };
                 onNegativeDisabled: {
                     defaultClass: string;
                 };
-                borderOnImage: {
+                ghost: {
+                    defaultClass: string;
+                };
+                ghostHover: {
+                    defaultClass: string;
+                };
+                ghostActive: {
+                    defaultClass: string;
+                };
+                ghostDisabled: {
+                    defaultClass: string;
+                };
+                onGhost: {
+                    defaultClass: string;
+                };
+                onGhostDisabled: {
+                    defaultClass: string;
+                };
+                neutral: {
+                    defaultClass: string;
+                };
+                neutralHover: {
+                    defaultClass: string;
+                };
+                neutralActive: {
+                    defaultClass: string;
+                };
+                neutralDisabled: {
+                    defaultClass: string;
+                };
+                onNeutral: {
+                    defaultClass: string;
+                };
+                onNeutralDisabled: {
                     defaultClass: string;
                 };
             };
@@ -11292,68 +11548,57 @@ declare function colorTheme({ foreground, background, accent, positive, negative
     negative?: string | undefined;
     warning?: string | undefined;
 }): {
-    foreground: {
+    colors: {
+        backdrop: string;
+        border: string;
+        borderOnImage: string;
+        background: string;
+        background2: string;
+        text1: string;
+        text2: string;
+        text3: string;
+        text4: string;
+        transparent: string;
         primary: string;
         secondary: string;
         tertiary: string;
         quaternary: string;
         accent: string;
-        ghost: string;
-        positive: string;
-        warning: string;
-        negative: string;
-        onGhost: string;
-        onGhostDisabled: string;
+        accentHover: string;
+        accentActive: string;
+        accentDisabled: string;
         onAccent: string;
         onAccentDisabled: string;
+        positive: string;
+        positiveHover: string;
+        positiveActive: string;
+        positiveDisabled: string;
         onPositive: string;
         onPositiveDisabled: string;
+        warning: string;
+        warningHover: string;
+        warningActive: string;
+        warningDisabled: string;
         onWarning: string;
         onWarningDisabled: string;
+        negative: string;
+        negativeHover: string;
+        negativeActive: string;
+        negativeDisabled: string;
         onNegative: string;
         onNegativeDisabled: string;
-        transparent: string;
-        border: string;
-        borderOnImage: string;
-    };
-    background: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        accent: string;
         ghost: string;
-        positive: string;
-        warning: string;
-        negative: string;
-        transparent: string;
-        backdrop: string;
-        border: string;
-        borderOnImage: string;
-    };
-    accent: {
-        hover: string;
-        active: string;
-        disabled: string;
-    };
-    positive: {
-        hover: string;
-        active: string;
-        disabled: string;
-    };
-    negative: {
-        hover: string;
-        active: string;
-        disabled: string;
-    };
-    ghost: {
-        hover: string;
-        active: string;
-        disabled: string;
-    };
-    neutral: {
-        hover: string;
-        active: string;
-        disabled: string;
+        ghostHover: string;
+        ghostActive: string;
+        ghostDisabled: string;
+        onGhost: string;
+        onGhostDisabled: string;
+        neutral: string;
+        neutralHover: string;
+        neutralActive: string;
+        neutralDisabled: string;
+        onNeutral: string;
+        onNeutralDisabled: string;
     };
     shadows: {
         small: string;
