@@ -1,5 +1,4 @@
-const ArtPage = () => null
-export default ArtPage
+export default function handler() { return null }
 
 /*
 import * as THREE from 'three'

@@ -1,3 +1,6 @@
+export default function handler() { return null }
+
+/*
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ethers } from 'ethers'
 const path = require('path')
@@ -82,3 +85,4 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   })
 }
+*/
