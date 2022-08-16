@@ -4,5 +4,5 @@
   "image": "ipfs://bafybeibbkcvigammbtfu5jtl5mknopolf2647a42tsn2tjwfh7hpxuylsy",
   "seller_fee_basis_points": 250,
   "fee_recipient": "0xc8401F94DffAD64784b10F4Baa263f53Fd24131a",
-  "allowlist_uri": "https://zora-nft-launch.vercel.app/allowlist.csv"
+  "allowlist_uri": "https://mint-page-template.vercel.app/allowlist.csv"
 }

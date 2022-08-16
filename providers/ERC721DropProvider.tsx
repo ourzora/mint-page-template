@@ -59,7 +59,7 @@ function ERC721DropContractProvider({
 
   useEffect(() => {
     ;(async () => {
-      if (saleDetails || !drop || !signer) {
+      if (!drop || !signer?.getAddress) {
         return
       }
       const config = (await drop.saleDetails()) as unknown
@@ -70,18 +70,18 @@ function ERC721DropContractProvider({
 
   const purchase = useCallback(
     async (quantity: number) => {
-      if (!drop || !saleDetails) return
+      if (!drop || !signer?.getAddress || !saleDetails) return
       const tx = await drop.purchase(quantity, {
         value: (saleDetails.publicSalePrice as BigNumber).mul(BigNumber.from(quantity)),
       })
       return tx
     },
-    [drop, saleDetails]
+    [drop, signer, saleDetails]
   )
 
   const purchasePresale = useCallback(
     async (quantity: number, allowlistEntry?: AllowListEntry) => {
-      if (!drop || !allowlistEntry) return
+      if (!drop || !allowlistEntry || !signer?.getAddress) return
       const tx = await drop.purchasePresale(
         quantity,
         allowlistEntry.maxCount,
@@ -93,7 +93,7 @@ function ERC721DropContractProvider({
       )
       return tx
     },
-    [drop]
+    [drop, signer]
   )
 
   const isAdmin = useCallback(
@@ -214,7 +214,7 @@ function ERC721DropContractProvider({
   }
 
   const fetchUserMintedCount = async () => {
-    if (!signer || !drop || !saleDetails) {
+    if (!drop || !signer.getAddress) {
       return undefined
     }
     const address = await signer?.getAddress()
@@ -222,7 +222,7 @@ function ERC721DropContractProvider({
   }
 
   const fetchTotalMinted = async () => {
-    if (!drop) {
+    if (!drop || !signer?.getAddress) {
       return undefined
     }
     return (await drop.totalSupply()).toNumber()

@@ -55,9 +55,8 @@ export function MintDetails({
         defaultOpen={!showToggle}
         onOpenChange={(value) => setOpened(value)}
       >
-        <Stack gap="x3">
-          <Separator my="x2" />
-          <Flex gap="x3" justify="space-between">
+        <Stack className="zord-mint-details" gap="x3">
+          <Flex className="zord-mint-details__item" gap="x3" justify="space-between">
             <Text variant="paragraph-sm" color="tertiary">
               Number minted
             </Text>
@@ -72,7 +71,7 @@ export function MintDetails({
               )}
             </Text>
           </Flex>
-          <Flex gap="x2" justify="space-between">
+          <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
             <Text variant="paragraph-sm" color="tertiary">
               Max per address
             </Text>
@@ -89,7 +88,7 @@ export function MintDetails({
             <Collapsible.Content className={collapsibleContent}>
               <Stack gap="x3">
                 {(saleIsFinished || isSoldOut) && (
-                  <Flex gap="x2" justify="space-between">
+                  <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
                     <Text variant="paragraph-sm" color="tertiary">
                       Mint price
                     </Text>
@@ -104,7 +103,7 @@ export function MintDetails({
                 )}
                 {presaleExists && (
                   <>
-                    <Flex gap="x2" justify="space-between">
+                    <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
                       <Text variant="paragraph-sm" color="tertiary">
                         Presale start
                       </Text>
@@ -112,7 +111,7 @@ export function MintDetails({
                         {presaleStartDate.toLocaleString(...dateOptions)}
                       </Text>
                     </Flex>
-                    <Flex gap="x2" justify="space-between">
+                    <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
                       <Text variant="paragraph-sm" color="tertiary">
                         Presale end
                       </Text>
@@ -124,21 +123,21 @@ export function MintDetails({
                     </Flex>
                   </>
                 )}
-                <Flex gap="x2" justify="space-between">
+                <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
                   <Text variant="paragraph-sm" color="tertiary">
                     Public sale start
                   </Text>
                   <Text variant="paragraph-sm" align="right">
-                    {startDate.toLocaleString(...dateOptions)}
+                    {startDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
                   </Text>
                 </Flex>
-                <Flex gap="x2" justify="space-between">
+                <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
                   <Text variant="paragraph-sm" color="tertiary">
                     Public sale end
                   </Text>
                   <Text variant="paragraph-sm" align="right">
                     {!isNaN(endDate.getTime())
-                      ? endDate.toLocaleString(...dateOptions)
+                      ? endDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])
                       : 'Never'}
                   </Text>
                 </Flex>
@@ -147,6 +146,7 @@ export function MintDetails({
             {showToggle && (
               <Collapsible.Trigger asChild={true}>
                 <Flex
+                  className="zord-mint-details__trigger"
                   cursor="pointer"
                   mt="x2"
                   gap="x2"

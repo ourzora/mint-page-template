@@ -6,7 +6,6 @@ import 'styles/global.css'
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import { defaultChains, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
-import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, provider } = configureChains(
   [
@@ -14,7 +13,7 @@ const { chains, provider } = configureChains(
       (chain) => chain.id.toString() === process.env.NEXT_PUBLIC_CHAIN_ID
     )!,
   ],
-  [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
+  [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID })]
 )
 
 const { connectors } = getDefaultWallets({

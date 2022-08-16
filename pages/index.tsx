@@ -1,14 +1,16 @@
 import request from 'graphql-request'
 import Head from 'next/head'
-import { Flex } from '@zoralabs/zord'
-import { ConnectWallet } from '@components/ConnectWallet'
-import { GetServerSideProps , NextPage } from 'next'
-import { SubgraphERC721Drop } from 'models/subgraph'
+import { useMemo } from 'react'
 import ERC721DropContractProvider from 'providers/ERC721DropProvider'
+import { Stack } from '@zoralabs/zord'
+import { GetServerSideProps, NextPage } from 'next'
+import { SubgraphERC721Drop } from 'models/subgraph'
 import { GET_COLLECTIONS_QUERY, SUBGRAPH_URL } from 'constants/queries'
-import { ipfsImage } from '@lib/helpers'
+import { ipfsImage, shortenAddress } from '@lib/helpers'
 import { collectionAddresses } from '@lib/constants'
-import { header } from 'styles/styles.css'
+// import { header } from 'styles/styles.css'
+// import { ConnectWallet } from '@components/ConnectWallet'
+import { useAccount, useEnsName } from 'wagmi'
 import { Collection } from '@components/Collection'
 
 interface HomePageProps {
@@ -17,6 +19,15 @@ interface HomePageProps {
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
   const ogImage = ipfsImage(collections[0].editionMetadata.imageURI)
+  const { data: account } = useAccount()
+  const { data: ensName } = useEnsName({
+    address: account?.address,
+    suspense: true,
+  })
+  const username = useMemo(
+    () => ensName || shortenAddress(account?.address),
+    [account?.address, ensName]
+  )
 
   return (
     <>
@@ -52,15 +63,22 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
         <meta name="twitter:image" content={ogImage} />
       </Head>
 
-      <Flex justify="flex-end" p="x4" className={header}>
+      {/*<Flex justify="flex-end" p="x4" className={header}>
         <ConnectWallet />
-      </Flex>
-      {collections.map(collection => (
-        collection?.address && (
-          <ERC721DropContractProvider key={collection.address} erc721DropAddress={collection.address}>
-            <Collection collection={collection} />
+      </Flex>*/}
+      <Stack align="center" minH="100vh">
+        {collections.map((collection) => (
+          <ERC721DropContractProvider
+            key={collection.address + '_' + username}
+            erc721DropAddress={collection.address}
+          >
+            <Collection
+              username={username}
+              collection={collection}
+            />
           </ERC721DropContractProvider>
-        )))}
+        ))}
+      </Stack>
     </>
   )
 }
@@ -68,14 +86,13 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
 export default HomePage
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { erc721Drops } = (await request(SUBGRAPH_URL, GET_COLLECTIONS_QUERY, {
+  const { erc721Drops } = await request(SUBGRAPH_URL, GET_COLLECTIONS_QUERY, {
     collectionAddresses: collectionAddresses,
-  }))
+  })
 
   return {
     props: {
       collections: erc721Drops,
     },
   }
-
 }

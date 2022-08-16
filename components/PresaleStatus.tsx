@@ -45,7 +45,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
   }, [merkleTree, account])
 
   return (
-    <Box>
+    <Box className="zord-presale-status">
       {loading ? (
         <Stack align="center">
           <SpinnerOG />

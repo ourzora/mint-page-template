@@ -1,117 +1,121 @@
+import { SubgraphERC721Drop } from 'models/subgraph'
+import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
-import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 import { useSaleStatus } from 'hooks/useSaleStatus'
+import { useDisconnect } from 'wagmi'
 import { ipfsImage } from '@lib/helpers'
-import { maxWidth, border, heroImage } from 'styles/styles.css'
+import { maxWidth, heroImage, wrapWords } from 'styles/styles.css'
 import { MintStatus } from '@components/MintStatus'
 import { MintDetails } from '@components/MintDetails'
 import { PresaleStatus } from '@components/PresaleStatus'
 import {
   Box,
-  Stack,
   Flex,
   Well,
+  Stack,
   Text,
   Button,
   Paragraph,
   SpinnerOG,
 } from '@zoralabs/zord'
 
-export function Collection({ collection }) {
-  const contractAddress = collection.address
+export function Collection({
+  collection,
+  username,
+}: {
+  collection: SubgraphERC721Drop
+  username?: string
+}) {
+  const { disconnect } = useDisconnect()
   const { presaleExists, saleNotStarted, saleIsFinished } = useSaleStatus({ collection })
   const [showPresale, setShowPresale] = useState(saleNotStarted && !saleIsFinished)
 
   return (
-      <Stack mt="x3" gap="x3">
-        <Box className={maxWidth} p="x4">
-          <Text variant="display-md" mb="x8" align="center">
+    <Flex
+      mt="x3"
+      align="center"
+      direction={{ '@initial': 'column', '@768': 'row-reverse' }}
+      gap="x3"
+      p={{ '@initial': 'x4', '@576': 'x10' }}
+      w="100%"
+      style={{ maxWidth: 1360, margin: 'auto', minHeight: '80vh' }}
+    >
+      <Flex flex={{ '@initial': '1', '@1024': '1' }} p="x2" justify="center">
+        <img
+          className={heroImage}
+          src={ipfsImage(collection.editionMetadata.imageURI)}
+          alt={collection.name}
+        />
+      </Flex>
+      <Box flex={{ '@initial': '1', '@1024': 'none' }} className={maxWidth} p="x4">
+        <Stack gap="x2" mb="x3">
+          <Text variant="display-md" mb="x2">
             {collection.name}
           </Text>
-          <Text>{collection?.editionMetadata?.description}</Text>
-          <Box mt="x8" mx="auto" style={{ maxWidth: 560 }}>
-            <Well className={border} p="x6" style={{ borderBottom: 0 }}>
-              <img
-                className={heroImage}
-                src={ipfsImage(collection.editionMetadata.imageURI)}
-                alt={collection.name}
-              />
-            </Well>
-            <Well className={border} p="x6">
-              <ERC721DropContractProvider erc721DropAddress={contractAddress}>
-                <Box>
-                  {collection != null ? (
-                    <>
-                      {presaleExists ? (
-                        <>
-                          <Flex flexChildren gap="x3" mb="x2">
-                            <Button
-                              pill
-                              variant={showPresale ? 'primary' : 'ghost'}
-                              color={showPresale ? 'primary' : 'tertiary'}
-                              onClick={() => setShowPresale(true)}
-                            >
-                              Presale
-                            </Button>
-                            <Button
-                              pill
-                              variant={!showPresale ? 'primary' : 'ghost'}
-                              color={!showPresale ? 'primary' : 'tertiary'}
-                              onClick={() => setShowPresale(false)}
-                            >
-                              Public sale
-                            </Button>
-                          </Flex>
-                          <Box style={{ display: showPresale ? 'block' : 'none' }}>
-                            <PresaleStatus collection={collection} />
-                          </Box>
-                          <Box style={{ display: !showPresale ? 'block' : 'none' }}>
-                            <MintStatus collection={collection} />
-                          </Box>
-                        </>
-                      ) : (
-                        <MintStatus collection={collection} />
-                      )}
-                      <MintDetails collection={collection} />
-                    </>
-                  ) : (
-                    <Paragraph align="center" mt="x8">
-                      <SpinnerOG />
-                    </Paragraph>
-                  )}
-                </Box>
-              </ERC721DropContractProvider>
-            </Well>
-          </Box>
-        </Box>
-        <Box p="x4" className={maxWidth}>
-          <Text as="h2" mt="x0" mb="x2" variant="heading-sm">
-            About
-          </Text>
-          <Text as="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et gravida
-            dolor, non finibus nibh. Nullam sollicitudin molestie sem vel fermentum.
-            Suspendisse vitae tincidunt justo. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Phasellus et gravida dolor, non finibus nibh. Nullam
-            sollicitudin molestie sem vel fermentum. Suspendisse vitae tincidunt justo.
-          </Text>
+          <Paragraph className={wrapWords} mb="x2">
+            <ReactMarkdown>{JSON.parse(`"${collection?.editionMetadata?.description}"`)}</ReactMarkdown>
+          </Paragraph>
+        </Stack>
 
-          <Text as="p">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et gravida
-            dolor, non finibus nibh. Nullam sollicitudin molestie sem vel fermentum.
-            Suspendisse vitae tincidunt justo. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Phasellus et gravida dolor, non finibus nibh. Nullam
-            sollicitudin molestie sem vel fermentum. Suspendisse vitae tincidunt justo.
-          </Text>
+        <Box>
+          {collection != null ? (
+            <>
+              {presaleExists ? (
+                <>
+                  <Flex flexChildren gap="x3">
+                    <Button
+                      pill
+                      variant={showPresale ? 'primary' : 'ghost'}
+                      color={showPresale ? 'primary' : 'tertiary'}
+                      onClick={() => setShowPresale(true)}
+                    >
+                      Presale
+                    </Button>
+                    <Button
+                      pill
+                      variant={!showPresale ? 'primary' : 'ghost'}
+                      color={!showPresale ? 'primary' : 'tertiary'}
+                      onClick={() => setShowPresale(false)}
+                    >
+                      Public sale
+                    </Button>
+                  </Flex>
+                  <Box style={{ display: showPresale ? 'block' : 'none' }}>
+                    <PresaleStatus collection={collection} />
+                  </Box>
+                  <Box style={{ display: !showPresale ? 'block' : 'none' }}>
+                    <MintStatus collection={collection} />
+                  </Box>
+                </>
+              ) : (
+                <MintStatus collection={collection} />
+              )}
+
+              <Box>
+                {username && (
+                  <Well borderColor="accent" py="x1" mt="x4">
+                    <Flex justify="space-between" align="center">
+                      <Text fontSize="x2">Logged in as {username}</Text>
+                      <Button pill variant="ghost" onClick={disconnect}>
+                        <Box as="span" fontSize="x2">
+                          Switch wallet
+                        </Box>
+                      </Button>
+                    </Flex>
+                  </Well>
+                )}
+              </Box>
+              <Well borderColor="accent" fontSize="x1" mt="x4">
+                <MintDetails collection={collection} showToggle={false} />
+              </Well>
+            </>
+          ) : (
+            <Paragraph align="center" mt="x8">
+              <SpinnerOG />
+            </Paragraph>
+          )}
         </Box>
-        <Box p="x4" className={maxWidth} style={{ maxWidth: 400 }}>
-          <Flex gap="x3" as="p" align="center" justify="space-between">
-            <a href="https://twitter.com/ourZORA">Twitter</a>
-            <a href="https://discord.com/invite/Va58aMrcwk">Discord</a>
-            <a href={`https://etherscan.io/address/${contractAddress}`}>Etherscan</a>
-            <a href={`https://zora.co/collections/${contractAddress}`}>Zora</a>
-          </Flex>
-        </Box>
-      </Stack>
+      </Box>
+    </Flex>
   )
 }

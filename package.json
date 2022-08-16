@@ -35,6 +35,7 @@
     "node-fetch": "^3.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-markdown": "^8.0.3",
     "react-prevent-outside-scroll": "^0.0.2",
     "shade-blend-color": "^1.0.0",
     "shorthash2": "^1.0.3",
