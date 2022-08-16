@@ -2,6 +2,8 @@ import { Button } from 'degen'
 import { useAccount, useSigner, useNetwork } from 'wagmi'
 import { ethers } from 'ethers'
 import abi from '@lib/ZoraNFTCreatorV1-abi.json'
+import getZoraNFTCreatorV1Address from '@lib/getZoraNFTCreatorV1Address'
+
 // import getFactoryAddress from '@/utils/getFactoryAddress'
 
 const CreateDropButton = () => {
@@ -9,15 +11,11 @@ const CreateDropButton = () => {
   const { activeChain } = useNetwork()
   const { data: signer } = useSigner()
 
-  console.log('ADDRESS', account)
-  console.log('chain', activeChain)
-  const contractAddress = '0xC551Fc4fBadc6dF12C4f98C6956E000990929837'
+  const contractAddress = getZoraNFTCreatorV1Address(activeChain?.id)
   const contract = new ethers.Contract(contractAddress, abi, signer)
 
   const handleClick = async () => {
-    console.log('contract', contract)
     const receipt = await createDrop()
-    console.log('RECEIPT', receipt)
   }
   const createDrop = () => {
     const name = 'sweets the engineer'
