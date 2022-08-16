@@ -3,7 +3,7 @@ import '@zoralabs/zord/index.css'
 import 'styles/global.css'
 
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
-import { configureChains, createClient, WagmiConfig, chain } from 'wagmi'
+import { configureChains, createClient, WagmiConfig, chain, allChains } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { contractAddress } from '@lib/constants'
 import { ThemeProvider } from 'degen'
@@ -12,7 +12,7 @@ import 'degen/styles'
 
 const { chains, provider } = configureChains(
   [
-    chain.goerli, chain.mainnet, chain.polygonMumbai
+    allChains.find((chain) => chain.id === parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)),
   ],
   [ publicProvider()]
 )
