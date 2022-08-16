@@ -3,7 +3,7 @@ import '@zoralabs/zord/index.css'
 import 'styles/global.css'
 
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
-import { configureChains, createClient, WagmiConfig, chain, allChains } from 'wagmi'
+import { configureChains, createClient, WagmiConfig, allChains } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { contractAddress } from '@lib/constants'
 import { ThemeProvider } from 'degen'
