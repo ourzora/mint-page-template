@@ -1,14 +1,6 @@
-## Zora Create Drop Template
-```
-cd ..
-cp .env.local.example .env.local
-# change NEXT_PUBLIC_CONTRACT_ADDRESS to the contract address you're using
-# change NEXT_PUBLIC_CHAIN_ID to the right network
-# change ALCHEMY_ID to your alchemy or infura URL
-```
+## WAYSPACE - Jackintheway album drop
 
-Now finally you can install all the required packages, and run the server. :)
+Live App: [https://wayspace.vercel.app/](https://wayspace.vercel.app/)
 
-```
-yarn install
-yarn dev
+<img width="643" alt="Screen Shot 2022-08-16 at 7 54 06 PM" src="https://user-images.githubusercontent.com/23249402/184998994-d7ec11d0-a348-46fb-a6b1-82f2767799ee.png">
+
