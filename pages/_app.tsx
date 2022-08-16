@@ -33,6 +33,7 @@ function App({ Component, pageProps }) {
     <ThemeProvider>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider
+          coolMode
           chains={chains}
           theme={lightTheme({
             accentColor: 'black',
