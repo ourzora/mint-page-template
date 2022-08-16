@@ -42,8 +42,10 @@ function SaleStatus({
   allowlistEntry?: AllowListEntry
 }) {
   const { data: account } = useAccount()
-  const { activeChain } = useNetwork()
+  const { switchNetwork } = useNetwork()
+
   const dropProvider = useERC721DropContract()
+  const { chainId, correctNetwork } = useERC721DropContract()
   const [awaitingApproval, setAwaitingApproval] = useState<boolean>(false)
   const [isMinting, setIsMinting] = useState<boolean>(false)
   const [errors, setErrors] = useState<string>()
@@ -53,11 +55,6 @@ function SaleStatus({
       collection,
       presale,
     })
-
-  const correctNetwork = useMemo(
-    () => process.env.NEXT_PUBLIC_CHAIN_ID === activeChain?.id.toString(),
-    [activeChain]
-  )
 
   const handleMint = useCallback(async () => {
     setIsMinted(false)
@@ -132,7 +129,7 @@ function SaleStatus({
                 : undefined
             }
             onClick={
-              !account ? openConnectModal : !correctNetwork ? openChainModal : handleMint
+              !account ? openConnectModal : !correctNetwork ? () => switchNetwork?.(chainId) : handleMint
             }
             style={isMinted ? { backgroundColor: '#1CB687' } : {}}
             className={awaitingApproval ? waitingApproval : ''}
