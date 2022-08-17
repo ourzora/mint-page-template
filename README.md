@@ -1,14 +1,25 @@
-## Zora Create Drop Template
+## Zora Mint Page Template
+
+Ideally, first create your collection here: <https://create.zora.co> or here <https://testnet.create.zora.co>, and then copy the contract address after it has been deployed.
+
+Alternatively, you can test with one of the included collections while you're setting up, or grab _any_ collection address from either the above sites (just make sure you update `NEXT_PUBLIC_CHAIN_ID` to match the network the contract exists on).
+
 ```
-cd ..
 cp .env.local.example .env.local
-# change NEXT_PUBLIC_CONTRACT_ADDRESS to the contract address you're using
-# change NEXT_PUBLIC_CHAIN_ID to the right network
-# change ALCHEMY_ID to your alchemy or infura URL
+
+# vi .env.local
+# change NEXT_PUBLIC_CHAIN_ID to the right network (4 for rinkeby, 1 for mainnet)
+# update ALCHEMY_ID with your alchemy id
 ```
 
-Now finally you can install all the required packages, and run the server. :)
+To change the target collection, open up `lib/constants.ts` and replace the `collectionAddressesList` with a list of collections you want to render (just a single collection is fine as well).
 
+Then install all the required packages, and run the server. :)
 ```
 yarn install
 yarn dev
+```
+
+You can customise the main theme in `styles/theme.css.ts`, and add custom css overrides in `styles/global.css`
+
+Good luck! :)
