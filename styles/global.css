@@ -40,8 +40,8 @@ a:hover {
 }
 
 .zord-mint-status__number-input {
-  background-color: var(--_1yv16yc5e); /* color: accent */
-  border-radius: var(--_1yv16yc7h); /* borderRadius: regular */
+  background-color: var(--_1yv16yc5i); /* color: accent */
+  border-radius: var(--_1yv16yc7l); /* borderRadius: regular */
   padding: 5px;
 }
 .zord-mint-status__number-input input,

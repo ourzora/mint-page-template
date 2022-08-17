@@ -169,6 +169,8 @@ declare const theme: _vanilla_extract_private.MapLeafNodes<{
         text2: string;
         text3: string;
         text4: string;
+        icon1: string;
+        icon2: string;
         primary: string;
         secondary: string;
         tertiary: string;
@@ -230,6 +232,8 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         text2: string;
         text3: string;
         text4: string;
+        icon1: string;
+        icon2: string;
         primary: string;
         secondary: string;
         tertiary: string;
@@ -627,6 +631,12 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 text4: {
                     defaultClass: string;
                 };
+                icon1: {
+                    defaultClass: string;
+                };
+                icon2: {
+                    defaultClass: string;
+                };
                 primary: {
                     defaultClass: string;
                 };
@@ -779,6 +789,12 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 text4: {
+                    defaultClass: string;
+                };
+                icon1: {
+                    defaultClass: string;
+                };
+                icon2: {
                     defaultClass: string;
                 };
                 primary: {
@@ -955,6 +971,12 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 text4: {
+                    defaultClass: string;
+                };
+                icon1: {
+                    defaultClass: string;
+                };
+                icon2: {
                     defaultClass: string;
                 };
                 primary: {
@@ -11559,6 +11581,8 @@ declare function colorTheme({ foreground, background, accent, positive, negative
         text3: string;
         text4: string;
         transparent: string;
+        icon1: string;
+        icon2: string;
         primary: string;
         secondary: string;
         tertiary: string;
