@@ -38,7 +38,7 @@ export function Collection({
       align="center"
       direction={{ '@initial': 'column', '@768': 'row-reverse' }}
       gap="x3"
-      p={{ '@initial': 'x4', '@576': 'x10' }}
+      p={{ '@initial': 'x1', '@576': 'x10' }}
       w="100%"
       style={{ maxWidth: 1360, margin: 'auto', minHeight: '80vh' }}
     >
