@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@zoralabs/zord": {
-      "signature": "c740d08afae48a6e19618979fc539ebb",
+      "signature": "382521989b0ceb11c39962e2d9b4d715",
       "file": true,
       "replaced": "^0.1.0"
     }
