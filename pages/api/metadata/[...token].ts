@@ -1,29 +1,26 @@
-export default function handler() { return null }
-
-/*
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { ethers } from 'ethers'
+// import { ethers } from 'ethers'
 const path = require('path')
 const fsp = require('fs').promises
 import { existsSync } from 'fs'
-import abi from 'lib/abi.json'
-import { chains } from 'lib/chains'
-import { baseUrl, contractAddress, chainId } from 'lib/constants'
+// import abi from 'lib/abi.json'
+// import { chains } from 'lib/chains'
+// import { baseUrl, contractAddress, chainId } from 'lib/constants'
 
-const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
-const contract = new ethers.Contract(
-  contractAddress,
-  abi,
-  new ethers.providers.StaticJsonRpcProvider(chain)
-)
+// const chain = chains.find((x) => x.id == chainId)?.rpcUrls[0]
+// const contract = new ethers.Contract(
+//   contractAddress,
+//   abi,
+//   new ethers.providers.StaticJsonRpcProvider(chain)
+// )
 
 const privateDirectory = path.resolve(process.cwd(), 'private')
 const validate = async (id: string, file: string) => {
   try {
-    if (file.indexOf('metadata.json') < 0 && file.indexOf('sample') < 0) {
-      // Verify token exists
-      await contract.tokenURI(Number(id))
-    }
+    // if (file.indexOf('metadata.json') < 0 && file.indexOf('sample') < 0) {
+    //   // Verify token exists
+    //   await contract.tokenURI(Number(id))
+    // }
     // Verif file exists
     if (!existsSync(file)) {
       throw 'File missing'
@@ -85,4 +82,3 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   })
 }
-*/
