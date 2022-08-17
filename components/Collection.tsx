@@ -95,9 +95,9 @@ export function Collection({
                 {username && (
                   <Well borderColor="accent" py="x1" mt="x4">
                     <Flex justify="space-between" align="center">
-                      <Text fontSize="x2">Logged in as {username}</Text>
+                      <Text fontSize={14}>Logged in as {username}</Text>
                       <Button pill variant="ghost" onClick={disconnect}>
-                        <Box as="span" fontSize="x2">
+                        <Box as="span" fontSize={14}>
                           Switch wallet
                         </Box>
                       </Button>
@@ -105,7 +105,7 @@ export function Collection({
                   </Well>
                 )}
               </Box>
-              <Well borderColor="accent" fontSize="x1" mt="x4">
+              <Well borderColor="accent" fontSize={14} mt="x4">
                 <MintDetails collection={collection} showToggle={false} />
               </Well>
             </>

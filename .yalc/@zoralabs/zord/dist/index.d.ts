@@ -17,37 +17,37 @@ declare const theme: _vanilla_extract_private.MapLeafNodes<{
     };
     fontSizing: {
         fontSize: {
-            x0: string;
-            x1: string;
-            x2: string;
-            x3: string;
-            x4: string;
-            x5: string;
-            x6: string;
-            x7: string;
-            x8: string;
-            x9: string;
-            x10: string;
-            x11: string;
-            x12: string;
-            x13: string;
+            0: string;
+            12: string;
+            14: string;
+            16: string;
+            18: string;
+            20: string;
+            28: string;
+            30: string;
+            35: string;
+            40: string;
+            48: string;
+            50: string;
+            65: string;
+            80: string;
             unset: string;
         };
         lineHeight: {
-            x0: string;
-            x1: string;
-            x2: string;
-            x3: string;
-            x4: string;
-            x5: string;
-            x6: string;
-            x7: string;
-            x8: string;
-            x9: string;
-            x10: string;
-            x11: string;
-            x12: string;
-            x13: string;
+            0: string;
+            14: string;
+            20: string;
+            24: string;
+            25: string;
+            30: string;
+            34: string;
+            40: string;
+            50: string;
+            55: string;
+            65: string;
+            70: string;
+            85: string;
+            95: string;
             unset: string;
         };
         fontWeight: {
@@ -278,37 +278,37 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         mono: string;
     }, _vanilla_extract_private.CSSVarFunction>;
     fontSize: _vanilla_extract_private.MapLeafNodes<{
-        x0: string;
-        x1: string;
-        x2: string;
-        x3: string;
-        x4: string;
-        x5: string;
-        x6: string;
-        x7: string;
-        x8: string;
-        x9: string;
-        x10: string;
-        x11: string;
-        x12: string;
-        x13: string;
+        0: string;
+        12: string;
+        14: string;
+        16: string;
+        18: string;
+        20: string;
+        28: string;
+        30: string;
+        35: string;
+        40: string;
+        48: string;
+        50: string;
+        65: string;
+        80: string;
         unset: string;
     }, _vanilla_extract_private.CSSVarFunction>;
     lineHeight: _vanilla_extract_private.MapLeafNodes<{
-        x0: string;
-        x1: string;
-        x2: string;
-        x3: string;
-        x4: string;
-        x5: string;
-        x6: string;
-        x7: string;
-        x8: string;
-        x9: string;
-        x10: string;
-        x11: string;
-        x12: string;
-        x13: string;
+        0: string;
+        14: string;
+        20: string;
+        24: string;
+        25: string;
+        30: string;
+        34: string;
+        40: string;
+        50: string;
+        55: string;
+        65: string;
+        70: string;
+        85: string;
+        95: string;
         unset: string;
     }, _vanilla_extract_private.CSSVarFunction>;
     fontWeight: _vanilla_extract_private.MapLeafNodes<{
@@ -425,6 +425,160 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
     }, _vanilla_extract_private.CSSVarFunction>;
 }, _vanilla_extract_private.CSSVarFunction>;
 declare const root: string;
+
+/**
+ *  Position & transforms
+ */
+declare const left: {
+    '50%': string;
+};
+declare const top: {
+    '50%': string;
+};
+declare const translateX: {
+    '-50%': string;
+};
+declare const translateY: {
+    '-50%': string;
+};
+declare const translate: {
+    '-50%': string;
+};
+declare const center: {
+    x: string;
+    y: string;
+    xy: string;
+};
+/**
+ *  Display
+ */
+declare const display: {
+    none: string;
+    block: string;
+    inline: string;
+    flex: string;
+    grid: string;
+    "inline-block": string;
+    "inline-flex": string;
+};
+/**
+ *  Dimensions and positioning
+ */
+declare const objectFit: {
+    contain: string;
+    cover: string;
+    fill: string;
+    scaleDown: string;
+};
+/**
+ *  Pointer events
+ */
+declare const pointerEvents: {
+    none: string;
+    auto: string;
+};
+/**
+ *  Overflow
+ */
+declare const overflow: {
+    auto: string;
+    hidden: string;
+    scroll: string;
+};
+/**
+ *  Text
+ */
+declare const textTransform: {
+    uppercase: string;
+    capitalize: string;
+    none: string;
+};
+declare const whiteSpace: {
+    nowrap: string;
+};
+declare const ellipsis: string;
+/**
+ *  Cursor
+ */
+declare const cursor: {
+    pointer: string;
+};
+declare const fadeIn: {
+    '0.2': string;
+    '0.3': string;
+    '0.4': string;
+};
+declare const transitionOpacity: {
+    '0.2': string;
+};
+declare const hoverFadeOut: string;
+declare const hoverFadeIn: string;
+/**
+ *  Debug
+ */
+declare const test: {
+    red: string;
+    blue: string;
+};
+
+declare const styles_left: typeof left;
+declare const styles_top: typeof top;
+declare const styles_translateX: typeof translateX;
+declare const styles_translateY: typeof translateY;
+declare const styles_translate: typeof translate;
+declare const styles_center: typeof center;
+declare const styles_display: typeof display;
+declare const styles_objectFit: typeof objectFit;
+declare const styles_pointerEvents: typeof pointerEvents;
+declare const styles_overflow: typeof overflow;
+declare const styles_textTransform: typeof textTransform;
+declare const styles_whiteSpace: typeof whiteSpace;
+declare const styles_ellipsis: typeof ellipsis;
+declare const styles_cursor: typeof cursor;
+declare const styles_fadeIn: typeof fadeIn;
+declare const styles_transitionOpacity: typeof transitionOpacity;
+declare const styles_hoverFadeOut: typeof hoverFadeOut;
+declare const styles_hoverFadeIn: typeof hoverFadeIn;
+declare const styles_test: typeof test;
+declare namespace styles {
+  export {
+    styles_left as left,
+    styles_top as top,
+    styles_translateX as translateX,
+    styles_translateY as translateY,
+    styles_translate as translate,
+    styles_center as center,
+    styles_display as display,
+    styles_objectFit as objectFit,
+    styles_pointerEvents as pointerEvents,
+    styles_overflow as overflow,
+    styles_textTransform as textTransform,
+    styles_whiteSpace as whiteSpace,
+    styles_ellipsis as ellipsis,
+    styles_cursor as cursor,
+    styles_fadeIn as fadeIn,
+    styles_transitionOpacity as transitionOpacity,
+    styles_hoverFadeOut as hoverFadeOut,
+    styles_hoverFadeIn as hoverFadeIn,
+    styles_test as test,
+  };
+}
+
+declare type Mixins = typeof styles;
+declare type MixinsProp<M = Mixins> = {
+    [P in keyof M]: Partial<keyof M[P]> | undefined | true;
+};
+declare function mixins(mixinsProp: Partial<MixinsProp>): string;
+
+declare const MODAL_BACKDROP_LAYER = 20;
+
+declare const MAX_GRID_WIDTH = 1440;
+
+declare const transitions: {
+    in: string;
+    out: string;
+    inOut: string;
+};
 
 declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSprinkles.SprinklesFn<[{
     conditions: never;
@@ -1582,6 +1736,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 length: 6;
             };
             values: {
+                0: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                16: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
                 unset: {
                     defaultClass: string;
                     conditions: {
@@ -1593,7 +1769,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x0: {
+                12: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1604,7 +1780,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x1: {
+                14: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1615,7 +1791,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x2: {
+                18: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1626,7 +1802,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x3: {
+                20: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1637,7 +1813,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x4: {
+                28: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1648,7 +1824,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x5: {
+                30: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1659,7 +1835,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x6: {
+                35: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1670,7 +1846,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x7: {
+                40: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1681,7 +1857,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x8: {
+                48: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1692,7 +1868,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x9: {
+                50: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1703,7 +1879,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x10: {
+                65: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1714,29 +1890,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x11: {
-                    defaultClass: string;
-                    conditions: {
-                        readonly '@initial': string;
-                        readonly '@480': string;
-                        readonly '@576': string;
-                        readonly '@768': string;
-                        readonly '@1024': string;
-                        readonly '@1440': string;
-                    };
-                };
-                x12: {
-                    defaultClass: string;
-                    conditions: {
-                        readonly '@initial': string;
-                        readonly '@480': string;
-                        readonly '@576': string;
-                        readonly '@768': string;
-                        readonly '@1024': string;
-                        readonly '@1440': string;
-                    };
-                };
-                x13: {
+                80: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1754,6 +1908,28 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                 length: 6;
             };
             values: {
+                0: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
+                24: {
+                    defaultClass: string;
+                    conditions: {
+                        readonly '@initial': string;
+                        readonly '@480': string;
+                        readonly '@576': string;
+                        readonly '@768': string;
+                        readonly '@1024': string;
+                        readonly '@1440': string;
+                    };
+                };
                 unset: {
                     defaultClass: string;
                     conditions: {
@@ -1765,7 +1941,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x0: {
+                14: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1776,7 +1952,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x1: {
+                20: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1787,7 +1963,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x2: {
+                30: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1798,7 +1974,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x3: {
+                40: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1809,7 +1985,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x4: {
+                50: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1820,7 +1996,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x5: {
+                65: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1831,7 +2007,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x6: {
+                25: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1842,7 +2018,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x7: {
+                34: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1853,7 +2029,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x8: {
+                55: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1864,7 +2040,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x9: {
+                70: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1875,7 +2051,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x10: {
+                85: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -1886,29 +2062,7 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                         readonly '@1440': string;
                     };
                 };
-                x11: {
-                    defaultClass: string;
-                    conditions: {
-                        readonly '@initial': string;
-                        readonly '@480': string;
-                        readonly '@576': string;
-                        readonly '@768': string;
-                        readonly '@1024': string;
-                        readonly '@1440': string;
-                    };
-                };
-                x12: {
-                    defaultClass: string;
-                    conditions: {
-                        readonly '@initial': string;
-                        readonly '@480': string;
-                        readonly '@576': string;
-                        readonly '@768': string;
-                        readonly '@1024': string;
-                        readonly '@1440': string;
-                    };
-                };
-                x13: {
+                95: {
                     defaultClass: string;
                     conditions: {
                         readonly '@initial': string;
@@ -10711,160 +10865,6 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
 }]>;
 declare type Atoms = Parameters<typeof atoms>[0];
 
-/**
- *  Position & transforms
- */
-declare const left: {
-    '50%': string;
-};
-declare const top: {
-    '50%': string;
-};
-declare const translateX: {
-    '-50%': string;
-};
-declare const translateY: {
-    '-50%': string;
-};
-declare const translate: {
-    '-50%': string;
-};
-declare const center: {
-    x: string;
-    y: string;
-    xy: string;
-};
-/**
- *  Display
- */
-declare const display: {
-    none: string;
-    block: string;
-    inline: string;
-    flex: string;
-    grid: string;
-    "inline-block": string;
-    "inline-flex": string;
-};
-/**
- *  Dimensions and positioning
- */
-declare const objectFit: {
-    contain: string;
-    cover: string;
-    fill: string;
-    scaleDown: string;
-};
-/**
- *  Pointer events
- */
-declare const pointerEvents: {
-    none: string;
-    auto: string;
-};
-/**
- *  Overflow
- */
-declare const overflow: {
-    auto: string;
-    hidden: string;
-    scroll: string;
-};
-/**
- *  Text
- */
-declare const textTransform: {
-    uppercase: string;
-    capitalize: string;
-    none: string;
-};
-declare const whiteSpace: {
-    nowrap: string;
-};
-declare const ellipsis: string;
-/**
- *  Cursor
- */
-declare const cursor: {
-    pointer: string;
-};
-declare const fadeIn: {
-    '0.2': string;
-    '0.3': string;
-    '0.4': string;
-};
-declare const transitionOpacity: {
-    '0.2': string;
-};
-declare const hoverFadeOut: string;
-declare const hoverFadeIn: string;
-/**
- *  Debug
- */
-declare const test: {
-    red: string;
-    blue: string;
-};
-
-declare const styles_left: typeof left;
-declare const styles_top: typeof top;
-declare const styles_translateX: typeof translateX;
-declare const styles_translateY: typeof translateY;
-declare const styles_translate: typeof translate;
-declare const styles_center: typeof center;
-declare const styles_display: typeof display;
-declare const styles_objectFit: typeof objectFit;
-declare const styles_pointerEvents: typeof pointerEvents;
-declare const styles_overflow: typeof overflow;
-declare const styles_textTransform: typeof textTransform;
-declare const styles_whiteSpace: typeof whiteSpace;
-declare const styles_ellipsis: typeof ellipsis;
-declare const styles_cursor: typeof cursor;
-declare const styles_fadeIn: typeof fadeIn;
-declare const styles_transitionOpacity: typeof transitionOpacity;
-declare const styles_hoverFadeOut: typeof hoverFadeOut;
-declare const styles_hoverFadeIn: typeof hoverFadeIn;
-declare const styles_test: typeof test;
-declare namespace styles {
-  export {
-    styles_left as left,
-    styles_top as top,
-    styles_translateX as translateX,
-    styles_translateY as translateY,
-    styles_translate as translate,
-    styles_center as center,
-    styles_display as display,
-    styles_objectFit as objectFit,
-    styles_pointerEvents as pointerEvents,
-    styles_overflow as overflow,
-    styles_textTransform as textTransform,
-    styles_whiteSpace as whiteSpace,
-    styles_ellipsis as ellipsis,
-    styles_cursor as cursor,
-    styles_fadeIn as fadeIn,
-    styles_transitionOpacity as transitionOpacity,
-    styles_hoverFadeOut as hoverFadeOut,
-    styles_hoverFadeIn as hoverFadeIn,
-    styles_test as test,
-  };
-}
-
-declare type Mixins = typeof styles;
-declare type MixinsProp<M = Mixins> = {
-    [P in keyof M]: Partial<keyof M[P]> | undefined | true;
-};
-declare function mixins(mixinsProp: Partial<MixinsProp>): string;
-
-declare const MODAL_BACKDROP_LAYER = 20;
-
-declare const MAX_GRID_WIDTH = 1440;
-
-declare const transitions: {
-    in: string;
-    out: string;
-    inOut: string;
-};
-
 interface BoxProps {
     className?: ClassValue;
     children?: ReactNode;
@@ -11728,37 +11728,37 @@ declare const fonts: {
     mono: string;
 };
 declare const fontSize: {
-    x0: string;
-    x1: string;
-    x2: string;
-    x3: string;
-    x4: string;
-    x5: string;
-    x6: string;
-    x7: string;
-    x8: string;
-    x9: string;
-    x10: string;
-    x11: string;
-    x12: string;
-    x13: string;
+    0: string;
+    12: string;
+    14: string;
+    16: string;
+    18: string;
+    20: string;
+    28: string;
+    30: string;
+    35: string;
+    40: string;
+    48: string;
+    50: string;
+    65: string;
+    80: string;
     unset: string;
 };
 declare const lineHeight: {
-    x0: string;
-    x1: string;
-    x2: string;
-    x3: string;
-    x4: string;
-    x5: string;
-    x6: string;
-    x7: string;
-    x8: string;
-    x9: string;
-    x10: string;
-    x11: string;
-    x12: string;
-    x13: string;
+    0: string;
+    14: string;
+    20: string;
+    24: string;
+    25: string;
+    30: string;
+    34: string;
+    40: string;
+    50: string;
+    55: string;
+    65: string;
+    70: string;
+    85: string;
+    95: string;
     unset: string;
 };
 declare const fontWeight: {
