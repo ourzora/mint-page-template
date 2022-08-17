@@ -1,4 +1,4 @@
-import { useState, useEffect, } from 'react'
+import { useState, useEffect } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { makeTreeFromUrl } from 'lib/merkle-proof'
 import { MintStatus } from 'components/MintStatus'
@@ -22,9 +22,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
   useEffect(() => {
     async function asyncFunc() {
       if (metadata && collection.salesConfig.presaleMerkleRoot && metadata.allowlistURI) {
-        const tree = await makeTreeFromUrl(
-          ipfsImage(metadata.allowlistURI)
-        )
+        const tree = await makeTreeFromUrl(ipfsImage(metadata.allowlistURI))
         if (tree) setMerkleTree(tree)
         setLoading(false)
       }
@@ -60,28 +58,6 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
             through the public sale.
           </Text>
         </Stack>
-      ) : metadata && merkleTree.root !== collection.salesConfig.presaleMerkleRoot ? (
-        <Stack align="center">
-          <Button
-            variant="circle"
-            color="onNegative"
-            mx="auto"
-            mb="x3"
-            backgroundColor="negative"
-            pointerEvents="none"
-          >
-            {/* prettier-ignore */}
-            <svg width="32" height="32" viewBox="0 0 24 24"> <path fill="currentColor" d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /> </svg>
-          </Button>
-          <Text wordBreak="break-word" color="negative">
-            The presaleMerkleRoot in salesConfig does not match the merkle root of the
-            hosted allowlist file at{' '}
-            <a href={metadata.allowlistURI} target="_blank" rel="noreferrer">
-              {metadata.allowlistURI}
-            </a>
-            .
-          </Text>
-        </Stack>
       ) : !account ? (
         <Stack align="center">
           <Button
@@ -89,7 +65,6 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
             color="secondary"
             mx="auto"
             mb="x3"
-            backgroundColor="secondary"
             pointerEvents="none"
             style={{ height: 'auto' }}
           >
@@ -105,14 +80,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
         </Stack>
       ) : !accessAllowed ? (
         <Stack align="center">
-          <Button
-            variant="circle"
-            color="onNegative"
-            mx="auto"
-            mb="x3"
-            backgroundColor="negative"
-            pointerEvents="none"
-          >
+          <Button variant="circle" mx="auto" mb="x3" pointerEvents="none">
             {/* prettier-ignore */}
             <svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M14 7H13V5C13 2.24 10.76 0 8 0C5.24 0 3 2.24 3 5V7H2C0.9 7 0 7.9 0 9V19C0 20.1 0.9 21 2 21H14C15.1 21 16 20.1 16 19V9C16 7.9 15.1 7 14 7ZM8 16C6.9 16 6 15.1 6 14C6 12.9 6.9 12 8 12C9.1 12 10 12.9 10 14C10 15.1 9.1 16 8 16ZM11.1 7H4.9V5C4.9 3.29 6.29 1.9 8 1.9C9.71 1.9 11.1 3.29 11.1 5V7Z" fill="#4D4D4D"/> </svg>
           </Button>
@@ -132,4 +100,3 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
     </Box>
   )
 }
-

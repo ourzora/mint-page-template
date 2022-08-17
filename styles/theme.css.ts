@@ -1,16 +1,11 @@
 import { colorTheme, theme, border, ease, size, space } from '@zoralabs/zord'
 import * as typography from './tokens/typography'
-import {
-  createTheme,
-  style,
-} from '@vanilla-extract/css'
+import { createTheme, style } from '@vanilla-extract/css'
 
 const { colors, shadows } = colorTheme({
   foreground: '#252329',
   background: '#ffffff',
   accent: '#92ea22',
-  warning: '#ea7922',
-  positive: '#92ea22',
 })
 
 export const customTheme = createTheme(theme, {
@@ -26,11 +21,10 @@ export const customTheme = createTheme(theme, {
   },
   colors: {
     ...colors,
-    icon1: colors.accent,
     secondary: colors.primary,
     tertiary: colors.secondary,
     onAccent: '#3D3B40',
-    onNegative: '#ffffff'
+    onNegative: '#ffffff',
   },
   radii: {
     tiny: '2px',
@@ -44,13 +38,12 @@ export const customTheme = createTheme(theme, {
   size,
   space: {
     ...space,
-    'x3': '24px',
-    'x4': '20px',
+    x3: '24px',
+    x4: '20px',
   },
   ease,
   border,
 })
-
 
 export const [baseTheme, vars] = createTheme({
   color: theme.colors,
