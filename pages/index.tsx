@@ -23,7 +23,6 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
   const { data: account } = useAccount()
   const { data: ensName } = useEnsName({
     address: account?.address,
-    suspense: true,
   })
   const username = useMemo(
     () => ensName || shortenAddress(account?.address),
