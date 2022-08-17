@@ -1,8 +1,8 @@
 import { style, keyframes } from '@vanilla-extract/css'
-import { vars, atoms } from '@zoralabs/zord'
+import { vars, atoms, ease } from '@zoralabs/zord'
 
-export const MAXWIDTH = 700
-const maxWidthQuery = `(max-width: ${MAXWIDTH}px)`
+export const MAXWIDTH = 480
+const maxWidthQuery = `(max-width: ${MAXWIDTH+100}px)`
 
 const waiting = keyframes({
   '0%': { opacity: 1 },
@@ -10,13 +10,22 @@ const waiting = keyframes({
   '60%': { opacity: 1 },
 })
 
+export const wrapWords = style({
+  wordBreak: 'break-word',
+})
+
 export const waitingApproval = style({
   opacity: '1 !important',
   selectors: {
     '&:after': {
-      content: '•',
-      fontSize: '20px',
-      color: '#F5A623',
+      content: '',
+      display: 'inline-block',
+      height: '0.7em',
+      width: '0.7em',
+      marginTop: '0.15em',
+      borderRadius: '50%',
+      backgroundColor: vars.color.warning,
+      marginRight: '0.2em',
       animation: `1s ${waiting} infinite ease-in-out`,
     },
   },
@@ -52,10 +61,10 @@ export const mintCounterInput = style([
     outline: 0,
     selectors: {
       '&:focus': {
-        borderColor: vars.color.border.secondary,
+        borderColor: vars.color.secondary,
       },
       '&:hover:not(:focus)': {
-        borderColor: vars.color.border.tertiary,
+        borderColor: vars.color.border,
       },
     },
   },
@@ -72,10 +81,10 @@ export const mintCounterInput = style([
 ])
 
 export const priceDateHeading = style({
-  fontWeight: 600,
-  fontSize: '38px',
-  lineHeight: '42px',
-  letterSpacing: '0.01em',
+  fontWeight: 500,
+  fontSize: '30px',
+  lineHeight: '40px',
+  color: vars.color.onAccent
 })
 
 export const maxWidth = style({
@@ -90,17 +99,42 @@ export const maxWidth = style({
 })
 
 export const border = style({
-  border: '1px solid #808080',
+  border: `1px solid ${vars.color.border}`,
   borderRadius: 0,
 })
 
 export const header = style({
-  borderBottom: '1px solid #f3f3f3',
+  borderBottom: `1px solid ${vars.color.border}`,
 })
 
 export const heroImage = style({
   objectFit: 'contain',
-  height: '100%',
-  width: '100%',
-  maxHeight: '80vh',
+  maxHeight: '45vh',
+  maxWidth: '100%',
+  borderRadius: '12px',
+  overflow: 'hidden',
+  margin: 'auto',
+  '@media': {
+    '(max-width: 940px)': {
+      width: '100%'
+    },
+  },
+})
+
+const collapsibleOpen = keyframes({
+  '0%': { height: 0 },
+  '100%': { height: 'var(--radix-collapsible-content-height)' },
+})
+
+const collapsibleClose = keyframes({
+  '0%': { height: 'var(--radix-collapsible-content-height)' },
+  '100%': { height: 0 },
+})
+
+export const collapsibleContent = style({
+  overflow: 'hidden',
+  selectors: {
+    '&[data-state="open"]': { animation: `${collapsibleOpen} 260ms ${ease.in}` },
+    '&[data-state="closed"]': { animation: `${collapsibleClose} 260ms ${ease.out}` },
+  },
 })

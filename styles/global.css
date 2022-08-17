@@ -6,8 +6,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  letter-spacing: 0.025em;
+  line-height: 1.5;
 }
 
 a {
@@ -21,4 +21,40 @@ a:hover {
 
 * {
   box-sizing: border-box;
+}
+
+/* Custom overrides */
+
+.zord-text p {
+  margin-bottom: 0.5em;
+}
+
+.zord-mint-details .zord-text-paragraph-sm {
+  font-size: var(--_1yv16yc6i); /* font-size: 18px */
+}
+
+.zord-text-eyebrow {
+  color: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.zord-mint-status__number-input {
+  background-color: var(--_1yv16yc5e); /* color: accent */
+  border-radius: var(--_1yv16yc7h); /* borderRadius: regular */
+  padding: 5px;
+}
+.zord-mint-status__number-input input,
+.zord-mint-status__number-input button,
+.zord-mint-status__number-input button > * {
+  border: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+}
+.zord-mint-status__number-input input {
+  width: 2.1em;
+}
+.zord-mint-status__number-input button:hover {
+  opacity: 0.6;
 }

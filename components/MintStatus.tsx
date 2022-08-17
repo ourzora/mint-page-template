@@ -1,5 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
+  vars,
   Box,
   Button,
   Eyebrow,
@@ -22,6 +23,7 @@ import { useSaleStatus } from 'hooks/useSaleStatus'
 import { CountdownTimer } from 'components/CountdownTimer'
 import { cleanErrors } from 'lib/errors'
 import { AllowListEntry } from 'lib/merkle-proof'
+import { isValidDate } from 'components/CountdownTimer'
 import type { ContractTransaction } from 'ethers'
 
 function SaleStatus({
@@ -59,6 +61,8 @@ function SaleStatus({
     [activeChain]
   )
 
+  const countdownTooLarge = !isValidDate(new Date(endDate)) || new Date(endDate).getTime() > new Date().getTime() + 31536000000
+
   const handleMint = useCallback(async () => {
     setIsMinted(false)
     setAwaitingApproval(true)
@@ -82,7 +86,7 @@ function SaleStatus({
       setAwaitingApproval(false)
       setIsMinting(false)
     }
-  }, [dropProvider, mintCounter, allowlistEntry])
+  }, [dropProvider, presale, setIsMinted, mintCounter, allowlistEntry])
 
   if (saleIsFinished || isSoldOut) {
     return (
@@ -124,17 +128,17 @@ function SaleStatus({
             size="lg"
             variant={
               account == null
-                ? undefined
+                ? 'primary'
                 : !correctNetwork
                 ? 'destructive'
                 : saleNotStarted || availableMints < 1
                 ? 'secondary'
-                : undefined
+                : 'primary'
             }
             onClick={
               !account ? openConnectModal : !correctNetwork ? openChainModal : handleMint
             }
-            style={isMinted ? { backgroundColor: '#1CB687' } : {}}
+            style={isMinted ? { backgroundColor: vars.color.positive } : {}}
             className={awaitingApproval ? waitingApproval : ''}
             disabled={
               isMinting ||
@@ -163,7 +167,7 @@ function SaleStatus({
           </Button>
         )}
       </ConnectButton.Custom>
-      {saleIsActive && (
+      {saleIsActive && !countdownTooLarge && (
         <Text variant="paragraph-sm" align="center" color="tertiary">
           <CountdownTimer targetTime={endDate} refresh={true} appendText=" left" />
         </Text>
@@ -225,7 +229,7 @@ export function MintStatus({
     if (mintCounter > availableMints) setMintCounter(Math.max(1, availableMints))
     else if (mintCounter < 1) setMintCounter(1)
     else setMintCounter(Math.round(mintCounter))
-  }, [mintCounter, isMinted])
+  }, [mintCounter, availableMints])
 
   // TODO: handle integer overflows for when we do open mints
   const formattedMintedCount = Intl.NumberFormat('en', {
@@ -236,8 +240,15 @@ export function MintStatus({
     notation: 'standard',
   }).format(parseInt(collection.maxSupply))
 
+  const classname = useMemo(() => {
+    let clsName = [`zord-mint-status`]
+    presale && clsName.push(`zord-mint-status--presale`)
+    return clsName
+  }, [presale])
+
+
   return (
-    <Stack gap="x4">
+    <Stack gap="x4" className={classname}>
       {showPrice && !saleIsFinished && !isSoldOut && (
         <Flex gap="x3" flexChildren justify="space-between" align="flex-end" wrap="wrap">
           <Stack gap="x1" style={{ flex: 'none' }}>
@@ -251,7 +262,7 @@ export function MintStatus({
 
           {saleIsActive && !isSoldOut ? (
             <Stack gap="x1" style={{ textAlign: 'right' }}>
-              <Flex gap="x2" justify="flex-end" align="center">
+              <Flex className={"zord-mint-status__number-input"} gap="x2" ml="auto" justify="flex-end" align="center">
                 <Button
                   w="x12"
                   variant="circle"
@@ -325,4 +336,3 @@ export function MintStatus({
     </Stack>
   )
 }
-

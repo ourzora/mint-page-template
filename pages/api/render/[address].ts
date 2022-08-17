@@ -1,3 +1,6 @@
+export default function handler() { return null }
+
+/*
 import { baseUrl } from '@lib/constants'
 import fetch from 'node-fetch'
 
@@ -25,3 +28,4 @@ export default async function handler(req, res) {
   res.send(Buffer.from(body))
   res.end()
 }
+*/

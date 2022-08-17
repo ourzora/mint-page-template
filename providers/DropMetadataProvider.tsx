@@ -2,6 +2,7 @@ import { useProvider } from 'wagmi'
 import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 // import {DropMetadataRenderer__factory} from '@zoralabs/nft-drop-contracts/dist/typechain/DropMetadataRenderer'
 import { DropMetadataRenderer__factory } from '../constants/typechain'
+import { DROPS_METADATA_RENDERER } from '../lib/constants'
 
 interface MetadataProps {
   description?: string
@@ -31,7 +32,7 @@ function DropMetadataContractProvider({
   const [metadata, setMetadata] = useState<MetadataProps | boolean>({ loading: true })
   const metadataRenderer = useMemo(
     () =>
-      provider && metadataRendererAddress
+      provider && metadataRendererAddress && metadataRendererAddress === DROPS_METADATA_RENDERER
         ? DropMetadataRenderer__factory.connect(metadataRendererAddress, provider)
         : null,
     [provider, metadataRendererAddress]
