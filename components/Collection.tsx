@@ -1,5 +1,6 @@
 import { SubgraphERC721Drop } from 'models/subgraph'
 import ReactMarkdown from 'react-markdown'
+import { useDropMetadataContract } from 'providers/DropMetadataProvider'
 import { useState } from 'react'
 import { useSaleStatus } from 'hooks/useSaleStatus'
 import { useDisconnect } from 'wagmi'
@@ -26,6 +27,7 @@ export function Collection({
   collection: SubgraphERC721Drop
   username?: string
 }) {
+  const { metadata } = useDropMetadataContract()
   const { disconnect } = useDisconnect()
   const { presaleExists, saleNotStarted, saleIsFinished } = useSaleStatus({ collection })
   const [showPresale, setShowPresale] = useState(saleNotStarted && !saleIsFinished)
@@ -43,7 +45,7 @@ export function Collection({
       <Flex flex={{ '@initial': '1', '@1024': '1' }} p="x2" justify="center">
         <img
           className={heroImage}
-          src={ipfsImage(collection.editionMetadata.imageURI)}
+          src={ipfsImage(metadata?.imageURI || collection.editionMetadata?.imageURI)}
           alt={collection.name}
         />
       </Flex>
@@ -53,7 +55,7 @@ export function Collection({
             {collection.name}
           </Text>
           <Paragraph className={wrapWords} mb="x2">
-            <ReactMarkdown>{JSON.parse(`"${collection?.editionMetadata?.description}"`)}</ReactMarkdown>
+            <ReactMarkdown>{JSON.parse(`"${metadata?.description || collection?.editionMetadata?.description}"`)}</ReactMarkdown>
           </Paragraph>
         </Stack>
 
@@ -62,7 +64,7 @@ export function Collection({
             <>
               {presaleExists ? (
                 <>
-                  <Flex flexChildren gap="x3">
+                  <Flex flexChildren gap="x3" mb="x4">
                     <Button
                       pill
                       variant={showPresale ? 'primary' : 'ghost'}

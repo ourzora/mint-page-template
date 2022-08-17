@@ -2,6 +2,7 @@ import request from 'graphql-request'
 import Head from 'next/head'
 import { useMemo } from 'react'
 import ERC721DropContractProvider from 'providers/ERC721DropProvider'
+import DropMetadataContractProvider from 'providers/DropMetadataProvider'
 import { Stack } from '@zoralabs/zord'
 import { GetServerSideProps, NextPage } from 'next'
 import { SubgraphERC721Drop } from 'models/subgraph'
@@ -72,10 +73,12 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
             key={collection.address + '_' + username}
             erc721DropAddress={collection.address}
           >
-            <Collection
-              username={username}
-              collection={collection}
-            />
+            <DropMetadataContractProvider
+              metadataRendererAddress={collection.contractConfig?.metadataRenderer}
+              address={collection.address}
+            >
+              <Collection username={username} collection={collection} />
+            </DropMetadataContractProvider>
           </ERC721DropContractProvider>
         ))}
       </Stack>
