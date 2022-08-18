@@ -59,6 +59,6 @@ export const [baseTheme, vars] = createTheme({
 })
 
 export const root = style({
-  backgroundColor: vars.color.background,
+  backgroundColor: vars.color.background1,
   color: vars.color.primary,
 })

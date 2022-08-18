@@ -163,7 +163,7 @@ declare const theme: _vanilla_extract_private.MapLeafNodes<{
         backdrop: string;
         border: string;
         borderOnImage: string;
-        background: string;
+        background1: string;
         background2: string;
         text1: string;
         text2: string;
@@ -226,7 +226,7 @@ declare const vars: _vanilla_extract_private.MapLeafNodes<{
         backdrop: string;
         border: string;
         borderOnImage: string;
-        background: string;
+        background1: string;
         background2: string;
         text1: string;
         text2: string;
@@ -589,9 +589,6 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
     styles: {
         color: {
             values: {
-                background: {
-                    defaultClass: string;
-                };
                 accent: {
                     defaultClass: string;
                 };
@@ -614,6 +611,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 borderOnImage: {
+                    defaultClass: string;
+                };
+                background1: {
                     defaultClass: string;
                 };
                 background2: {
@@ -749,9 +749,6 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         backgroundColor: {
             values: {
-                background: {
-                    defaultClass: string;
-                };
                 accent: {
                     defaultClass: string;
                 };
@@ -774,6 +771,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 borderOnImage: {
+                    defaultClass: string;
+                };
+                background1: {
                     defaultClass: string;
                 };
                 background2: {
@@ -931,9 +931,6 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
         };
         borderColor: {
             values: {
-                background: {
-                    defaultClass: string;
-                };
                 accent: {
                     defaultClass: string;
                 };
@@ -956,6 +953,9 @@ declare const atoms: _vanilla_extract_sprinkles_dist_declarations_src_createSpri
                     defaultClass: string;
                 };
                 borderOnImage: {
+                    defaultClass: string;
+                };
+                background1: {
                     defaultClass: string;
                 };
                 background2: {
@@ -11574,7 +11574,7 @@ declare function colorTheme({ foreground, background, accent, positive, negative
         backdrop: string;
         border: string;
         borderOnImage: string;
-        background: string;
+        background1: string;
         background2: string;
         text1: string;
         text2: string;
