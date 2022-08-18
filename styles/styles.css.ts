@@ -84,7 +84,7 @@ export const priceDateHeading = style({
   fontWeight: 500,
   fontSize: '30px',
   lineHeight: '40px',
-  color: vars.color.onAccent
+  color: vars.color.primary
 })
 
 export const maxWidth = style({
