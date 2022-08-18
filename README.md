@@ -28,7 +28,7 @@ You will be prompted to fill in three variables as part of the deployment proces
 
 ### Deploy
 
-Start your own custom minting site using the deploy link below.
+Create your own custom minting site using the deploy link below. :)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fourzora%2Fmint-page-template&env=ALCHEMY_ID,NEXT_PUBLIC_CHAIN_ID,NEXT_PUBLIC_CONTRACT_ADDRESSES)
 
