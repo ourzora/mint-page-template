@@ -6,9 +6,9 @@ Alternatively, you can test with one of the included collections while you're se
 
 ## Clone and deploy with Vercel
 
-Click the link below to clone your own version of the mint page template.
+Click the '▲ Deploy' button below to clone your own version of the mint page template.
 
-You will be prompted to fill three variables as part of the deployment process.
+You will be prompted to fill in three variables as part of the deployment process.
 
 `ALCHEMY_ID` can be found by creating a new project in [Alchemy](https://dashboard.alchemyapi.io/) and then grabbing the API KEY from the project dashboard page (after clicking the 'Get Key' button)
 
