@@ -1,4 +1,4 @@
-import { colorTheme, theme, border, ease, size, space } from '@zoralabs/zord'
+import { colorTheme, theme, border, radii, ease, size, space } from '@zoralabs/zord'
 import * as typography from './tokens/typography'
 import { createTheme, style } from '@vanilla-extract/css'
 
@@ -28,12 +28,9 @@ export const customTheme = createTheme(theme, {
     onNegative: '#ffffff',
   },
   radii: {
-    tiny: '2px',
+    ...radii,
     small: '12px',
     normal: '12px',
-    curved: '10px',
-    phat: '20px',
-    round: '9999px',
   },
   shadows,
   size,
