@@ -2,6 +2,7 @@ import { colorTheme, theme, border, ease, size, space } from '@zoralabs/zord'
 import * as typography from './tokens/typography'
 import { createTheme, style } from '@vanilla-extract/css'
 
+// Valid colour values are short and long hex codes (#00ff00) (#f00)
 const { colors, shadows } = colorTheme({
   foreground: '#252329',
   background: '#ffffff',
