@@ -1,8 +1,12 @@
-# Zora Mint Page Template
+# Zora Create / Mint Page Template
 
-Ideally, first create your collection here: <https://create.zora.co> or here <https://testnet.create.zora.co>, and then copy the contract address after it has been deployed.
+Demo site: <https://mint-page-template.vercel.app/>
 
-Alternatively, you can test with one of the included collections while you're setting up, or grab _any_ collection address from either the above sites (just make sure you update `NEXT_PUBLIC_CHAIN_ID` to match the network the contract exists on).
+## Creating a mintable collection
+
+First create your collection here (for mainnet) <https://create.zora.co> or here (for rinkeby) <https://testnet.create.zora.co>, and copy the contract address once your collection has been deployed.
+
+Alternatively, you can test with one of the included collections while you're setting up, or grab _any_ collection address from either of the above sites (just make sure you update `NEXT_PUBLIC_CHAIN_ID` to match the network the collection exists on).
 
 ## Clone and deploy with Vercel
 
