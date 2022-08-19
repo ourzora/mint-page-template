@@ -21,7 +21,7 @@
     "@vanilla-extract/recipes": "^0.2.5",
     "@vanilla-extract/sprinkles": "^1.4.1",
     "@zoralabs/nft-editions-contracts": "^1.0.3",
-    "@zoralabs/zord": "file:.yalc/@zoralabs/zord",
+    "@zoralabs/zord": "1.0.0-alpha.0",
     "bignumber.js": "^9.0.2",
     "date-fns": "^2.28.0",
     "ethers": "^5.5.4",
