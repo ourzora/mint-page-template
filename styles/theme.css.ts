@@ -7,6 +7,7 @@ const { colors, shadows } = colorTheme({
   foreground: '#252329',
   background: '#ffffff',
   accent: '#92ea22',
+  positive: '#92ea22',
 })
 
 export const customTheme = createTheme(theme, {
