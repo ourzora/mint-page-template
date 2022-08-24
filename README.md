@@ -89,7 +89,7 @@ Your project should now be running and accessible on `http://localhost:3000`.
 
 You can customise the main theme in `styles/theme.css.ts`, and add custom css overrides in `styles/global.css`.
 
-For a simple color scheme change, you can change the color values in `styles/theme.css`.
+For a simple color scheme change, you can change the color values in `styles/theme.css.ts`.
 
 ```
 // Valid colour values are short and long hex codes (#00ff00) (#f00)
