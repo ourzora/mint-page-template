@@ -3,6 +3,8 @@ import { gql } from 'graphql-request'
 export const SUBGRAPH_URL =
   process.env.NEXT_PUBLIC_CHAIN_ID === '4'
     ? 'https://api.thegraph.com/subgraphs/name/iainnash/erc721droprinkeby'
+    : process.env.NEXT_PUBLIC_CHAIN_ID === '5'
+    ? 'https://api.thegraph.com/subgraphs/name/iainnash/erc721drop-goerli'
     : 'https://api.thegraph.com/subgraphs/name/iainnash/zora-editions-mainnet'
 
 const ERC721_DROP_FRAGMENT = gql`
