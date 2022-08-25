@@ -1947,10 +1947,10 @@
     base64-sol "^1.0.1"
     ethers "^5.4.1"
 
-"@zoralabs/zord@1.0.0-alpha.0":
-  version "1.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@zoralabs/zord/-/zord-1.0.0-alpha.0.tgz#77df8d3bd89fdb5733a85dacf78a13be283dcb08"
-  integrity sha512-73laaLgq0x0eDK++ud5GI6TSIp5LAV2tUcSVzqx0ITgRcCO8hYS/Cl5/FavemgnyMjqiZjqPEE2r/HOk5W+qbA==
+"@zoralabs/zord@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@zoralabs/zord/-/zord-1.0.1.tgz#f58c13f889d10bff9a4d09514ed654bc82424d6a"
+  integrity sha512-JHcw7OIWSQgK2MX1v1EKxnxD5gY3bZnrglRJRm8I71jlqe0cmCQbF0G9gYnk9jFBhJUWs2mH5DOd5KxU/DbIpA==
   dependencies:
     "@radix-ui/react-switch" "^0.1.5"
     uuid "^8.3.2"
