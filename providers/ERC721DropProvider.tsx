@@ -10,7 +10,7 @@ import React, {
 import { ERC721Drop__factory } from '../constants/typechain'
 import { EditionSaleDetails, EditionSalesConfig } from '../models/edition'
 import { BigNumber } from 'ethers'
-import { parseEther } from 'ethers/lib/utils'
+import { MAX_UINT64 } from 'constants/numbers'
 import { AllowListEntry } from 'utils/merkle-proof'
 import type { ContractTransaction } from 'ethers'
 
@@ -20,6 +20,7 @@ export interface ERC721DropProviderState {
     quantity: number,
     allowlistEntry?: AllowListEntry
   ) => Promise<ContractTransaction | undefined>
+  salesConfig?: EditionSalesConfig
   updateSalesConfig: (salesConfig: EditionSalesConfig) => Promise<void>
   startPublicSale: () => Promise<void>
   userCanMint: () => Promise<boolean | undefined>
@@ -51,7 +52,7 @@ function ERC721DropContractProvider({
   const { data: signer } = useSigner()
   const [userMintedCount, setUserMintedCount] = useState<number>()
   const [totalMinted, setTotalMinted] = useState<number>()
-  const [saleDetails, setSaleDetails] = useState<EditionSaleDetails>()
+  const [salesConfig, setSalesConfig] = useState<EditionSaleDetails>()
   const drop = useMemo(
     () => (signer ? new ERC721Drop__factory(signer).attach(erc721DropAddress) : null),
     [signer, erc721DropAddress]
@@ -59,41 +60,40 @@ function ERC721DropContractProvider({
 
   useEffect(() => {
     ;(async () => {
-      if (!drop || !signer?.getAddress) {
+      if (salesConfig || !drop || !signer?.getAddress) {
         return
       }
       const config = (await drop.saleDetails()) as unknown
-
-      setSaleDetails(config as EditionSaleDetails)
+      setSalesConfig(config as EditionSaleDetails)
     })()
-  }, [drop, saleDetails, signer])
+  }, [drop, salesConfig, signer])
 
   const purchase = useCallback(
     async (quantity: number) => {
-      if (!drop || !signer?.getAddress || !saleDetails) return
+      if (!drop || !salesConfig) return
       const tx = await drop.purchase(quantity, {
-        value: (saleDetails.publicSalePrice as BigNumber).mul(BigNumber.from(quantity)),
+        value: (salesConfig.publicSalePrice as BigNumber).mul(BigNumber.from(quantity)),
       })
       return tx
     },
-    [drop, signer, saleDetails]
+    [drop, salesConfig]
   )
 
   const purchasePresale = useCallback(
     async (quantity: number, allowlistEntry?: AllowListEntry) => {
-      if (!drop || !allowlistEntry || !signer?.getAddress) return
+      if (!drop || !allowlistEntry) return
       const tx = await drop.purchasePresale(
         quantity,
-        allowlistEntry.maxCount,
-        allowlistEntry.price,
-        allowlistEntry.proof,
+        allowlistEntry.maxCanMint,
+        BigNumber.from(allowlistEntry.price),
+        allowlistEntry.proof.map((e) => `0x${e}`),
         {
-          value: (allowlistEntry.price as BigNumber).mul(BigNumber.from(quantity)),
+          value: BigNumber.from(allowlistEntry.price).mul(BigNumber.from(quantity)),
         }
       )
       return tx
     },
-    [drop, signer]
+    [drop]
   )
 
   const isAdmin = useCallback(
@@ -173,36 +173,32 @@ function ERC721DropContractProvider({
       await tx.wait(2)
 
       const updatedConfig = (await drop.saleDetails()) as unknown
-      setSaleDetails(updatedConfig as EditionSaleDetails)
+      setSalesConfig(updatedConfig as EditionSaleDetails)
     },
     [drop]
   )
 
   const startPublicSale = useCallback(async () => {
-    if (!saleDetails) {
+    if (!salesConfig) {
       return
     }
 
     await updateSalesConfig({
-      ...(saleDetails as EditionSaleDetails),
+      ...(salesConfig as EditionSaleDetails),
       publicSaleStart: BigNumber.from(Math.round(Date.now() / 1000).toString()),
-      // MAX UINT64
-      publicSaleEnd: BigNumber.from('18446744073709551615'),
-      maxSalePurchasePerAddress: BigNumber.from(3),
-      // For example, 0.01 eth price
-      publicSalePrice: parseEther('0.01'),
+      publicSaleEnd: MAX_UINT64,
     })
-  }, [saleDetails, updateSalesConfig])
+  }, [salesConfig, updateSalesConfig])
 
   const userCanMint = async () => {
-    if (!signer || !drop || !saleDetails) {
+    if (!signer?.getAddress || !drop || !salesConfig) {
       return undefined
     }
-    const address = await signer?.getAddress()
+    const address = await signer.getAddress()
     return (
       (await drop.mintedPerAddress(address)).totalMints.lt(
-        saleDetails.maxSalePurchasePerAddress
-      ) && saleDetails.totalMinted.lt(saleDetails.maxSupply)
+        salesConfig.maxSalePurchasePerAddress
+      ) && salesConfig.totalMinted.lt(salesConfig.maxSupply)
     )
   }
 
@@ -214,11 +210,11 @@ function ERC721DropContractProvider({
   }
 
   const fetchUserMintedCount = async () => {
-    if (!drop || !signer.getAddress) {
+    if (!signer?.getAddress || !drop) {
       return undefined
     }
-    const address = await signer?.getAddress()
-    return address ? (await drop.mintedPerAddress(address)).totalMints.toNumber() : undefined
+    const address = await signer.getAddress()
+    return (await drop.mintedPerAddress(address)).totalMints.toNumber()
   }
 
   const fetchTotalMinted = async () => {
@@ -248,6 +244,7 @@ function ERC721DropContractProvider({
         grantAdmin,
         revokeAdmin,
         adminMintAirdrop,
+        salesConfig,
         updateSalesConfig,
         startPublicSale,
         userCanMint,
