@@ -1,9 +1,4 @@
 {
-   "functions": {
-      "pages/api/metadata/**.js": {
-         "includeFiles": "private/**.json"
-      }
-   },
    "headers": [
     {
       "source": "/art/(.*)",

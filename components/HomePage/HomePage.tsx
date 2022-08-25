@@ -12,7 +12,6 @@ import {
 } from '@zoralabs/zord'
 import { ConnectWallet } from '@components/ConnectWallet'
 import { NextPage } from 'next'
-import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { MintStatus } from '@components/MintStatus'
 import { MintDetails } from '@components/MintDetails'
