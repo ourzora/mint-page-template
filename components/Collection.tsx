@@ -101,7 +101,7 @@ export function Collection({
                       <Text fontSize={14}>Logged in as {username}</Text>
                       <Button pill variant="ghost" onClick={disconnect} positive="relative" style={{ left: vars.space.x5 }}>
                         <Box as="span" fontSize={14}>
-                          Switch wallet
+                          Disconnect
                         </Box>
                       </Button>
                     </Flex>
