@@ -1,8 +1,7 @@
 import { ethers, utils } from 'ethers'
 import { GetStaticProps } from 'next'
 import { ipfsImage } from '@lib/helpers'
-import abi from '@lib/ERC721Drop-abi.json'
-import metadataRendererAbi from '@lib/MetadataRenderer-abi.json'
+import abi from '@lib/WAYSPACE-abi.json'
 import getDefaultProvider from '@lib/getDefaultProvider'
 import { allChains } from 'wagmi'
 import HomePage from '@components/HomePage/HomePage'
@@ -25,10 +24,10 @@ export const getServerSideProps: GetStaticProps = async (context) => {
 
   // Get metadata renderer
   console.log("HELLO WORLD")
-  const metadataRendererAddress = await contract.metadataBase();
-  console.log("metadataRendererAddress", metadataRendererAddress)
+  const songURI = await contract.songURI(1);
+  console.log("songURI", songURI)
 
-  const metadataURI = ipfsImage(metadataRendererAddress[0])
+  const metadataURI = ipfsImage(songURI)
   console.log("metadataURI", metadataURI)
 
   const axios = require('axios').default;
@@ -37,7 +36,7 @@ export const getServerSideProps: GetStaticProps = async (context) => {
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
-
+  console.log("SALE DETAILS", saleDetails)
   const maxSalePurchasePerAddress = saleDetails.maxSalePurchasePerAddress.toString() === "0" ? 1000001 : saleDetails.maxSalePurchasePerAddress.toString()
   const erc721Drop = {
     id: "string",
