@@ -2,13 +2,13 @@
 
 Demo site: <https://mint-page-template.vercel.app/>
 
-## Creating a mintable collection
+## Step 1. Creating a mintable collection
 
 First create your collection here (for mainnet) <https://create.zora.co> or here (for rinkeby) <https://testnet.create.zora.co>, and copy the contract address once your collection has been deployed.
 
 Alternatively, you can test with one of the included collections while you're setting up, or grab _any_ collection address from either of the above sites (just make sure you update `NEXT_PUBLIC_CHAIN_ID` to match the network the collection exists on).
 
-## Clone and deploy with Vercel
+## Step 2 (Option A). Clone and deploy with Vercel
 
 Click the '▲ Deploy' button below to clone your own version of the mint page template.
 
@@ -32,7 +32,9 @@ Create your own custom minting site using the deploy link below. :)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fourzora%2Fmint-page-template&env=ALCHEMY_ID,NEXT_PUBLIC_CHAIN_ID,NEXT_PUBLIC_CONTRACT_ADDRESSES)
 
-## Run the mint site locally
+## Step 2 (Option B). Run the mint site locally
+
+First [clone the repository locally](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 
 1. Copy `.env.local.example`, and rename it to `.env.local`. Files starting with a dot are often hidden in the file explorer, so you may need to open the folder with a code editor like [Visual Studio Code](https://code.visualstudio.com/) or [Atom](https://atom.io/) to see it.
 
@@ -49,6 +51,18 @@ Create your own custom minting site using the deploy link below. :)
 ```
 
 `NEXT_PUBLIC_CONTRACT_ADDRESSES` will be your contract address (or a comma-separated list if you want to render multiple contracts.
+
+If needed, you can grab all of the edition contract addresses created by a single wallet by running the following command in a terminal, replacing `0x17cd072cBd45031EFc21Da538c783E0ed3b25DCc` with the desired wallet address (requires python).
+```
+# Rinkeby subgraph: https://api.thegraph.com/subgraphs/name/iainnash/erc721droprinkeby
+# Goerli subgraph: https://api.thegraph.com/subgraphs/name/iainnash/erc721drop-goerli
+
+curl -s 'https://api.thegraph.com/subgraphs/name/iainnash/zora-editions-mainnet' \
+  -X POST -H 'content-type: application/json' \
+  --data '{
+    "query": "{erc721Drops(where: { owner: \"0x17cd072cBd45031EFc21Da538c783E0ed3b25DCc\", }) { address}}"
+  }' | python3 -c "import sys, json; print(','.join(list(map(lambda x: x['address'], json.load(sys.stdin)['data']['erc721Drops']))))"
+```
 
 The final `.env.local` file should now look something like this:
 
