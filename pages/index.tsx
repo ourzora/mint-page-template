@@ -10,8 +10,6 @@ const MintPage = ({collection, chainId}) => <HomePage collection={collection} ch
 export default MintPage;
 
 export const getServerSideProps: GetStaticProps = async (context) => {
-  console.log("HELLO WORLD")
-
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
   const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
   
@@ -23,20 +21,13 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
 
   // Get metadata renderer
-  console.log("HELLO WORLD")
   const songURI = await contract.songURI(1);
-  console.log("songURI", songURI)
-
   const metadataURI = ipfsImage(songURI)
-  console.log("metadataURI", metadataURI)
-
   const axios = require('axios').default;
   const {data: metadata} = await axios.get(metadataURI)
-  console.log("metadata", metadata)
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
-  console.log("SALE DETAILS", saleDetails)
   const maxSalePurchasePerAddress = saleDetails.maxSalePurchasePerAddress.toString() === "0" ? 1000001 : saleDetails.maxSalePurchasePerAddress.toString()
   const erc721Drop = {
     id: "string",
