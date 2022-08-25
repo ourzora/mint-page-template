@@ -20,13 +20,13 @@ interface HomePageProps {
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
   const ogImage = ipfsImage(collections[0].editionMetadata.imageURI)
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { data: ensName } = useEnsName({
-    address: account?.address,
+    address: address,
   })
   const username = useMemo(
-    () => ensName || shortenAddress(account?.address),
-    [account?.address, ensName]
+    () => ensName || shortenAddress(address),
+    [address, ensName]
   )
 
   return (

@@ -1,46 +1,18 @@
-import { useState, useEffect } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
-import { makeTreeFromUrl } from 'lib/merkle-proof'
-import { MintStatus } from 'components/MintStatus'
+import { MintComponent } from './MintComponent'
 import { useSaleStatus } from 'hooks/useSaleStatus'
-import { ipfsImage } from 'lib/helpers'
+import { useAllowlistEntry } from 'hooks/useAllowlistEntry'
 import { useAccount, useDisconnect } from 'wagmi'
-import { utils } from 'ethers'
 import { Box, Text, Flex, Heading, Button, Stack, SpinnerOG } from '@zoralabs/zord'
-import { useDropMetadataContract } from 'providers/DropMetadataProvider'
 
-export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }) {
-  const { data: account } = useAccount()
+export function PresaleComponent({ collection }: { collection: SubgraphERC721Drop }) {
+  const { address } = useAccount()
   const { disconnect } = useDisconnect()
   const { saleIsFinished } = useSaleStatus({ collection, presale: true })
-  const { metadata } = useDropMetadataContract()
-  const [merkleTree, setMerkleTree] = useState<any>()
-  const [accessAllowed, setAccessAllowed] = useState<boolean>()
-  const [allowlistEntry, setAllowlistEntry] = useState<any>()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function asyncFunc() {
-      if (metadata && collection.salesConfig.presaleMerkleRoot && metadata.allowlistURI) {
-        const tree = await makeTreeFromUrl(ipfsImage(metadata.allowlistURI))
-        if (tree) setMerkleTree(tree)
-        setLoading(false)
-      }
-    }
-    asyncFunc()
-  }, [metadata, collection.salesConfig.presaleMerkleRoot])
-
-  useEffect(() => {
-    async function asyncFunc() {
-      if (!merkleTree?.entries || !account?.address) return
-      const entry = merkleTree.entries.find(
-        (e: any) => utils.getAddress(e.minter) === utils.getAddress(account.address || '')
-      )
-      setAccessAllowed(!!entry && !!entry.proof.length)
-      setAllowlistEntry(entry)
-    }
-    asyncFunc()
-  }, [merkleTree, account])
+  const { loading, allowlistEntry, accessAllowed } = useAllowlistEntry({
+    merkleRoot: collection.salesConfig?.presaleMerkleRoot.toString(),
+    address,
+  })
 
   return (
     <Box className="zord-presale-status">
@@ -58,7 +30,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
             through the public sale.
           </Text>
         </Stack>
-      ) : !account ? (
+      ) : !address ? (
         <Stack align="center">
           <Button
             variant="circle"
@@ -75,7 +47,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
             Connect wallet to access presale
           </Heading>
           <Flex mt="x4" w="100%" flexChildren>
-            <MintStatus presale collection={collection} showPrice={false} />
+            <MintComponent presale collection={collection} showPrice={false} />
           </Flex>
         </Stack>
       ) : !accessAllowed ? (
@@ -101,7 +73,7 @@ export function PresaleStatus({ collection }: { collection: SubgraphERC721Drop }
           </Flex>
         </Stack>
       ) : (
-        <MintStatus presale allowlistEntry={allowlistEntry} collection={collection} />
+        <MintComponent presale allowlistEntry={allowlistEntry} collection={collection} />
       )}
     </Box>
   )

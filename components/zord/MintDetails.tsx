@@ -1,14 +1,16 @@
-import { Box, Flex, Text, Stack, Icon, Separator } from '@zoralabs/zord'
+import { Box, Flex, Text, Stack, Icon } from '@zoralabs/zord'
 import React, { useMemo, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { formatCryptoVal } from 'lib/numbers'
-import { OPEN_EDITION_SIZE } from 'lib/constants'
+import { formatCryptoVal } from 'utils/numbers'
+import { OPEN_EDITION_SIZE } from 'constants/numbers'
 import { useSaleStatus } from 'hooks/useSaleStatus'
 import { parseInt } from 'lodash'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { dateOptions } from 'lib/constants'
+import { dateOptions } from 'constants/dates'
 import { collapsibleContent } from 'styles/styles.css'
+import { useAllowlistEntry } from 'hooks/useAllowlistEntry'
+import { useAccount } from 'wagmi'
 
 export function MintDetails({
   collection,
@@ -17,6 +19,12 @@ export function MintDetails({
   collection: SubgraphERC721Drop
   showToggle?: boolean
 }) {
+  const { address } = useAccount()
+  const { allowlistEntry } = useAllowlistEntry({
+    merkleRoot: collection.salesConfig?.presaleMerkleRoot.toString(),
+    address,
+  })
+
   const { totalMinted } = useERC721DropContract()
   const { presaleExists, saleIsFinished, isSoldOut } = useSaleStatus({ collection })
   const maxPerWallet = parseInt(collection.salesConfig.maxSalePurchasePerAddress)
@@ -71,24 +79,32 @@ export function MintDetails({
               )}
             </Text>
           </Flex>
-          <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
-            <Text variant="paragraph-sm" color="tertiary">
-              Max per address
-            </Text>
-            <Text variant="paragraph-sm">
-              {/*userMintedCount && maxPerWallet < OPEN_EDITION_SIZE && (
+          {maxPerWallet < OPEN_EDITION_SIZE && (
+            <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
+              <Text variant="paragraph-sm" color="tertiary">
+                Max per address
+              </Text>
+              <Text variant="paragraph-sm">
+                {/*userMintedCount && maxPerWallet < OPEN_EDITION_SIZE && (
                 <Box display="inline" color="tertiary">
                   {userMintedCount}/
                 </Box>
               )*/}
-              {maxPerWallet > OPEN_EDITION_SIZE ? 'Unlimited' : maxPerWallet}
-            </Text>
-          </Flex>
+                {allowlistEntry &&
+                  `Presale: ${allowlistEntry.maxCanMint} / Public sale: `}
+                {maxPerWallet}
+              </Text>
+            </Flex>
+          )}
           <Box>
             <Collapsible.Content className={collapsibleContent}>
               <Stack gap="x3">
                 {(saleIsFinished || isSoldOut) && (
-                  <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
+                  <Flex
+                    className="zord-mint-details__item"
+                    gap="x2"
+                    justify="space-between"
+                  >
                     <Text variant="paragraph-sm" color="tertiary">
                       Mint price
                     </Text>
@@ -103,44 +119,62 @@ export function MintDetails({
                 )}
                 {presaleExists && (
                   <>
-                    <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
+                    <Flex
+                      className="zord-mint-details__item"
+                      gap="x2"
+                      justify="space-between"
+                    >
                       <Text variant="paragraph-sm" color="tertiary">
                         Presale start
                       </Text>
                       <Text variant="paragraph-sm" align="right">
-                        {presaleStartDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
+                        {presaleStartDate.toLocaleString(...dateOptions)}
                       </Text>
                     </Flex>
-                    <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
-                      <Text variant="paragraph-sm" color="tertiary">
-                        Presale end
-                      </Text>
-                      <Text variant="paragraph-sm" align="right">
-                        {!isNaN(presaleEndDate.getTime())
-                          ? presaleEndDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])
-                          : 'Never'}
-                      </Text>
-                    </Flex>
+                    {!isNaN(presaleEndDate.getTime()) && (
+                      <Flex
+                        className="zord-mint-details__item"
+                        gap="x2"
+                        justify="space-between"
+                      >
+                        <Text variant="paragraph-sm" color="tertiary">
+                          Presale end
+                        </Text>
+                        <Text variant="paragraph-sm" align="right">
+                          {presaleEndDate.toLocaleString(...dateOptions)}
+                        </Text>
+                      </Flex>
+                    )}
                   </>
                 )}
-                <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
+                <Flex
+                  className="zord-mint-details__item"
+                  gap="x2"
+                  justify="space-between"
+                >
                   <Text variant="paragraph-sm" color="tertiary">
                     Public sale start
                   </Text>
                   <Text variant="paragraph-sm" align="right">
-                    {startDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])}
+                    {startDate.toLocaleString(
+                      ...(dateOptions as [string, Intl.DateTimeFormatOptions])
+                    )}
                   </Text>
                 </Flex>
-                <Flex className="zord-mint-details__item" gap="x2" justify="space-between">
-                  <Text variant="paragraph-sm" color="tertiary">
-                    Public sale end
-                  </Text>
-                  <Text variant="paragraph-sm" align="right">
-                    {!isNaN(endDate.getTime())
-                      ? endDate.toLocaleString(...dateOptions as [string, Intl.DateTimeFormatOptions])
-                      : 'Never'}
-                  </Text>
-                </Flex>
+                {!isNaN(endDate.getTime()) && (
+                  <Flex
+                    className="zord-mint-details__item"
+                    gap="x2"
+                    justify="space-between"
+                  >
+                    <Text variant="paragraph-sm" color="tertiary">
+                      Public sale end
+                    </Text>
+                    <Text variant="paragraph-sm" align="right">
+                      {endDate.toLocaleString(...dateOptions)}
+                    </Text>
+                  </Flex>
+                )}
               </Stack>
             </Collapsible.Content>
             {showToggle && (

@@ -13,7 +13,7 @@ const { chains, provider } = configureChains(
       (chain) => chain.id.toString() === process.env.NEXT_PUBLIC_CHAIN_ID
     )!,
   ],
-  [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID })]
+  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID })]
 )
 
 const { connectors } = getDefaultWallets({
@@ -32,6 +32,7 @@ function App({ Component, pageProps }) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         chains={chains}
+        modalSize="compact"
         theme={lightTheme({
           accentColor: 'black',
           borderRadius: 'small',

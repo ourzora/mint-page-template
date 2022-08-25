@@ -6,9 +6,9 @@ import { useSaleStatus } from 'hooks/useSaleStatus'
 import { useDisconnect } from 'wagmi'
 import { ipfsImage } from '@lib/helpers'
 import { maxWidth, heroImage, wrapWords } from 'styles/styles.css'
-import { MintStatus } from '@components/MintStatus'
-import { MintDetails } from '@components/MintDetails'
-import { PresaleStatus } from '@components/PresaleStatus'
+import { MintComponent } from '@components/zord/MintComponent'
+import { MintDetails } from '@components/zord/MintDetails'
+import { PresaleComponent } from '@components/zord/PresaleComponent'
 import {
   vars,
   Box,
@@ -84,14 +84,14 @@ export function Collection({
                     </Button>
                   </Flex>
                   <Box style={{ display: showPresale ? 'block' : 'none' }}>
-                    <PresaleStatus collection={collection} />
+                    <PresaleComponent collection={collection} />
                   </Box>
                   <Box style={{ display: !showPresale ? 'block' : 'none' }}>
-                    <MintStatus collection={collection} />
+                    <MintComponent collection={collection} />
                   </Box>
                 </>
               ) : (
-                <MintStatus collection={collection} />
+                <MintComponent collection={collection} />
               )}
 
               <Box>
