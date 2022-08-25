@@ -11,7 +11,7 @@ import { ERC721Drop__factory } from '../constants/typechain'
 import { EditionSaleDetails, EditionSalesConfig } from '../models/edition'
 import { BigNumber } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
-import { AllowListEntry } from 'lib/merkle-proof'
+import { AllowListEntry } from 'utils/merkle-proof'
 import type { ContractTransaction } from 'ethers'
 
 export interface ERC721DropProviderState {
