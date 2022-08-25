@@ -1,7 +1,6 @@
 import { MerkleTree } from 'merkletreejs'
 import { utils } from 'ethers'
 import keccak256 from 'keccak256'
-import type { BigNumber } from 'ethers'
 
 interface EntryType {
   minter: string
@@ -10,9 +9,9 @@ interface EntryType {
 }
 
 export interface AllowListEntry {
-  maxCount: string
-  minter: string
-  price: BigNumber
+  maxCanMint: string
+  user: string
+  price: string
   proof: string[]
 }
 
