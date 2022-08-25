@@ -11,6 +11,8 @@ const MintPage = ({collection, chainId}) => <HomePage collection={collection} ch
 export default MintPage;
 
 export const getServerSideProps: GetStaticProps = async (context) => {
+  console.log("HELLO WORLD")
+
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
   const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
   
@@ -22,12 +24,16 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
 
   // Get metadata renderer
-  const metadataRendererAddress = await contract.metadataRenderer();
-  const metadataRendererContract = new ethers.Contract(metadataRendererAddress.toString(), metadataRendererAbi, provider);
-  const metadataBase = await metadataRendererContract.metadataBaseByContract(contractAddress);
-  const metadataURI = ipfsImage(metadataBase.base)
+  console.log("HELLO WORLD")
+  const metadataRendererAddress = await contract.metadataBase();
+  console.log("metadataRendererAddress", metadataRendererAddress)
+
+  const metadataURI = ipfsImage(metadataRendererAddress[0])
+  console.log("metadataURI", metadataURI)
+
   const axios = require('axios').default;
   const {data: metadata} = await axios.get(metadataURI)
+  console.log("metadata", metadata)
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
