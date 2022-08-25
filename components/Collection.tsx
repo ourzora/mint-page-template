@@ -10,6 +10,7 @@ import { MintStatus } from '@components/MintStatus'
 import { MintDetails } from '@components/MintDetails'
 import { PresaleStatus } from '@components/PresaleStatus'
 import {
+  vars,
   Box,
   Flex,
   Well,
@@ -98,7 +99,7 @@ export function Collection({
                   <Well borderColor="accent" py="x1" mt="x4">
                     <Flex justify="space-between" align="center">
                       <Text fontSize={14}>Logged in as {username}</Text>
-                      <Button pill variant="ghost" onClick={disconnect}>
+                      <Button pill variant="ghost" onClick={disconnect} positive="relative" style={{ left: vars.space.x5 }}>
                         <Box as="span" fontSize={14}>
                           Switch wallet
                         </Box>
