@@ -1,0 +1,711 @@
+[
+  {
+    "type": "constructor",
+    "name": "",
+    "inputs": [
+      {
+        "type": "string[]",
+        "name": "_musicMetadata",
+        "internalType": "string[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "error",
+    "name": "ApprovalCallerNotOwnerNorApproved",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "ApprovalQueryForNonexistentToken",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "ApproveToCaller",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "BalanceQueryForZeroAddress",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "MintERC2309QuantityExceedsLimit",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "MintToZeroAddress",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "MintZeroQuantity",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "OwnerQueryForNonexistentToken",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "OwnershipNotInitializedForExtraData",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "Purchase_WrongPrice",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "correctPrice",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "Sale_Inactive",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "TransferCallerNotOwnerNorApproved",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "TransferFromIncorrectOwner",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "TransferToNonERC721ReceiverImplementer",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "TransferToZeroAddress",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "error",
+    "name": "URIQueryForNonexistentToken",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "event",
+    "name": "Approval",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "owner",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "approved",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ApprovalForAll",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "owner",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "operator",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "bool",
+        "name": "approved",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ConsecutiveTransfer",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "fromTokenId",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "toTokenId",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "from",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "to",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Sale",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "to",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "quantity",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "pricePerToken",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "firstPurchasedTokenId",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Transfer",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "from",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "to",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "name": "approve",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "to",
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "balanceOf",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "owner",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "bundlePrice",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getApproved",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isApprovedForAll",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "owner",
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "operator",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "name",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "string",
+        "name": "",
+        "internalType": "string"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "ownerOf",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "publicSaleEnd",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint64",
+        "name": "",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "publicSaleStart",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint64",
+        "name": "",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "purchase",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_quantity",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "purchaseBundle",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_quantity",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "safeTransferFrom",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "from",
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "to",
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "safeTransferFrom",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "from",
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "to",
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      },
+      {
+        "type": "bytes",
+        "name": "_data",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "saleDetails",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "tuple",
+        "name": "",
+        "components": [
+          {
+            "type": "bool",
+            "name": "publicSaleActive",
+            "internalType": "bool"
+          },
+          {
+            "type": "bool",
+            "name": "presaleActive",
+            "internalType": "bool"
+          },
+          {
+            "type": "uint256",
+            "name": "publicSalePrice",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "publicSaleBundlePrice",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint64",
+            "name": "publicSaleStart",
+            "internalType": "uint64"
+          },
+          {
+            "type": "uint64",
+            "name": "publicSaleEnd",
+            "internalType": "uint64"
+          },
+          {
+            "type": "uint64",
+            "name": "presaleStart",
+            "internalType": "uint64"
+          },
+          {
+            "type": "uint64",
+            "name": "presaleEnd",
+            "internalType": "uint64"
+          },
+          {
+            "type": "bytes32",
+            "name": "presaleMerkleRoot",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint256",
+            "name": "maxSalePurchasePerAddress",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "totalMinted",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "maxSupply",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct IPuzzleDrop.SaleDetails"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setApprovalForAll",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "operator",
+        "internalType": "address"
+      },
+      {
+        "type": "bool",
+        "name": "approved",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "singlePrice",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "songURI",
+    "inputs": [
+      {
+        "type": "uint8",
+        "name": "_songId",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "string",
+        "name": "",
+        "internalType": "string"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "supportsInterface",
+    "inputs": [
+      {
+        "type": "bytes4",
+        "name": "interfaceId",
+        "internalType": "bytes4"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "symbol",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "string",
+        "name": "",
+        "internalType": "string"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "tokenURI",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "string",
+        "name": "",
+        "internalType": "string"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "totalSupply",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "transferFrom",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "from",
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "to",
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+]

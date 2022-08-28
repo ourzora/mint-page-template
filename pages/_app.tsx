@@ -5,7 +5,6 @@ import 'styles/global.css'
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, WagmiConfig, allChains } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
-import { contractAddress } from '@lib/constants'
 import { ThemeProvider } from 'degen'
 import ERC721DropContractProvider from 'providers/ERC721DropProvider'
 import 'degen/styles'
@@ -40,7 +39,10 @@ function App({ Component, pageProps }) {
             borderRadius: 'small',
           })}
         >
-          <ERC721DropContractProvider erc721DropAddress={contractAddress}>
+          <ERC721DropContractProvider
+            erc721DropAddress={process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}
+            chainId={parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)}
+          >            
             <Component {...pageProps} />
           </ERC721DropContractProvider>
         </RainbowKitProvider>

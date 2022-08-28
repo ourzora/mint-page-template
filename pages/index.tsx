@@ -1,8 +1,7 @@
 import { ethers, utils } from 'ethers'
 import { GetStaticProps } from 'next'
 import { ipfsImage } from '@lib/helpers'
-import abi from '@lib/ERC721Drop-abi.json'
-import metadataRendererAbi from '@lib/MetadataRenderer-abi.json'
+import abi from '@lib/WAYSPACE-abi.json'
 import getDefaultProvider from '@lib/getDefaultProvider'
 import { allChains } from 'wagmi'
 import HomePage from '@components/HomePage/HomePage'
@@ -20,18 +19,14 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   )
   const provider = getDefaultProvider(chain.network, chainId);
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
-
   // Get metadata renderer
-  const metadataRendererAddress = await contract.metadataRenderer();
-  const metadataRendererContract = new ethers.Contract(metadataRendererAddress.toString(), metadataRendererAbi, provider);
-  const metadataBase = await metadataRendererContract.metadataBaseByContract(contractAddress);
-  const metadataURI = ipfsImage(metadataBase.base)
+  const songURI = await contract.songURI(1);
+  const metadataURI = ipfsImage(songURI)
   const axios = require('axios').default;
   const {data: metadata} = await axios.get(metadataURI)
 
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
-
   const maxSalePurchasePerAddress = saleDetails.maxSalePurchasePerAddress.toString() === "0" ? 1000001 : saleDetails.maxSalePurchasePerAddress.toString()
   const erc721Drop = {
     id: "string",

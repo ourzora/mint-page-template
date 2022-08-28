@@ -53,14 +53,7 @@ export function MintDetails({
             Number minted
           </Text>
           <Text variant="paragraph-sm">
-            {formattedMintedCount}
-            {parseInt(collection.maxSupply) > OPEN_EDITION_SIZE ? (
-              ' NFTs'
-            ) : (
-              <Box display="inline" color="tertiary">
-                /{formattedTotalSupplyCount}
-              </Box>
-            )}
+            {formattedMintedCount} NFTs  
           </Text>
         </Flex>
         <Flex gap="x2" justify="space-between">
@@ -68,11 +61,6 @@ export function MintDetails({
             Max per address
           </Text>
           <Text variant="paragraph-sm">
-            {/*userMintedCount && maxPerWallet < OPEN_EDITION_SIZE && (
-                <Box display="inline" color="tertiary">
-                  {userMintedCount}/
-                </Box>
-              )*/}
             {maxPerWallet > OPEN_EDITION_SIZE ? 'Unlimited' : maxPerWallet}
           </Text>
         </Flex>
