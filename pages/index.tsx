@@ -19,9 +19,11 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   )
   const provider = getDefaultProvider(chain.network, chainId);
   const contract = new ethers.Contract(contractAddress.toString(), abi, provider);
-
+console.log("CONTRACT RECEIVED", contract.address)
   // Get metadata renderer
   const songURI = await contract.songURI(1);
+console.log("songURI", songURI)
+
   const metadataURI = ipfsImage(songURI)
   const axios = require('axios').default;
   const {data: metadata} = await axios.get(metadataURI)
