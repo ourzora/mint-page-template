@@ -17,6 +17,7 @@ import abi from '@lib/ERC721Drop-abi.json'
 
 export interface ERC721DropProviderState {
   purchase: (quantity: number) => Promise<ContractTransaction | undefined>
+  purchaseAlt: (quantity: number) => Promise<ContractTransaction | undefined>
   purchasePresale: (
     quantity: number,
     allowlistEntry?: AllowListEntry
@@ -87,6 +88,17 @@ function ERC721DropContractProvider({
     async (quantity: number) => {
       if (!drop || !saleDetails) return
       const tx = await drop.purchase(quantity, {
+        value: (saleDetails.publicSalePrice as BigNumber).mul(BigNumber.from(quantity)),
+      })
+      return tx
+    },
+    [drop, saleDetails]
+  )
+
+  const purchaseAlt = useCallback(
+    async (quantity: number) => {
+      if (!drop || !saleDetails) return
+      const tx = await drop.purchaseAlt(quantity, {
         value: (saleDetails.publicSalePrice as BigNumber).mul(BigNumber.from(quantity)),
       })
       return tx
@@ -224,9 +236,7 @@ function ERC721DropContractProvider({
 
   const updateMintCounters = async () => {
     const userMintedCount = await fetchUserMintedCount()
-    const totalMinted = await fetchTotalMinted()
     if (userMintedCount) setUserMintedCount(userMintedCount)
-    if (totalMinted) setTotalMinted(totalMinted)
   }
 
   const fetchUserMintedCount = async () => {
@@ -257,6 +267,7 @@ function ERC721DropContractProvider({
     <ERC721DropContext.Provider
       value={{
         purchase,
+        purchaseAlt,
         purchasePresale,
         isAdmin,
         chainId,

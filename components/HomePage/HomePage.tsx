@@ -68,7 +68,7 @@ const HomePage: NextPage<HomePageProps> = ({ collection, chainId, collectionTwo 
       </Flex>
       <Stack direction={ isMobile ? "column" :"row"} mt="x3" gap="x3">
         <DropSection collection={collection} />
-        {collectionTwo && <DropSection collection={collectionTwo} />}
+        {collectionTwo && <DropSection collection={collectionTwo} isSecond />}
         
       </Stack>
     </>
