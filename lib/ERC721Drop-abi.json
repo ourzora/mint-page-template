@@ -992,6 +992,25 @@
   },
   {
     "type": "function",
+    "name": "purchaseAlt",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_quantity",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "renounceRole",
     "inputs": [
       {

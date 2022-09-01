@@ -428,6 +428,25 @@
   },
   {
     "type": "function",
+    "name": "purchaseAlt",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_quantity",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "purchaseBundle",
     "inputs": [
       {
@@ -620,6 +639,19 @@
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "songsForSale",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint8[2]",
+        "name": "",
+        "internalType": "uint8[2]"
+      }
+    ],
+    "stateMutability": "pure"
   },
   {
     "type": "function",

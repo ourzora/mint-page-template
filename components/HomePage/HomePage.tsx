@@ -14,9 +14,10 @@ import { useEffect, useState } from 'react'
 interface HomePageProps {
   collection: SubgraphERC721Drop;
   chainId?: number;
+  collectionTwo: SubgraphERC721Drop;
 }
 
-const HomePage: NextPage<HomePageProps> = ({ collection, chainId }) => {
+const HomePage: NextPage<HomePageProps> = ({ collection, chainId, collectionTwo }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleResize = () => {
@@ -66,8 +67,9 @@ const HomePage: NextPage<HomePageProps> = ({ collection, chainId }) => {
         <ConnectWallet />
       </Flex>
       <Stack direction={ isMobile ? "column" :"row"} mt="x3" gap="x3">
-        <DropSection collection={collection} />
-        <DropSection collection={collection} />
+        <DropSection collection={collection} isSecond={false} />
+        {collectionTwo && <DropSection collection={collectionTwo} isSecond />}
+        
       </Stack>
     </>
   )

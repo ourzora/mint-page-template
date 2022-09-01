@@ -1,4 +1,3 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
   Box,
   Button,
@@ -8,27 +7,25 @@ import {
   Heading,
   Text,
   Stack,
-  SpinnerOG,
 } from '@zoralabs/zord'
-import React, { useEffect, useCallback, useMemo, useState } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { useAccount, useNetwork } from 'wagmi'
 import { formatCryptoVal } from 'lib/numbers'
 import { OPEN_EDITION_SIZE } from 'lib/constants'
 import { parseInt } from 'lodash'
-import { waitingApproval, priceDateHeading, mintCounterInput } from 'styles/styles.css'
+import {  priceDateHeading, mintCounterInput } from 'styles/styles.css'
 import { useSaleStatus } from 'hooks/useSaleStatus'
 import { CountdownTimer } from 'components/CountdownTimer'
-import { cleanErrors } from 'lib/errors'
+import MintButton from 'components/MintButton'
 import { AllowListEntry } from 'lib/merkle-proof'
-import type { ContractTransaction } from 'ethers'
 
 function SaleStatus({
   collection,
   isMinted,
   setIsMinted,
   presale,
+  isSecond,
   mintCounter = 1,
   availableMints,
   allowlistEntry,
@@ -37,17 +34,11 @@ function SaleStatus({
   isMinted: boolean
   setIsMinted: (state: boolean) => void
   presale: boolean
+  isSecond: boolean
   mintCounter: number
   availableMints: number
   allowlistEntry?: AllowListEntry
 }) {
-  const { data: account } = useAccount()
-  const { switchNetwork } = useNetwork()
-
-  const dropProvider = useERC721DropContract()
-  const { chainId, correctNetwork } = useERC721DropContract()
-  const [awaitingApproval, setAwaitingApproval] = useState<boolean>(false)
-  const [isMinting, setIsMinting] = useState<boolean>(false)
   const [errors, setErrors] = useState<string>()
 
   const { startDate, endDate, isSoldOut, saleIsActive, saleNotStarted, saleIsFinished } =
@@ -55,31 +46,6 @@ function SaleStatus({
       collection,
       presale,
     })
-
-  const handleMint = useCallback(async () => {
-    setIsMinted(false)
-    setAwaitingApproval(true)
-    setErrors(undefined)
-    try {
-      const tx: ContractTransaction | undefined = presale
-        ? await dropProvider.purchasePresale(mintCounter, allowlistEntry)
-        : await dropProvider.purchase(mintCounter)
-      console.log({ tx })
-      setAwaitingApproval(false)
-      setIsMinting(true)
-      if (tx) {
-        await tx.wait(2)
-        setIsMinting(false)
-        setIsMinted(true)
-      } else {
-        throw 'Error creating transaction! Please try again'
-      }
-    } catch (e: any) {
-      setErrors(cleanErrors(e))
-      setAwaitingApproval(false)
-      setIsMinting(false)
-    }
-  }, [dropProvider, mintCounter, allowlistEntry])
 
   if (saleIsFinished || isSoldOut) {
     return (
@@ -113,53 +79,7 @@ function SaleStatus({
 
   return (
     <>
-      <ConnectButton.Custom>
-        {({ openChainModal, openConnectModal }) => (
-          <Button
-            icon={isMinted ? 'Check' : undefined}
-            iconSize="sm"
-            size="lg"
-            variant={
-              account == null
-                ? undefined
-                : !correctNetwork
-                ? 'destructive'
-                : saleNotStarted || availableMints < 1
-                ? 'secondary'
-                : undefined
-            }
-            onClick={
-              !account ? openConnectModal : !correctNetwork ? () => switchNetwork?.(chainId) : handleMint
-            }
-            style={isMinted ? { backgroundColor: '#1CB687' } : {}}
-            className={awaitingApproval ? waitingApproval : ''}
-            disabled={
-              isMinting ||
-              awaitingApproval ||
-              (account && correctNetwork && saleNotStarted) ||
-              (account && correctNetwork && availableMints < 1)
-            }
-          >
-            {isMinting ? (
-              <SpinnerOG />
-            ) : !account ? (
-              'Connect wallet'
-            ) : !correctNetwork ? (
-              'Wrong network'
-            ) : awaitingApproval ? (
-              'Confirm in wallet'
-            ) : isMinted ? (
-              'Minted'
-            ) : saleNotStarted ? (
-              'Not started'
-            ) : availableMints < 1 ? (
-              'Mint limit reached'
-            ) : (
-              'Mint'
-            )}
-          </Button>
-        )}
-      </ConnectButton.Custom>
+      <MintButton isMinted={isMinted} collection={collection} isSecond={isSecond} availableMints={availableMints} mintCounter={mintCounter} allowlistEntry={allowlistEntry} setIsMinted={setIsMinted} setErrors={setErrors} />
       {saleIsActive && (
         <Text variant="paragraph-sm" align="center" color="tertiary">
           <CountdownTimer targetTime={endDate} refresh={true} appendText=" left" />
@@ -186,11 +106,13 @@ function SaleStatus({
 export function MintStatus({
   collection,
   presale = false,
+  isSecond,
   showPrice = true,
   allowlistEntry,
 }: {
   collection: SubgraphERC721Drop
   presale?: boolean
+  isSecond?: boolean
   showPrice?: boolean
   allowlistEntry?: AllowListEntry
 }) {
@@ -313,6 +235,7 @@ export function MintStatus({
       <SaleStatus
         collection={collection}
         mintCounter={mintCounter}
+        isSecond={isSecond}
         isMinted={isMinted}
         presale={presale}
         setIsMinted={setIsMinted}
