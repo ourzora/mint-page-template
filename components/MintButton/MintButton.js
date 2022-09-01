@@ -49,7 +49,7 @@ const MintButton = ({
       setAwaitingApproval(false)
       setIsMinting(false)
     }
-  }, [mintCounter, allowlistEntry])
+  }, [mintCounter, allowlistEntry, isSecond, purchase, purchaseAlt])
 
   return (
     <ConnectButton.Custom>
