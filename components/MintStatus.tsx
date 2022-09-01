@@ -8,7 +8,7 @@ import {
   Text,
   Stack,
 } from '@zoralabs/zord'
-import React, { useEffect, useCallback, useMemo, useState } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
 import { formatCryptoVal } from 'lib/numbers'
