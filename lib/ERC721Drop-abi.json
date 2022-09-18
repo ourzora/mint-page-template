@@ -991,23 +991,28 @@
     "stateMutability": "payable"
   },
   {
-    "type": "function",
-    "name": "purchaseAlt",
     "inputs": [
       {
-        "type": "uint256",
+        "internalType": "uint256",
         "name": "_quantity",
-        "internalType": "uint256"
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_trackNumber",
+        "type": "uint8"
       }
     ],
+    "name": "purchaseTrack",
     "outputs": [
       {
-        "type": "uint256",
+        "internalType": "uint256",
         "name": "",
-        "internalType": "uint256"
+        "type": "uint256"
       }
     ],
-    "stateMutability": "payable"
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
     "type": "function",

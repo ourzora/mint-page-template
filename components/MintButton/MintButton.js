@@ -17,10 +17,11 @@ const MintButton = ({
   setErrors,
   isSecond,
 }) => {
+  console.log('collection', collection)
   const presale = false
   const { switchNetwork } = useNetwork()
   const { data: account } = useAccount()
-  const { chainId, correctNetwork, purchaseAlt, purchase } = useERC721DropContract()
+  const { chainId, correctNetwork, purchaseTrack, purchase } = useERC721DropContract()
   const { saleNotStarted } = useSaleStatus({
     collection,
     presale,
@@ -33,7 +34,7 @@ const MintButton = ({
     setAwaitingApproval(true)
     setErrors(undefined)
     try {
-      const tx = isSecond ? await purchaseAlt(mintCounter) : await purchase(mintCounter)
+      const tx = await purchaseTrack(mintCounter, collection.editionMetadata.trackNumber)
       console.log({ tx })
       setAwaitingApproval(false)
       setIsMinting(true)
@@ -49,7 +50,7 @@ const MintButton = ({
       setAwaitingApproval(false)
       setIsMinting(false)
     }
-  }, [mintCounter, allowlistEntry, isSecond, purchase, purchaseAlt])
+  }, [mintCounter, allowlistEntry, isSecond, purchase, purchaseTrack])
 
   return (
     <ConnectButton.Custom>

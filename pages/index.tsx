@@ -13,7 +13,7 @@ export default MintPage;
 export const getServerSideProps: GetStaticProps = async (context) => {
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
   const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
-  
+  console.log("contractAddress", contractAddress)
   // Create Ethers Contract
   const chain = allChains.find(
     (chain) => chain.id.toString() === chainId
@@ -32,9 +32,10 @@ export const getServerSideProps: GetStaticProps = async (context) => {
   const {data: metadata2} = await axios.get(metadataURI2)
   // Get Sale Details
   const saleDetails = await contract.saleDetails();
+  // console.log(saleDetails)
   const erc721Drop = getDrop(contractAddress, metadata, saleDetails)
   const erc721Drop2 = getDrop(contractAddress, metadata2, saleDetails)
-
+console.log("erc721Drop", erc721Drop)
   return {
     props: { collection: erc721Drop, chainId: chain.id, collection2: erc721Drop2 },
   }
