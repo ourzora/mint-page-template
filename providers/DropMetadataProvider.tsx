@@ -3,6 +3,7 @@ import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'reac
 // import {DropMetadataRenderer__factory} from '@zoralabs/nft-drop-contracts/dist/typechain/DropMetadataRenderer'
 import { DropMetadataRenderer__factory } from '../constants/typechain'
 import { DROPS_METADATA_RENDERER } from '../lib/constants'
+import { ipfsImage } from '@lib/helpers'
 
 interface MetadataProps {
   description?: string
@@ -46,7 +47,7 @@ function DropMetadataContractProvider({
       const metadataBases = await metadataRenderer.metadataBaseByContract(address)
       try {
         // Fetch contractURI and parse it
-        const req = await fetch(metadataBases.contractURI)
+        const req = await fetch(ipfsImage(metadataBases.contractURI))
         const data = await req.json()
         setMetadata({
           loading: false,

@@ -13,6 +13,7 @@ export function useAllowlistEntry({
 
   useEffect(() => {
     async function asyncFunc() {
+      if (!address) setLoading(false)
       if (!address || !merkleRoot) return
       const url = `https://allowlist.zora.co/allowed?user=${address}&root=${merkleRoot}`
       const req = await fetch(url)

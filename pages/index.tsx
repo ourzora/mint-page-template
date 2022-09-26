@@ -2,15 +2,15 @@ import request from 'graphql-request'
 import Head from 'next/head'
 import { useMemo } from 'react'
 import ERC721DropContractProvider from 'providers/ERC721DropProvider'
-import DropMetadataContractProvider from 'providers/DropMetadataProvider'
-import { Stack } from '@zoralabs/zord'
+import DropMetadataContractProvider, {
+  useDropMetadataContract,
+} from 'providers/DropMetadataProvider'
+import { Stack, Paragraph } from '@zoralabs/zord'
 import { GetServerSideProps, NextPage } from 'next'
 import { SubgraphERC721Drop } from 'models/subgraph'
 import { GET_COLLECTIONS_QUERY, SUBGRAPH_URL } from 'constants/queries'
 import { ipfsImage, shortenAddress } from '@lib/helpers'
 import { collectionAddresses } from '@lib/constants'
-// import { header } from 'styles/styles.css'
-// import { ConnectWallet } from '@components/ConnectWallet'
 import { useAccount, useEnsName } from 'wagmi'
 import { Collection } from '@components/Collection'
 
@@ -19,15 +19,21 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
-  const ogImage = ipfsImage(collections[0].editionMetadata.imageURI)
+  const { metadata } = useDropMetadataContract()
+  const ogImage = ipfsImage(metadata?.image || collections[0]?.editionMetadata?.imageURI)
   const { address } = useAccount()
   const { data: ensName } = useEnsName({
     address: address,
   })
-  const username = useMemo(
-    () => ensName || shortenAddress(address),
-    [address, ensName]
-  )
+  const username = useMemo(() => ensName || shortenAddress(address), [address, ensName])
+
+  if (!collections.length) {
+    return (
+      <Paragraph py="x5" align="center">
+        404, contract not found.
+      </Paragraph>
+    )
+  }
 
   return (
     <>
@@ -87,10 +93,14 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
 
 export default HomePage
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const { erc721Drops } = await request(SUBGRAPH_URL, GET_COLLECTIONS_QUERY, {
     collectionAddresses: collectionAddresses,
   })
+
+  if (!erc721Drops.length) {
+    res.statusCode = 404
+  }
 
   return {
     props: {
