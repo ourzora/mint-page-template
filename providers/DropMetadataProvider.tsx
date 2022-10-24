@@ -1,19 +1,36 @@
-import { useProvider } from 'wagmi'
-import React, { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 // import {DropMetadataRenderer__factory} from '@zoralabs/nft-drop-contracts/dist/typechain/DropMetadataRenderer'
 import { DropMetadataRenderer__factory } from '../constants/typechain'
-import { DROPS_METADATA_RENDERER } from '../lib/constants'
-import { ipfsImage } from '@lib/helpers'
+import type { ContractTransaction } from 'ethers'
+import { SubgraphERC721Drop } from 'models/subgraph'
+import { transformIPFSURL } from 'providers/IPFSProvider'
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import useSWR from 'swr'
+import { cleanDescription } from 'utils/edition'
+import { useProvider, useSigner } from 'wagmi'
 
-interface MetadataProps {
+export interface MetadataDetails {
+  name?: string
   description?: string
   imageURI?: string
-  allowlistURI?: string
-  loading: boolean
+  animationURI?: string
+  metadataURIBase?: string
+  contractURI?: string
+  loading?: boolean
 }
 
 export interface DropMetadataProviderState {
-  metadata: any
+  metadataDetails: MetadataDetails
+  updateMetadataBase: (
+    baseUri: string,
+    newContractUri: string
+  ) => Promise<ContractTransaction | undefined>
 }
 
 export const DropMetadataContext = React.createContext<DropMetadataProviderState>(
@@ -21,48 +38,103 @@ export const DropMetadataContext = React.createContext<DropMetadataProviderState
 )
 
 function DropMetadataContractProvider({
-  address,
+  collection,
   metadataRendererAddress,
   children,
 }: {
-  address: string
+  collection: SubgraphERC721Drop
   metadataRendererAddress: string
   children?: ReactNode
 }) {
+  const { data: signer } = useSigner()
   const provider = useProvider()
-  const [metadata, setMetadata] = useState<MetadataProps | boolean>({ loading: true })
+  const [metadata, setMetadata] = useState<MetadataDetails | undefined>()
   const metadataRenderer = useMemo(
     () =>
-      provider && metadataRendererAddress && metadataRendererAddress === DROPS_METADATA_RENDERER
-        ? DropMetadataRenderer__factory.connect(metadataRendererAddress, provider)
+      provider && metadataRendererAddress
+        ? signer
+          ? new DropMetadataRenderer__factory(signer).attach(metadataRendererAddress)
+          : DropMetadataRenderer__factory.connect(metadataRendererAddress, provider)
         : null,
-    [provider, metadataRendererAddress]
+    [provider, signer, metadataRendererAddress]
+  )
+  const { data: extraMetadata } = useSWR(
+    metadata?.contractURI ? transformIPFSURL(metadata.contractURI) : undefined,
+    (url) =>
+      fetch(url)
+        .then((r) => r.text())
+        .then((t) => {
+          try {
+            return JSON.parse(t.replace(/\\n/g, ' '))
+          } catch (e) {
+            return undefined
+          }
+        })
   )
 
   useEffect(() => {
     ;(async () => {
-      if (!address || !metadataRenderer) {
-        return
-      }
-      const metadataBases = await metadataRenderer.metadataBaseByContract(address)
       try {
-        // Fetch contractURI and parse it
-        const req = await fetch(ipfsImage(metadataBases.contractURI))
-        const data = await req.json()
-        setMetadata({
-          loading: false,
-          imageURI: data.image || data.imageURI,
-          description: data.description,
-          allowlistURI: data.allowlistURI || data.allowlist_uri,
-        })
-      } catch (e: any) {
-        setMetadata(false)
+        if (!collection.address || !metadataRenderer) {
+          throw 'No collection or metadataRenderer'
+        }
+        const { base, contractURI } = await metadataRenderer.metadataBaseByContract(
+          collection.address
+        )
+        setMetadata((prevState) => ({
+          ...prevState,
+          metadataURIBase: base,
+          contractURI: contractURI,
+        }))
+      } catch (e) {
+        console.log({ e })
+        setMetadata(undefined)
       }
     })()
-  }, [address, metadataRenderer])
+  }, [signer, collection.address, metadataRenderer])
+
+  const updateMetadataBase = useCallback(
+    async (baseUri: string, newContractUri: string) => {
+      if (!metadataRenderer || !signer) return
+
+      setMetadata((prevState) => ({
+        ...prevState,
+      }))
+
+      const tx = await metadataRenderer.updateMetadataBase(
+        collection.address,
+        baseUri,
+        newContractUri
+      )
+      await tx.wait(2)
+
+      setMetadata((prevState) => ({
+        ...prevState,
+        metadataURIBase: baseUri,
+        contractURI: newContractUri,
+      }))
+
+      return tx
+    },
+    [signer, metadataRenderer, collection.address]
+  )
 
   return (
-    <DropMetadataContext.Provider value={{ metadata }}>
+    <DropMetadataContext.Provider
+      value={{
+        updateMetadataBase,
+        metadataDetails:
+          {
+            loading: !extraMetadata,
+            ...metadata,
+            ...extraMetadata,
+            imageURI: extraMetadata?.image || extraMetadata?.imageURI,
+            description: extraMetadata?.description
+              ? cleanDescription(extraMetadata.description)
+              : undefined,
+          } || {},
+      }}
+    >
       {children}
     </DropMetadataContext.Provider>
   )

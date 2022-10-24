@@ -23,6 +23,7 @@ export interface EditionMetadataRendererInterface extends utils.Interface {
     'initializeWithData(bytes)': FunctionFragment
     'tokenInfos(address)': FunctionFragment
     'tokenURI(uint256)': FunctionFragment
+    'updateDescription(address,string)': FunctionFragment
     'updateMediaURIs(address,string,string)': FunctionFragment
   }
 
@@ -32,6 +33,7 @@ export interface EditionMetadataRendererInterface extends utils.Interface {
       | 'initializeWithData'
       | 'tokenInfos'
       | 'tokenURI'
+      | 'updateDescription'
       | 'updateMediaURIs'
   ): FunctionFragment
 
@@ -39,6 +41,10 @@ export interface EditionMetadataRendererInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'initializeWithData', values: [BytesLike]): string
   encodeFunctionData(functionFragment: 'tokenInfos', values: [string]): string
   encodeFunctionData(functionFragment: 'tokenURI', values: [BigNumberish]): string
+  encodeFunctionData(
+    functionFragment: 'updateDescription',
+    values: [string, string]
+  ): string
   encodeFunctionData(
     functionFragment: 'updateMediaURIs',
     values: [string, string, string]
@@ -48,16 +54,31 @@ export interface EditionMetadataRendererInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'initializeWithData', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'tokenInfos', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'tokenURI', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'updateDescription', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'updateMediaURIs', data: BytesLike): Result
 
   events: {
+    'DescriptionUpdated(address,address,string)': EventFragment
     'EditionInitialized(address,string,string,string)': EventFragment
     'MediaURIsUpdated(address,address,string,string)': EventFragment
   }
 
+  getEvent(nameOrSignatureOrTopic: 'DescriptionUpdated'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'EditionInitialized'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'MediaURIsUpdated'): EventFragment
 }
+
+export interface DescriptionUpdatedEventObject {
+  target: string
+  sender: string
+  newDescription: string
+}
+export type DescriptionUpdatedEvent = TypedEvent<
+  [string, string, string],
+  DescriptionUpdatedEventObject
+>
+
+export type DescriptionUpdatedEventFilter = TypedEventFilter<DescriptionUpdatedEvent>
 
 export interface EditionInitializedEventObject {
   target: string
@@ -132,6 +153,12 @@ export interface EditionMetadataRenderer extends BaseContract {
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>
 
+    updateDescription(
+      target: string,
+      newDescription: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>
+
     updateMediaURIs(
       target: string,
       imageURI: string,
@@ -160,6 +187,12 @@ export interface EditionMetadataRenderer extends BaseContract {
 
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>
 
+  updateDescription(
+    target: string,
+    newDescription: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>
+
   updateMediaURIs(
     target: string,
     imageURI: string,
@@ -185,6 +218,12 @@ export interface EditionMetadataRenderer extends BaseContract {
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>
 
+    updateDescription(
+      target: string,
+      newDescription: string,
+      overrides?: CallOverrides
+    ): Promise<void>
+
     updateMediaURIs(
       target: string,
       imageURI: string,
@@ -194,6 +233,17 @@ export interface EditionMetadataRenderer extends BaseContract {
   }
 
   filters: {
+    'DescriptionUpdated(address,address,string)'(
+      target?: string | null,
+      sender?: null,
+      newDescription?: null
+    ): DescriptionUpdatedEventFilter
+    DescriptionUpdated(
+      target?: string | null,
+      sender?: null,
+      newDescription?: null
+    ): DescriptionUpdatedEventFilter
+
     'EditionInitialized(address,string,string,string)'(
       target?: string | null,
       description?: null,
@@ -233,6 +283,12 @@ export interface EditionMetadataRenderer extends BaseContract {
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>
 
+    updateDescription(
+      target: string,
+      newDescription: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>
+
     updateMediaURIs(
       target: string,
       imageURI: string,
@@ -254,6 +310,12 @@ export interface EditionMetadataRenderer extends BaseContract {
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
+    updateDescription(
+      target: string,
+      newDescription: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
     updateMediaURIs(

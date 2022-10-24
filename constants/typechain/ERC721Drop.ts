@@ -139,6 +139,7 @@ export interface ERC721DropInterface extends utils.Interface {
     'salesConfig()': FunctionFragment
     'setApprovalForAll(address,bool)': FunctionFragment
     'setFundsRecipient(address)': FunctionFragment
+    'setMetadataRenderer(address,bytes)': FunctionFragment
     'setOwner(address)': FunctionFragment
     'setSaleConfiguration(uint104,uint32,uint64,uint64,uint64,uint64,bytes32)': FunctionFragment
     'supportsInterface(bytes4)': FunctionFragment
@@ -192,6 +193,7 @@ export interface ERC721DropInterface extends utils.Interface {
       | 'salesConfig'
       | 'setApprovalForAll'
       | 'setFundsRecipient'
+      | 'setMetadataRenderer'
       | 'setOwner'
       | 'setSaleConfiguration'
       | 'supportsInterface'
@@ -280,6 +282,10 @@ export interface ERC721DropInterface extends utils.Interface {
     values: [string, boolean]
   ): string
   encodeFunctionData(functionFragment: 'setFundsRecipient', values: [string]): string
+  encodeFunctionData(
+    functionFragment: 'setMetadataRenderer',
+    values: [string, BytesLike]
+  ): string
   encodeFunctionData(functionFragment: 'setOwner', values: [string]): string
   encodeFunctionData(
     functionFragment: 'setSaleConfiguration',
@@ -353,6 +359,7 @@ export interface ERC721DropInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'salesConfig', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'setApprovalForAll', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'setFundsRecipient', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'setMetadataRenderer', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'setOwner', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'setSaleConfiguration', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result
@@ -371,6 +378,7 @@ export interface ERC721DropInterface extends utils.Interface {
     'Approval(address,address,uint256)': EventFragment
     'ApprovalForAll(address,address,bool)': EventFragment
     'BeaconUpgraded(address)': EventFragment
+    'FundsReceived(address,uint256)': EventFragment
     'FundsRecipientChanged(address,address)': EventFragment
     'OpenMintFinalized(address,uint256)': EventFragment
     'OwnershipTransferred(address,address)': EventFragment
@@ -380,6 +388,7 @@ export interface ERC721DropInterface extends utils.Interface {
     'Sale(address,uint256,uint256,uint256)': EventFragment
     'SalesConfigChanged(address)': EventFragment
     'Transfer(address,address,uint256)': EventFragment
+    'UpdatedMetadataRenderer(address,address)': EventFragment
     'Upgraded(address)': EventFragment
   }
 
@@ -387,6 +396,7 @@ export interface ERC721DropInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: 'Approval'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'ApprovalForAll'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'BeaconUpgraded'): EventFragment
+  getEvent(nameOrSignatureOrTopic: 'FundsReceived'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'FundsRecipientChanged'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'OpenMintFinalized'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment
@@ -396,6 +406,7 @@ export interface ERC721DropInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: 'Sale'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'SalesConfigChanged'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'Transfer'): EventFragment
+  getEvent(nameOrSignatureOrTopic: 'UpdatedMetadataRenderer'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'Upgraded'): EventFragment
 }
 
@@ -434,6 +445,14 @@ export interface BeaconUpgradedEventObject {
 export type BeaconUpgradedEvent = TypedEvent<[string], BeaconUpgradedEventObject>
 
 export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>
+
+export interface FundsReceivedEventObject {
+  source: string
+  amount: BigNumber
+}
+export type FundsReceivedEvent = TypedEvent<[string, BigNumber], FundsReceivedEventObject>
+
+export type FundsReceivedEventFilter = TypedEventFilter<FundsReceivedEvent>
 
 export interface FundsRecipientChangedEventObject {
   newAddress: string
@@ -533,6 +552,18 @@ export interface TransferEventObject {
 export type TransferEvent = TypedEvent<[string, string, BigNumber], TransferEventObject>
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>
+
+export interface UpdatedMetadataRendererEventObject {
+  sender: string
+  renderer: string
+}
+export type UpdatedMetadataRendererEvent = TypedEvent<
+  [string, string],
+  UpdatedMetadataRendererEventObject
+>
+
+export type UpdatedMetadataRendererEventFilter =
+  TypedEventFilter<UpdatedMetadataRendererEvent>
 
 export interface UpgradedEventObject {
   implementation: string
@@ -737,6 +768,12 @@ export interface ERC721Drop extends BaseContract {
 
     setFundsRecipient(
       newRecipientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
@@ -965,6 +1002,12 @@ export interface ERC721Drop extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
+  setMetadataRenderer(
+    newRenderer: string,
+    setupRenderer: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>
+
   setOwner(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1164,6 +1207,12 @@ export interface ERC721Drop extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>
 
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>
+
     setOwner(newOwner: string, overrides?: CallOverrides): Promise<void>
 
     setSaleConfiguration(
@@ -1241,6 +1290,12 @@ export interface ERC721Drop extends BaseContract {
 
     'BeaconUpgraded(address)'(beacon?: string | null): BeaconUpgradedEventFilter
     BeaconUpgraded(beacon?: string | null): BeaconUpgradedEventFilter
+
+    'FundsReceived(address,uint256)'(
+      source?: string | null,
+      amount?: null
+    ): FundsReceivedEventFilter
+    FundsReceived(source?: string | null, amount?: null): FundsReceivedEventFilter
 
     'FundsRecipientChanged(address,address)'(
       newAddress?: string | null,
@@ -1330,6 +1385,15 @@ export interface ERC721Drop extends BaseContract {
       to?: string | null,
       tokenId?: BigNumberish | null
     ): TransferEventFilter
+
+    'UpdatedMetadataRenderer(address,address)'(
+      sender?: null,
+      renderer?: null
+    ): UpdatedMetadataRendererEventFilter
+    UpdatedMetadataRenderer(
+      sender?: null,
+      renderer?: null
+    ): UpdatedMetadataRendererEventFilter
 
     'Upgraded(address)'(implementation?: string | null): UpgradedEventFilter
     Upgraded(implementation?: string | null): UpgradedEventFilter
@@ -1485,6 +1549,12 @@ export interface ERC721Drop extends BaseContract {
 
     setFundsRecipient(
       newRecipientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>
 
@@ -1710,6 +1780,12 @@ export interface ERC721Drop extends BaseContract {
 
     setFundsRecipient(
       newRecipientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 

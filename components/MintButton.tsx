@@ -1,15 +1,14 @@
-import { useConnectModal, useChainModal } from '@rainbow-me/rainbowkit'
-import { vars, Box, Button, Paragraph, Heading, Text, SpinnerOG } from '@zoralabs/zord'
-import React, { useCallback, useState } from 'react'
-import { SubgraphERC721Drop } from 'models/subgraph'
-import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { useAccount, useNetwork } from 'wagmi'
-import { waitingApproval } from 'styles/styles.css'
-import { useSaleStatus } from 'hooks/useSaleStatus'
+import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit'
+import { Box, Button, Heading, Paragraph, Text, vars } from '@zoralabs/zord'
 import { CountdownTimer } from 'components/CountdownTimer'
+import type { ContractTransaction } from 'ethers'
+import { useSaleStatus } from 'hooks/useSaleStatus'
+import { ERC721DropProviderState } from 'providers/ERC721DropProvider'
+import React, { useCallback, useState } from 'react'
+import { waitingApproval } from 'styles/styles.css'
 import { cleanErrors } from 'utils/errors'
 import { AllowListEntry } from 'utils/merkle-proof'
-import type { ContractTransaction } from 'ethers'
+import { useAccount, useNetwork } from 'wagmi'
 
 export function MintButton({
   collection,
@@ -20,7 +19,7 @@ export function MintButton({
   availableMints,
   allowlistEntry,
 }: {
-  collection: SubgraphERC721Drop
+  collection: ERC721DropProviderState
   isMinted: boolean
   setIsMinted: (state: boolean) => void
   presale: boolean
@@ -32,7 +31,7 @@ export function MintButton({
   const { chain } = useNetwork()
   const { openConnectModal } = useConnectModal()
   const { openChainModal } = useChainModal()
-  const dropProvider = useERC721DropContract()
+  const { updateMintCounters } = collection
   const [awaitingApproval, setAwaitingApproval] = useState<boolean>(false)
   const [isMinting, setIsMinting] = useState<boolean>(false)
   const [errors, setErrors] = useState<string>()
@@ -49,13 +48,14 @@ export function MintButton({
     setErrors(undefined)
     try {
       const tx: ContractTransaction | undefined = presale
-        ? await dropProvider.purchasePresale(mintCounter, allowlistEntry)
-        : await dropProvider.purchase(mintCounter)
+        ? await collection.purchasePresale(mintCounter, allowlistEntry)
+        : await collection.purchase(mintCounter)
       console.log({ tx })
       setAwaitingApproval(false)
       setIsMinting(true)
       if (tx) {
         await tx.wait(2)
+        updateMintCounters()
         setIsMinting(false)
         setIsMinted(true)
       } else {
@@ -66,17 +66,17 @@ export function MintButton({
       setAwaitingApproval(false)
       setIsMinting(false)
     }
-  }, [dropProvider, presale, setIsMinted, mintCounter, allowlistEntry])
+  }, [collection, presale, setIsMinted, mintCounter, allowlistEntry])
 
   if (saleIsFinished || isSoldOut) {
     return (
       <Box>
-        <Heading align="center" size="xs">
+        <Heading textAlign="center" size="xs">
           {saleIsFinished ? 'Minting complete' : 'Sold out'}
         </Heading>
         <Paragraph
           mt="x1"
-          align="center"
+          textAlign="center"
           size="sm"
           color="secondary"
           maxW="x64"
@@ -90,7 +90,7 @@ export function MintButton({
           target="_blank"
           rel="noreferrer"
           size="lg"
-          mt="x3"
+          my="x3"
         >
           View on Zora Marketplace
         </Button>
@@ -116,40 +116,42 @@ export function MintButton({
         onClick={
           !address ? openConnectModal : chain?.unsupported ? openChainModal : handleMint
         }
-        style={isMinted ? { backgroundColor: vars.color.positive } : {}}
+        style={
+          isMinted
+            ? { backgroundColor: vars.color.positive, color: vars.color.onPositive }
+            : {}
+        }
         className={awaitingApproval ? waitingApproval : ''}
         disabled={
           isMinting ||
           awaitingApproval ||
           (!!address && !chain?.unsupported && saleNotStarted) ||
-          (!!address && !chain?.unsupported && availableMints < 1)
+          (!!address && !chain?.unsupported && availableMints < 1 && !isMinted)
         }
+        loading={isMinting}
+        suppressHydrationWarning={true}
       >
-        {isMinting ? (
-          <SpinnerOG />
-        ) : !address ? (
-          'Connect wallet'
-        ) : chain?.unsupported ? (
-          'Wrong network'
-        ) : awaitingApproval ? (
-          'Confirm in wallet'
-        ) : isMinted ? (
-          'Minted'
-        ) : saleNotStarted ? (
-          'Not started'
-        ) : availableMints < 1 ? (
-          'Mint limit reached'
-        ) : (
-          'Mint'
-        )}
+        {!address
+          ? 'Connect wallet'
+          : chain?.unsupported
+          ? 'Wrong network'
+          : awaitingApproval
+          ? 'Confirm in wallet'
+          : isMinted
+          ? 'Minted'
+          : saleNotStarted
+          ? 'Not started'
+          : availableMints < 1
+          ? 'Mint limit reached'
+          : 'Mint'}
       </Button>
       {saleIsActive && (
-        <Text variant="paragraph-sm" align="center" color="tertiary">
+        <Text variant="paragraph-sm" textAlign="center" color="tertiary">
           <CountdownTimer targetTime={endDate} refresh={true} appendText=" left" />
         </Text>
       )}
       {saleNotStarted && (
-        <Text variant="paragraph-sm" align="center" color="tertiary">
+        <Text variant="paragraph-sm" textAlign="center" color="tertiary">
           <CountdownTimer
             targetTime={startDate}
             refresh={true}

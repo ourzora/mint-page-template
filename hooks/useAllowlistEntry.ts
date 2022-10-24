@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import useSWR from 'swr'
 
 export function useAllowlistEntry({
   merkleRoot,
@@ -7,27 +7,13 @@ export function useAllowlistEntry({
   merkleRoot?: string
   address?: string
 }) {
-  const [accessAllowed, setAccessAllowed] = useState<boolean>()
-  const [allowlistEntry, setAllowlistEntry] = useState<any>()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function asyncFunc() {
-      if (!address) setLoading(false)
-      if (!address || !merkleRoot) return
-      const url = `https://allowlist.zora.co/allowed?user=${address}&root=${merkleRoot}`
-      const req = await fetch(url)
-      const entry = await req.json()
-      setAccessAllowed(!!entry.length && !!entry[0].proof.length)
-      setAllowlistEntry(entry[0])
-      setLoading(false)
-    }
-    asyncFunc()
-  }, [address, merkleRoot])
+  const { data: entry, error } = useSWR(
+    `https://allowlist.zora.co/allowed?user=${address}&root=${merkleRoot}`
+  )
 
   return {
-    loading,
-    accessAllowed,
-    allowlistEntry,
+    loading: !error && !entry,
+    accessAllowed: entry && !!entry.length && !!entry[0].proof.length,
+    allowlistEntry: entry && entry[0],
   }
 }

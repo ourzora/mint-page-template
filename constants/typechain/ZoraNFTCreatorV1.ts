@@ -57,10 +57,10 @@ export interface ZoraNFTCreatorV1Interface extends utils.Interface {
     'editionMetadataRenderer()': FunctionFragment
     'implementation()': FunctionFragment
     'initialize()': FunctionFragment
-    'isValidUpgrade(address)': FunctionFragment
     'owner()': FunctionFragment
     'proxiableUUID()': FunctionFragment
     'renounceOwnership()': FunctionFragment
+    'setupDropsContract(string,string,address,uint64,uint16,address,(uint104,uint32,uint64,uint64,uint64,uint64,bytes32),address,bytes)': FunctionFragment
     'transferOwnership(address)': FunctionFragment
     'upgradeTo(address)': FunctionFragment
     'upgradeToAndCall(address,bytes)': FunctionFragment
@@ -75,10 +75,10 @@ export interface ZoraNFTCreatorV1Interface extends utils.Interface {
       | 'editionMetadataRenderer'
       | 'implementation'
       | 'initialize'
-      | 'isValidUpgrade'
       | 'owner'
       | 'proxiableUUID'
       | 'renounceOwnership'
+      | 'setupDropsContract'
       | 'transferOwnership'
       | 'upgradeTo'
       | 'upgradeToAndCall'
@@ -121,10 +121,23 @@ export interface ZoraNFTCreatorV1Interface extends utils.Interface {
   ): string
   encodeFunctionData(functionFragment: 'implementation', values?: undefined): string
   encodeFunctionData(functionFragment: 'initialize', values?: undefined): string
-  encodeFunctionData(functionFragment: 'isValidUpgrade', values: [string]): string
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string
   encodeFunctionData(functionFragment: 'proxiableUUID', values?: undefined): string
   encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string
+  encodeFunctionData(
+    functionFragment: 'setupDropsContract',
+    values: [
+      string,
+      string,
+      string,
+      BigNumberish,
+      BigNumberish,
+      string,
+      IERC721Drop.SalesConfigurationStruct,
+      string,
+      BytesLike
+    ]
+  ): string
   encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string
   encodeFunctionData(functionFragment: 'upgradeTo', values: [string]): string
   encodeFunctionData(
@@ -142,10 +155,10 @@ export interface ZoraNFTCreatorV1Interface extends utils.Interface {
   ): Result
   decodeFunctionResult(functionFragment: 'implementation', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'isValidUpgrade', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'proxiableUUID', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'setupDropsContract', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'upgradeTo', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'upgradeToAndCall', data: BytesLike): Result
@@ -276,16 +289,24 @@ export interface ZoraNFTCreatorV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    isValidUpgrade(
-      newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
-
     owner(overrides?: CallOverrides): Promise<[string]>
 
     proxiableUUID(overrides?: CallOverrides): Promise<[string]>
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>
+
+    setupDropsContract(
+      name: string,
+      symbol: string,
+      defaultAdmin: string,
+      editionSize: BigNumberish,
+      royaltyBPS: BigNumberish,
+      fundsRecipient: string,
+      saleConfig: IERC721Drop.SalesConfigurationStruct,
+      metadataRenderer: string,
+      metadataInitializer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
@@ -345,16 +366,24 @@ export interface ZoraNFTCreatorV1 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  isValidUpgrade(
-    newImplementation: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
-
   owner(overrides?: CallOverrides): Promise<string>
 
   proxiableUUID(overrides?: CallOverrides): Promise<string>
 
   renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>
+
+  setupDropsContract(
+    name: string,
+    symbol: string,
+    defaultAdmin: string,
+    editionSize: BigNumberish,
+    royaltyBPS: BigNumberish,
+    fundsRecipient: string,
+    saleConfig: IERC721Drop.SalesConfigurationStruct,
+    metadataRenderer: string,
+    metadataInitializer: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
@@ -412,13 +441,24 @@ export interface ZoraNFTCreatorV1 extends BaseContract {
 
     initialize(overrides?: CallOverrides): Promise<void>
 
-    isValidUpgrade(newImplementation: string, overrides?: CallOverrides): Promise<boolean>
-
     owner(overrides?: CallOverrides): Promise<string>
 
     proxiableUUID(overrides?: CallOverrides): Promise<string>
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>
+
+    setupDropsContract(
+      name: string,
+      symbol: string,
+      defaultAdmin: string,
+      editionSize: BigNumberish,
+      royaltyBPS: BigNumberish,
+      fundsRecipient: string,
+      saleConfig: IERC721Drop.SalesConfigurationStruct,
+      metadataRenderer: string,
+      metadataInitializer: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>
 
     transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>
 
@@ -505,16 +545,24 @@ export interface ZoraNFTCreatorV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>
 
-    isValidUpgrade(
-      newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
-
     owner(overrides?: CallOverrides): Promise<BigNumber>
 
     proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>
+
+    setupDropsContract(
+      name: string,
+      symbol: string,
+      defaultAdmin: string,
+      editionSize: BigNumberish,
+      royaltyBPS: BigNumberish,
+      fundsRecipient: string,
+      saleConfig: IERC721Drop.SalesConfigurationStruct,
+      metadataRenderer: string,
+      metadataInitializer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>
 
@@ -575,16 +623,24 @@ export interface ZoraNFTCreatorV1 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    isValidUpgrade(
-      newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
-
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>
+
+    setupDropsContract(
+      name: string,
+      symbol: string,
+      defaultAdmin: string,
+      editionSize: BigNumberish,
+      royaltyBPS: BigNumberish,
+      fundsRecipient: string,
+      saleConfig: IERC721Drop.SalesConfigurationStruct,
+      metadataRenderer: string,
+      metadataInitializer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 

@@ -82,6 +82,7 @@ export interface IERC721DropInterface extends utils.Interface {
     'purchase(uint256)': FunctionFragment
     'purchasePresale(uint256,uint256,uint256,bytes32[])': FunctionFragment
     'saleDetails()': FunctionFragment
+    'setMetadataRenderer(address,bytes)': FunctionFragment
   }
 
   getFunction(
@@ -94,6 +95,7 @@ export interface IERC721DropInterface extends utils.Interface {
       | 'purchase'
       | 'purchasePresale'
       | 'saleDetails'
+      | 'setMetadataRenderer'
   ): FunctionFragment
 
   encodeFunctionData(
@@ -110,6 +112,10 @@ export interface IERC721DropInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish, BytesLike[]]
   ): string
   encodeFunctionData(functionFragment: 'saleDetails', values?: undefined): string
+  encodeFunctionData(
+    functionFragment: 'setMetadataRenderer',
+    values: [string, BytesLike]
+  ): string
 
   decodeFunctionResult(functionFragment: 'adminMint', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'adminMintAirdrop', data: BytesLike): Result
@@ -119,13 +125,45 @@ export interface IERC721DropInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'purchase', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'purchasePresale', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'saleDetails', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'setMetadataRenderer', data: BytesLike): Result
 
   events: {
+    'FundsRecipientChanged(address,address)': EventFragment
+    'OpenMintFinalized(address,uint256)': EventFragment
     'Sale(address,uint256,uint256,uint256)': EventFragment
+    'SalesConfigChanged(address)': EventFragment
+    'UpdatedMetadataRenderer(address,address)': EventFragment
   }
 
+  getEvent(nameOrSignatureOrTopic: 'FundsRecipientChanged'): EventFragment
+  getEvent(nameOrSignatureOrTopic: 'OpenMintFinalized'): EventFragment
   getEvent(nameOrSignatureOrTopic: 'Sale'): EventFragment
+  getEvent(nameOrSignatureOrTopic: 'SalesConfigChanged'): EventFragment
+  getEvent(nameOrSignatureOrTopic: 'UpdatedMetadataRenderer'): EventFragment
 }
+
+export interface FundsRecipientChangedEventObject {
+  newAddress: string
+  changedBy: string
+}
+export type FundsRecipientChangedEvent = TypedEvent<
+  [string, string],
+  FundsRecipientChangedEventObject
+>
+
+export type FundsRecipientChangedEventFilter =
+  TypedEventFilter<FundsRecipientChangedEvent>
+
+export interface OpenMintFinalizedEventObject {
+  sender: string
+  numberOfMints: BigNumber
+}
+export type OpenMintFinalizedEvent = TypedEvent<
+  [string, BigNumber],
+  OpenMintFinalizedEventObject
+>
+
+export type OpenMintFinalizedEventFilter = TypedEventFilter<OpenMintFinalizedEvent>
 
 export interface SaleEventObject {
   to: string
@@ -139,6 +177,25 @@ export type SaleEvent = TypedEvent<
 >
 
 export type SaleEventFilter = TypedEventFilter<SaleEvent>
+
+export interface SalesConfigChangedEventObject {
+  changedBy: string
+}
+export type SalesConfigChangedEvent = TypedEvent<[string], SalesConfigChangedEventObject>
+
+export type SalesConfigChangedEventFilter = TypedEventFilter<SalesConfigChangedEvent>
+
+export interface UpdatedMetadataRendererEventObject {
+  sender: string
+  renderer: string
+}
+export type UpdatedMetadataRendererEvent = TypedEvent<
+  [string, string],
+  UpdatedMetadataRendererEventObject
+>
+
+export type UpdatedMetadataRendererEventFilter =
+  TypedEventFilter<UpdatedMetadataRendererEvent>
 
 export interface IERC721Drop extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this
@@ -201,6 +258,12 @@ export interface IERC721Drop extends BaseContract {
     ): Promise<ContractTransaction>
 
     saleDetails(overrides?: CallOverrides): Promise<[IERC721Drop.SaleDetailsStructOutput]>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>
   }
 
   adminMint(
@@ -238,6 +301,12 @@ export interface IERC721Drop extends BaseContract {
 
   saleDetails(overrides?: CallOverrides): Promise<IERC721Drop.SaleDetailsStructOutput>
 
+  setMetadataRenderer(
+    newRenderer: string,
+    setupRenderer: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>
+
   callStatic: {
     adminMint(
       to: string,
@@ -267,9 +336,33 @@ export interface IERC721Drop extends BaseContract {
     ): Promise<BigNumber>
 
     saleDetails(overrides?: CallOverrides): Promise<IERC721Drop.SaleDetailsStructOutput>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>
   }
 
   filters: {
+    'FundsRecipientChanged(address,address)'(
+      newAddress?: string | null,
+      changedBy?: string | null
+    ): FundsRecipientChangedEventFilter
+    FundsRecipientChanged(
+      newAddress?: string | null,
+      changedBy?: string | null
+    ): FundsRecipientChangedEventFilter
+
+    'OpenMintFinalized(address,uint256)'(
+      sender?: string | null,
+      numberOfMints?: null
+    ): OpenMintFinalizedEventFilter
+    OpenMintFinalized(
+      sender?: string | null,
+      numberOfMints?: null
+    ): OpenMintFinalizedEventFilter
+
     'Sale(address,uint256,uint256,uint256)'(
       to?: string | null,
       quantity?: BigNumberish | null,
@@ -282,6 +375,20 @@ export interface IERC721Drop extends BaseContract {
       pricePerToken?: BigNumberish | null,
       firstPurchasedTokenId?: null
     ): SaleEventFilter
+
+    'SalesConfigChanged(address)'(
+      changedBy?: string | null
+    ): SalesConfigChangedEventFilter
+    SalesConfigChanged(changedBy?: string | null): SalesConfigChangedEventFilter
+
+    'UpdatedMetadataRenderer(address,address)'(
+      sender?: null,
+      renderer?: null
+    ): UpdatedMetadataRendererEventFilter
+    UpdatedMetadataRenderer(
+      sender?: null,
+      renderer?: null
+    ): UpdatedMetadataRendererEventFilter
   }
 
   estimateGas: {
@@ -316,6 +423,12 @@ export interface IERC721Drop extends BaseContract {
     ): Promise<BigNumber>
 
     saleDetails(overrides?: CallOverrides): Promise<BigNumber>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>
   }
 
   populateTransaction: {
@@ -353,5 +466,11 @@ export interface IERC721Drop extends BaseContract {
     ): Promise<PopulatedTransaction>
 
     saleDetails(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    setMetadataRenderer(
+      newRenderer: string,
+      setupRenderer: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>
   }
 }

@@ -1,4 +1,4 @@
-import { BigNumber, BytesLike } from 'ethers'
+import { BigNumber, BigNumberish, BytesLike } from 'ethers'
 
 export interface Edition {
   name: string
@@ -6,11 +6,16 @@ export interface Edition {
   description: string
   price: BigNumber
   maxSupply: BigNumber
+  fundsRecipient: string
   royalty: number
   animationURI?: string
   animationHash?: BytesLike
   imageURI?: string
   imageHash?: BytesLike
+  maxSalePurchasePerAddress?: string
+  isOpenEdition?: number
+  publicSaleStart?: Date
+  publicSaleEnd?: Date
 }
 
 export interface EditionForm {
@@ -19,25 +24,24 @@ export interface EditionForm {
   description: string
   price: string
   royalty: number
+  fundsRecipient: string
+  maxSalePurchasePerAddress?: string
   maxSupply: string
+  fileInput: Blob
   confirm: boolean
+  isOpenEdition?: number
+  publicSaleStart?: Date
+  publicSaleEnd?: Date
 }
 
 export interface EditionSalesConfig {
-  publicSalePrice: BigNumber
-  maxSalePurchasePerAddress: BigNumber
-  publicSaleStart: BigNumber
-  publicSaleEnd: BigNumber
-  presaleStart: BigNumber
-  presaleEnd: BigNumber
+  publicSalePrice: BigNumberish
+  maxSalePurchasePerAddress: BigNumberish
+  publicSaleStart: BigNumberish
+  publicSaleEnd: BigNumberish
+  presaleStart: BigNumberish
+  presaleEnd: BigNumberish
   presaleMerkleRoot: BytesLike
-}
-
-export interface EditionSaleDetails extends EditionSalesConfig {
-  publicSaleActive: boolean
-  presaleActive: boolean
-  totalMinted: BigNumber
-  maxSupply: BigNumber
 }
 
 export interface EditionSalesConfigForm {

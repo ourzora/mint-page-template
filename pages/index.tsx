@@ -1,10 +1,6 @@
 import request from 'graphql-request'
 import Head from 'next/head'
 import { useMemo } from 'react'
-import ERC721DropContractProvider from 'providers/ERC721DropProvider'
-import DropMetadataContractProvider, {
-  useDropMetadataContract,
-} from 'providers/DropMetadataProvider'
 import { Stack, Paragraph } from '@zoralabs/zord'
 import { GetServerSideProps, NextPage } from 'next'
 import { SubgraphERC721Drop } from 'models/subgraph'
@@ -14,13 +10,14 @@ import { collectionAddresses } from '@lib/constants'
 import { useAccount, useEnsName } from 'wagmi'
 import { Collection } from '@components/Collection'
 
+
 interface HomePageProps {
   collections: SubgraphERC721Drop[]
 }
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
-  const { metadata } = useDropMetadataContract()
-  const ogImage = ipfsImage(metadata?.image || collections[0]?.editionMetadata?.imageURI)
+  // const { metadata } = useDropMetadataContract()
+  const ogImage = ipfsImage(collections[0]?.editionMetadata?.imageURI)
   const { address } = useAccount()
   const { data: ensName } = useEnsName({
     address: address,
@@ -69,22 +66,9 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
         <meta name="twitter:image" content={ogImage} />
       </Head>
 
-      {/*<Flex justify="flex-end" p="x4" className={header}>
-        <ConnectWallet />
-      </Flex>*/}
       <Stack align="center" minH="100vh">
         {collections.map((collection) => (
-          <ERC721DropContractProvider
-            key={collection.address + '_' + username}
-            erc721DropAddress={collection.address}
-          >
-            <DropMetadataContractProvider
-              metadataRendererAddress={collection.contractConfig?.metadataRenderer}
-              address={collection.address}
-            >
-              <Collection username={username} collection={collection} />
-            </DropMetadataContractProvider>
-          </ERC721DropContractProvider>
+          <Collection key={collection.address} username={username} collection={collection} />
         ))}
       </Stack>
     </>

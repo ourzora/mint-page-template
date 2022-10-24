@@ -107,6 +107,44 @@ const _abi = [
       {
         indexed: true,
         internalType: 'address',
+        name: 'newAddress',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'changedBy',
+        type: 'address',
+      },
+    ],
+    name: 'FundsRecipientChanged',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'numberOfMints',
+        type: 'uint256',
+      },
+    ],
+    name: 'OpenMintFinalized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
         name: 'to',
         type: 'address',
       },
@@ -130,6 +168,38 @@ const _abi = [
       },
     ],
     name: 'Sale',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'changedBy',
+        type: 'address',
+      },
+    ],
+    name: 'SalesConfigChanged',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'contract IMetadataRenderer',
+        name: 'renderer',
+        type: 'address',
+      },
+    ],
+    name: 'UpdatedMetadataRenderer',
     type: 'event',
   },
   {
@@ -364,6 +434,24 @@ const _abi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'contract IMetadataRenderer',
+        name: 'newRenderer',
+        type: 'address',
+      },
+      {
+        internalType: 'bytes',
+        name: 'setupRenderer',
+        type: 'bytes',
+      },
+    ],
+    name: 'setMetadataRenderer',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
 ]

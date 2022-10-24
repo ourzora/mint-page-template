@@ -1,27 +1,30 @@
-import { Box, Button, Eyebrow, Flex, Heading, Stack } from '@zoralabs/zord'
-import React, { useEffect, useMemo, useCallback, useState } from 'react'
-import { SubgraphERC721Drop } from 'models/subgraph'
-import { useERC721DropContract } from 'providers/ERC721DropProvider'
-import { formatCryptoVal } from 'utils/numbers'
-import { OPEN_EDITION_SIZE } from 'constants/numbers'
-import { parseInt } from 'lodash'
-import { priceDateHeading, mintCounterInput } from 'styles/styles.css'
-import { useSaleStatus } from 'hooks/useSaleStatus'
-import { AllowListEntry } from 'utils/merkle-proof'
 import { MintButton } from './MintButton'
+import { Box, Button, Eyebrow, Flex, Heading, Stack, StackProps } from '@zoralabs/zord'
+import { OPEN_EDITION_SIZE } from 'constants/numbers'
+import { useSaleStatus } from 'hooks/useSaleStatus'
+import { parseInt } from 'lodash'
+import { ERC721DropProviderState } from 'providers/ERC721DropProvider'
+import React, { useCallback, useState } from 'react'
+import { mintCounterInput, priceDateHeading } from 'styles/styles.css'
+import { AllowListEntry } from 'utils/merkle-proof'
+import { formatCryptoVal } from 'utils/numbers'
+
+interface MintComponentProps extends StackProps {
+  collection: ERC721DropProviderState
+  presale?: boolean
+  showPrice?: boolean
+  allowlistEntry?: AllowListEntry
+}
 
 export function MintComponent({
+  className,
   collection,
   presale = false,
   showPrice = true,
   allowlistEntry,
-}: {
-  collection: SubgraphERC721Drop
-  presale?: boolean
-  showPrice?: boolean
-  allowlistEntry?: AllowListEntry
-}) {
-  const { userMintedCount, totalMinted, updateMintCounters } = useERC721DropContract()
+  ...props
+}: MintComponentProps) {
+  const { userMintedCount, totalMinted } = collection
   const { isSoldOut, saleIsActive, saleIsFinished } = useSaleStatus({
     collection,
     presale,
@@ -29,16 +32,13 @@ export function MintComponent({
   const maxPerWallet = parseInt(
     presale
       ? allowlistEntry?.maxCanMint || '0'
-      : collection.salesConfig.maxSalePurchasePerAddress
+      : collection.salesConfig.maxSalePurchasePerAddress.toString()
   )
   const [isMinted, setIsMinted] = useState<boolean>(false)
   const [mintCounter, setMintCounter] = useState(1)
   const availableMints = maxPerWallet - (userMintedCount || 0)
   const internalPrice = allowlistEntry?.price || collection.salesConfig.publicSalePrice
-
-  useEffect(() => {
-    updateMintCounters()
-  }, [updateMintCounters, isMinted])
+  const availableTokenCount = collection.maxSupply - totalMinted
 
   function handleMintCounterUpdate(value: any) {
     setMintCounter(value)
@@ -47,26 +47,25 @@ export function MintComponent({
 
   const clampMintCounter = useCallback(() => {
     if (mintCounter > availableMints) setMintCounter(Math.max(1, availableMints))
+    else if (mintCounter > availableTokenCount) setMintCounter(availableTokenCount)
     else if (mintCounter < 1) setMintCounter(1)
     else setMintCounter(Math.round(mintCounter))
-  }, [mintCounter, availableMints])
+  }, [mintCounter, availableTokenCount, availableMints])
 
   const formattedMintedCount = Intl.NumberFormat('en', {
     notation: 'standard',
-  }).format(totalMinted || parseInt(collection.totalMinted))
+  }).format(totalMinted)
 
   const formattedTotalSupplyCount = Intl.NumberFormat('en', {
     notation: 'standard',
-  }).format(parseInt(collection.maxSupply))
-
-  const classname = useMemo(() => {
-    let clsName = [`zord-mint-status`]
-    presale && clsName.push(`zord-mint-status--presale`)
-    return clsName
-  }, [presale])
+  }).format(collection.maxSupply)
 
   return (
-    <Stack gap="x4" className={classname}>
+    <Stack
+      className={[className, 'zord-mint-status', presale && 'zord-mint-status--presale']}
+      gap="x4"
+      {...props}
+    >
       {showPrice && !saleIsFinished && !isSoldOut && (
         <Flex gap="x3" flexChildren justify="space-between" align="flex-end" wrap="wrap">
           <Stack gap="x1" style={{ flex: 'none' }}>
@@ -82,7 +81,7 @@ export function MintComponent({
             <Stack gap="x1" style={{ textAlign: 'right' }}>
               <Flex
                 className={'zord-mint-status__number-input'}
-                gap="x2"
+                gap="x1"
                 ml="auto"
                 justify="flex-end"
                 align="center"
@@ -107,14 +106,14 @@ export function MintComponent({
                     min={1}
                     placeholder="1"
                     value={mintCounter || ''}
-                    onBlur={clampMintCounter}
                     onChange={(e) => handleMintCounterUpdate(Number(e.target.value))}
+                    onBlur={clampMintCounter}
                     className={mintCounterInput}
                   />
                 </Heading>
                 <Button
                   w="x12"
-                  disabled={mintCounter >= availableMints}
+                  disabled={mintCounter >= Math.min(availableMints, availableTokenCount)}
                   variant="circle"
                   onClick={() =>
                     setMintCounter((state) => (state < maxPerWallet ? state + 1 : state))
@@ -131,7 +130,7 @@ export function MintComponent({
               <Eyebrow>Sold</Eyebrow>
               <Heading size="sm" className={priceDateHeading}>
                 {formattedMintedCount}
-                {parseInt(collection.maxSupply) > OPEN_EDITION_SIZE ? (
+                {collection.maxSupply > OPEN_EDITION_SIZE ? (
                   ' NFTs'
                 ) : (
                   <Box

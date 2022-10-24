@@ -48,7 +48,7 @@ export interface SubgraphTokenMetadata {
 }
 
 export interface SubgraphEditionMetadata {
-  id: string
+  id?: string
   description: string
   imageURI: string
   contractURI: string
@@ -59,6 +59,7 @@ export interface SubgraphERC721Drop {
   id: string
   created: SubgraphTransactionInfo
   creator: string
+  owner: string
   address: string
   name: string
   symbol: string
@@ -77,6 +78,7 @@ export interface RPCProviderERC721Drop {
   id: string
   created: SubgraphTransactionInfo
   creator: string
+  owner: string
   address: string
   name: string
   symbol: string
