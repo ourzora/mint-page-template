@@ -14,7 +14,7 @@ Click the '▲ Deploy' button below to clone your own version of the mint page t
 
 You will be prompted to fill in three variables as part of the deployment process.
 
-`ALCHEMY_ID` can be found by creating a new project in [Alchemy](https://dashboard.alchemyapi.io/) and then grabbing the API KEY from the project dashboard page and clicking the 'Get Key' button.
+`NEXT_PUBLIC_ALCHEMY_ID` can be found by creating a new project in [Alchemy](https://dashboard.alchemyapi.io/) and then grabbing the API KEY from the project dashboard page and clicking the 'Get Key' button.
 
 `NEXT_PUBLIC_CHAIN_ID` will be the chain your contract exists on.
 
@@ -30,7 +30,7 @@ You will be prompted to fill in three variables as part of the deployment proces
 
 Create your own custom minting site using the deploy link below. :)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fourzora%2Fmint-page-template&env=ALCHEMY_ID,NEXT_PUBLIC_CHAIN_ID,NEXT_PUBLIC_CONTRACT_ADDRESSES)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fourzora%2Fmint-page-template&env=NEXT_PUBLIC_ALCHEMY_ID,NEXT_PUBLIC_CHAIN_ID,NEXT_PUBLIC_CONTRACT_ADDRESSES)
 
 ## Step 2 (Option B). Run the mint site locally
 
@@ -40,7 +40,7 @@ First [clone the repository locally](https://docs.github.com/en/repositories/cre
 
 2. Update the values inside the newly created `.env.local` file.
 
-`ALCHEMY_ID` can be found by creating a new project in [Alchemy](https://dashboard.alchemyapi.io/) and then grabbing the API KEY from the project dashboard page and clicking the 'Get Key' button.
+`NEXT_PUBLIC_ALCHEMY_ID` can be found by creating a new project in [Alchemy](https://dashboard.alchemyapi.io/) and then grabbing the API KEY from the project dashboard page and clicking the 'Get Key' button.
 
 `NEXT_PUBLIC_CHAIN_ID` will be the chain your contract exists on.
 
@@ -75,7 +75,7 @@ NEXT_PUBLIC_IMAGE_HOST=
 NEXT_PUBLIC_IMAGE_HOST_APPEND=
 
 # First create a new project on Alchemy, and grab the API Key from the project dashboard (under 'View Key')
-ALCHEMY_ID=xxCG3Cw2CrnL5PM0bvqgZ6TFpdNyL6Xx
+NEXT_PUBLIC_ALCHEMY_ID=xxCG3Cw2CrnL5PM0bvqgZ6TFpdNyL6Xx
 
 # 1 = mainnet, 4 = rinkeby, 5 = goerli, 1337 = hardhat (local)
 NEXT_PUBLIC_CHAIN_ID=4

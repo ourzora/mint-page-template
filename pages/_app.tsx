@@ -13,7 +13,7 @@ const { chains, provider } = configureChains(
       (chain) => chain.id.toString() === process.env.NEXT_PUBLIC_CHAIN_ID
     )!,
   ],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID })]
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID })]
 )
 
 const { connectors } = getDefaultWallets({
