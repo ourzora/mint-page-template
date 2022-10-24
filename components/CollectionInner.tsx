@@ -60,7 +60,7 @@ export function CollectionInner({
           </Text>
           <Paragraph className={wrapWords} mb="x2">
             <ReactMarkdown>
-              {JSON.parse(`"${metadataDetails?.description}"`)}
+              {JSON.parse(`"${metadataDetails?.description || '...'}"`)}
             </ReactMarkdown>
           </Paragraph>
         </Stack>
