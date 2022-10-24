@@ -1,7 +1,7 @@
 import { CollectionDetailsItem } from './CollectionDetailsItem'
 import { Label, Well } from '@zoralabs/zord'
 import { NETWORK_NAME } from 'constants/addresses'
-import { useShortAddress } from 'hooks/useShortAddress'
+import { shortenAddress } from 'lib/helpers'
 import { ERC721DropProviderState } from 'providers/ERC721DropProvider'
 import { transformIPFSURL } from 'providers/IPFSProvider'
 import React from 'react'
@@ -11,7 +11,7 @@ export function CollectionDetails({
 }: {
   collection: ERC721DropProviderState
 }) {
-  const shortAddress = useShortAddress(collection.address)
+  const shortAddress = shortenAddress(collection.address)
 
   return (
     <Well px="x5" py="x5" gap="x3">

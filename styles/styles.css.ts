@@ -14,6 +14,23 @@ export const wrapWords = style({
   wordBreak: 'break-word',
 })
 
+export const trailingArrow = style({
+  position: 'relative',
+  marginRight: '1.1em',
+
+  selectors: {
+    '&:after': {
+      content: '↗',
+      fontFamily: 'system-ui',
+      opacity: ' 0.8',
+      fontSize: '0.9em',
+      position: 'absolute',
+      right: '-1em',
+      top: '-0.1em',
+    },
+  },
+})
+
 export const waitingApproval = style({
   opacity: '1 !important',
   selectors: {
