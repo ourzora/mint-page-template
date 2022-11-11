@@ -3,6 +3,7 @@ import '@zoralabs/zord/index.css'
 import 'styles/theme.css'
 import 'styles/global.css'
 
+import { SWRConfig } from 'swr'
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import { defaultChains, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
@@ -38,7 +39,13 @@ function App({ Component, pageProps }) {
           borderRadius: 'small',
         })}
       >
-        <Component {...pageProps} />
+        <SWRConfig
+          value={{
+            fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
+          }}
+        >
+          <Component {...pageProps} />
+        </SWRConfig>
       </RainbowKitProvider>
     </WagmiConfig>
   )
