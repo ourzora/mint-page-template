@@ -31,6 +31,13 @@ export function CollectionInner({
     collectionContext.contractConfig.metadataRenderer
   )
 
+  let description = '...'
+  try {
+    description = JSON.parse(`"${metadataDetails?.description || '...'}"`)
+  } catch (e) {
+    description = metadataDetails?.description || '...'
+  }
+
   const { disconnect } = useDisconnect()
   return (
     <Flex
@@ -59,9 +66,7 @@ export function CollectionInner({
             {collectionContext.name}
           </Text>
           <Paragraph className={wrapWords} mb="x2">
-            <ReactMarkdown>
-              {JSON.parse(`"${metadataDetails?.description || '...'}"`)}
-            </ReactMarkdown>
+            <ReactMarkdown>{description}</ReactMarkdown>
           </Paragraph>
         </Stack>
 
