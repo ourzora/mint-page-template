@@ -86,13 +86,13 @@ export function MintButton({
         </Paragraph>
         <Button
           as="a"
-          href={`https://zora.co/collections/${collection.address}`}
+          href={`https://opensea.io/assets?search[query]=${collection.address}`}
           target="_blank"
           rel="noreferrer"
           size="lg"
           my="x3"
         >
-          View on Zora Marketplace
+          View on Opensea
         </Button>
       </Box>
     )
