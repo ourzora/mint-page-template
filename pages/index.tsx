@@ -17,7 +17,7 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
-  const { type, metadata } = useCollectionMetadata(collections[0].metadataRenderer)
+  const { metadata } = useCollectionMetadata(collections[0].contractConfig.metadataRenderer)
   const ogImage = ipfsImage(collections[0]?.editionMetadata?.imageURI)
   const { address } = useAccount()
   const { data: ensName } = useEnsName({
