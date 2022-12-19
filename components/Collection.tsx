@@ -34,7 +34,7 @@ export function Collection({
         collection={collection}
         metadataRendererAddress={collection.contractConfig.metadataRenderer}
       >
-        <CollectionInner collection={collection} username={username} />
+        <CollectionInner username={username} />
       </MetadataProvider>
     </ERC721DropContractProvider>
   )

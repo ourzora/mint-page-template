@@ -12,15 +12,19 @@ import React, {
   useState,
 } from 'react'
 import useSWR from 'swr'
-import { cleanDescription } from 'utils/edition'
 import { useProvider, useSigner } from 'wagmi'
 
 export interface MetadataDetails {
   name?: string
   description?: string
+  image?: string | null
   imageURI?: string
   animationURI?: string
+  animation_url?: string
   metadataURIBase?: string
+  metadataURIExtension?: string
+  seller_fee_basis_points?: string
+  seller_fee_recipient?: string
   contractURI?: string
   loading?: boolean
 }
@@ -46,9 +50,13 @@ function DropMetadataContractProvider({
   metadataRendererAddress: string
   children?: ReactNode
 }) {
-  const { data: signer } = useSigner()
+  const { data: signer } = useSigner({
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+  })
+
   const provider = useProvider()
   const [metadata, setMetadata] = useState<MetadataDetails | undefined>()
+
   const metadataRenderer = useMemo(
     () =>
       provider && metadataRendererAddress
@@ -58,18 +66,23 @@ function DropMetadataContractProvider({
         : null,
     [provider, signer, metadataRendererAddress]
   )
+
   const { data: extraMetadata } = useSWR(
-    metadata?.contractURI ? transformIPFSURL(metadata.contractURI) : undefined,
+    metadata?.contractURI ? transformIPFSURL(metadata.contractURI) : null,
     (url) =>
       fetch(url)
         .then((r) => r.text())
         .then((t) => {
           try {
-            return JSON.parse(t.replace(/\\n/g, ' '))
+            return JSON.parse(t)
           } catch (e) {
             return undefined
           }
-        })
+        }),
+    {
+      revalidateOnReconnect: false,
+      revalidateOnFocus: false,
+    }
   )
 
   useEffect(() => {
@@ -78,12 +91,12 @@ function DropMetadataContractProvider({
         if (!collection.address || !metadataRenderer) {
           throw 'No collection or metadataRenderer'
         }
-        const { base, contractURI } = await metadataRenderer.metadataBaseByContract(
-          collection.address
-        )
+        const { base, extension, contractURI } =
+          await metadataRenderer.metadataBaseByContract(collection.address)
         setMetadata((prevState) => ({
           ...prevState,
           metadataURIBase: base,
+          metadataURIExtension: extension,
           contractURI: contractURI,
         }))
       } catch (e) {
@@ -128,10 +141,8 @@ function DropMetadataContractProvider({
             loading: !extraMetadata,
             ...metadata,
             ...extraMetadata,
-            imageURI: extraMetadata?.image || extraMetadata?.imageURI,
-            description: extraMetadata?.description
-              ? cleanDescription(extraMetadata.description)
-              : undefined,
+            image: extraMetadata?.image || extraMetadata?.imageURI,
+            name: collection.name,
           } || {},
       }}
     >

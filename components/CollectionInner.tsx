@@ -20,16 +20,15 @@ import {
 } from '@zoralabs/zord'
 
 export function CollectionInner({
-  collection,
   username,
 }: {
-  collection: SubgraphERC721Drop
   username?: string
 }) {
   const collectionContext = useERC721DropContract()
-  const { metadataDetails } = useCollectionMetadata(
+  const { metadata } = useCollectionMetadata(
     collectionContext.contractConfig.metadataRenderer
   )
+  const metadataDetails = metadata.metadataDetails
 
   let description = '...'
   try {
@@ -39,6 +38,7 @@ export function CollectionInner({
   }
 
   const { disconnect } = useDisconnect()
+
   return (
     <Flex
       mt="x3"
@@ -50,10 +50,10 @@ export function CollectionInner({
       style={{ maxWidth: 1360, margin: 'auto', minHeight: '80vh' }}
     >
       <Flex flex={{ '@initial': '1', '@1024': '1' }} p="x2" justify="center">
-        {metadataDetails?.imageURI ? (
+        {metadataDetails?.image || metadataDetails?.imageURI ? (
           <img
             className={heroImage}
-            src={ipfsImage(metadataDetails?.imageURI)}
+            src={ipfsImage(metadataDetails?.image || metadataDetails?.imageURI)}
             alt={collectionContext.name}
           />
         ) : (

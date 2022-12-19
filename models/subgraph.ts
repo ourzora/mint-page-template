@@ -1,3 +1,4 @@
+import { LowercaseAddress } from 'constants/addresses'
 import { BytesLike } from 'ethers'
 
 export interface SubgraphSalesConfig {
@@ -35,7 +36,7 @@ export interface SubgraphNFTEditionTransfer {
 }
 
 export interface SubgraphContractConfig {
-  metadataRenderer: string
+  metadataRenderer: LowercaseAddress
   editionSize: string
   royaltyBPS: number
   fundsRecipient: string

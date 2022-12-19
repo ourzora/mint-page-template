@@ -2,6 +2,7 @@
 import { EditionMetadataRenderer__factory } from '../constants/typechain'
 import type { ContractTransaction } from 'ethers'
 import { SubgraphERC721Drop } from 'models/subgraph'
+import { MetadataDetails } from 'providers/DropMetadataProvider'
 import React, {
   ReactNode,
   useCallback,
@@ -12,14 +13,6 @@ import React, {
 } from 'react'
 import { cleanDescription } from 'utils/edition'
 import { useSigner } from 'wagmi'
-
-// import {EditionMetadataRenderer__factory} from '@zoralabs/nft-drop-contracts/dist/typechain/EditionMetadataRenderer'
-
-interface MetadataDetails {
-  description: string
-  imageURI: string
-  animationURI: string
-}
 
 export interface EditionMetadataProviderState {
   loading: boolean

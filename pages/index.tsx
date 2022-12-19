@@ -9,6 +9,7 @@ import { ipfsImage, shortenAddress } from '@lib/helpers'
 import { collectionAddresses } from '@lib/constants'
 import { useAccount, useEnsName } from 'wagmi'
 import { Collection } from '@components/Collection'
+import {useCollectionMetadata} from '@hooks/useCollectionMetadata'
 
 
 interface HomePageProps {
@@ -16,7 +17,7 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
-  // const { metadata } = useDropMetadataContract()
+  const { type, metadata } = useCollectionMetadata(collections[0].metadataRenderer)
   const ogImage = ipfsImage(collections[0]?.editionMetadata?.imageURI)
   const { address } = useAccount()
   const { data: ensName } = useEnsName({
@@ -40,7 +41,7 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
         <meta
           name="description"
           content={
-            collections[0].editionMetadata?.description ||
+            metadata.metadataDetails?.description ||
             "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
           }
         />
@@ -52,7 +53,7 @@ const HomePage: NextPage<HomePageProps> = ({ collections }) => {
         <meta
           name="og:description"
           content={
-            collections[0].editionMetadata?.description ||
+            metadata.metadataDetails?.description ||
             "ZORA's creator toolkit makes it easy to create an NFT collection, with tooling that scales with your creative ambitions"
           }
         />

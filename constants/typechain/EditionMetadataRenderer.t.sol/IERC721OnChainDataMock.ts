@@ -12,25 +12,49 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers'
-import type { FunctionFragment, Result } from '@ethersproject/abi'
-import type { Listener, Provider } from '@ethersproject/providers'
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../common'
+} from "ethers";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
+  TypedListener,
+  OnEvent,
+} from "../common";
 
 export declare namespace IERC721Drop {
+  export type ConfigurationStruct = {
+    metadataRenderer: string;
+    editionSize: BigNumberish;
+    royaltyBPS: BigNumberish;
+    fundsRecipient: string;
+  };
+
+  export type ConfigurationStructOutput = [
+    string,
+    BigNumber,
+    number,
+    string
+  ] & {
+    metadataRenderer: string;
+    editionSize: BigNumber;
+    royaltyBPS: number;
+    fundsRecipient: string;
+  };
+
   export type SaleDetailsStruct = {
-    publicSaleActive: boolean
-    presaleActive: boolean
-    publicSalePrice: BigNumberish
-    publicSaleStart: BigNumberish
-    publicSaleEnd: BigNumberish
-    presaleStart: BigNumberish
-    presaleEnd: BigNumberish
-    presaleMerkleRoot: BytesLike
-    maxSalePurchasePerAddress: BigNumberish
-    totalMinted: BigNumberish
-    maxSupply: BigNumberish
-  }
+    publicSaleActive: boolean;
+    presaleActive: boolean;
+    publicSalePrice: BigNumberish;
+    publicSaleStart: BigNumberish;
+    publicSaleEnd: BigNumberish;
+    presaleStart: BigNumberish;
+    presaleEnd: BigNumberish;
+    presaleMerkleRoot: BytesLike;
+    maxSalePurchasePerAddress: BigNumberish;
+    totalMinted: BigNumberish;
+    maxSupply: BigNumberish;
+  };
 
   export type SaleDetailsStructOutput = [
     boolean,
@@ -45,104 +69,139 @@ export declare namespace IERC721Drop {
     BigNumber,
     BigNumber
   ] & {
-    publicSaleActive: boolean
-    presaleActive: boolean
-    publicSalePrice: BigNumber
-    publicSaleStart: BigNumber
-    publicSaleEnd: BigNumber
-    presaleStart: BigNumber
-    presaleEnd: BigNumber
-    presaleMerkleRoot: string
-    maxSalePurchasePerAddress: BigNumber
-    totalMinted: BigNumber
-    maxSupply: BigNumber
-  }
+    publicSaleActive: boolean;
+    presaleActive: boolean;
+    publicSalePrice: BigNumber;
+    publicSaleStart: BigNumber;
+    publicSaleEnd: BigNumber;
+    presaleStart: BigNumber;
+    presaleEnd: BigNumber;
+    presaleMerkleRoot: string;
+    maxSalePurchasePerAddress: BigNumber;
+    totalMinted: BigNumber;
+    maxSupply: BigNumber;
+  };
 }
 
 export interface IERC721OnChainDataMockInterface extends utils.Interface {
   functions: {
-    'name()': FunctionFragment
-    'saleDetails()': FunctionFragment
-  }
+    "config()": FunctionFragment;
+    "name()": FunctionFragment;
+    "saleDetails()": FunctionFragment;
+  };
 
-  getFunction(nameOrSignatureOrTopic: 'name' | 'saleDetails'): FunctionFragment
+  getFunction(
+    nameOrSignatureOrTopic: "config" | "name" | "saleDetails"
+  ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'name', values?: undefined): string
-  encodeFunctionData(functionFragment: 'saleDetails', values?: undefined): string
+  encodeFunctionData(functionFragment: "config", values?: undefined): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "saleDetails",
+    values?: undefined
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'saleDetails', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "config", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "saleDetails",
+    data: BytesLike
+  ): Result;
 
-  events: {}
+  events: {};
 }
 
 export interface IERC721OnChainDataMock extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
-  interface: IERC721OnChainDataMockInterface
+  interface: IERC721OnChainDataMockInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
     eventFilter: TypedEventFilter<TEvent>
-  ): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
+    config(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     name(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     saleDetails(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
-  }
+    ): Promise<ContractTransaction>;
+  };
+
+  config(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   name(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   saleDetails(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   callStatic: {
-    name(overrides?: CallOverrides): Promise<string>
+    config(
+      overrides?: CallOverrides
+    ): Promise<IERC721Drop.ConfigurationStructOutput>;
 
-    saleDetails(overrides?: CallOverrides): Promise<IERC721Drop.SaleDetailsStructOutput>
-  }
+    name(overrides?: CallOverrides): Promise<string>;
 
-  filters: {}
+    saleDetails(
+      overrides?: CallOverrides
+    ): Promise<IERC721Drop.SaleDetailsStructOutput>;
+  };
+
+  filters: {};
 
   estimateGas: {
-    name(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-    saleDetails(
+    config(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
-  }
+    ): Promise<BigNumber>;
 
-  populateTransaction: {
     name(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     saleDetails(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
-  }
+    ): Promise<BigNumber>;
+  };
+
+  populateTransaction: {
+    config(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    name(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    saleDetails(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+  };
 }
