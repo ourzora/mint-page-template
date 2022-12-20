@@ -7,6 +7,8 @@ export const mediaContainer = style([
     overflow: 'hidden',
     '@media': {
       [media.min480]: {
+        maxWidth: '80%',
+        maxHeight: '90vh',
         borderRadius: vars.radii.curved,
       },
     },
