@@ -1,11 +1,10 @@
-import { SubgraphERC721Drop } from 'models/subgraph'
 import ReactMarkdown from 'react-markdown'
-import { ipfsImage } from '@lib/helpers'
-import { maxWidth, heroImage, wrapWords } from 'styles/styles.css'
+import { maxWidth, wrapWords } from 'styles/styles.css'
 import { MintAndPresaleComponent } from '@components/MintAndPresaleComponent'
 import { MintDetails } from '@components/MintDetails'
 import { useERC721DropContract } from 'providers/ERC721DropProvider'
 import { useCollectionMetadata } from 'hooks/useCollectionMetadata'
+import * as styles from './CollectionMedia.css'
 import { useDisconnect } from 'wagmi'
 import {
   vars,
@@ -18,6 +17,7 @@ import {
   Paragraph,
   SpinnerOG,
 } from '@zoralabs/zord'
+import {CollectionMedia} from './CollectionMedia'
 
 export function CollectionInner({
   username,
@@ -39,6 +39,7 @@ export function CollectionInner({
 
   const { disconnect } = useDisconnect()
 
+
   return (
     <Flex
       mt="x3"
@@ -50,15 +51,19 @@ export function CollectionInner({
       style={{ maxWidth: 1360, margin: 'auto', minHeight: '80vh' }}
     >
       <Flex flex={{ '@initial': '1', '@1024': '1' }} p="x2" justify="center">
-        {metadataDetails?.image || metadataDetails?.imageURI ? (
-          <img
-            className={heroImage}
-            src={ipfsImage(metadataDetails?.image || metadataDetails?.imageURI)}
-            alt={collectionContext.name}
-          />
-        ) : (
-          <SpinnerOG />
-        )}
+        <Box position="relative" w="100%"
+          className={styles.mediaContainer}
+        >
+            <CollectionMedia
+              className={styles.mediaItem}
+              h="100%"
+              metadata={metadataDetails}
+              borderRadius="curved"
+              objectFit="cover"
+              collection={collectionContext}
+            />
+          </Box>
+
       </Flex>
       <Box flex={{ '@initial': '1', '@1024': 'none' }} className={maxWidth} p="x4">
         <Stack gap="x2" mb="x3">

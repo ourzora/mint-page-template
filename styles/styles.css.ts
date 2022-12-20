@@ -4,6 +4,11 @@ import { vars, atoms, ease } from '@zoralabs/zord'
 export const MAXWIDTH = 480
 const maxWidthQuery = `(max-width: ${MAXWIDTH+100}px)`
 
+const maxWidthValues = {
+  minWidth: 0,
+  maxWidth: 1200,
+}
+
 const waiting = keyframes({
   '0%': { opacity: 1 },
   '30%': { opacity: 0.2 },
@@ -30,6 +35,7 @@ export const trailingArrow = style({
     },
   },
 })
+
 
 export const waitingApproval = style({
   opacity: '1 !important',
@@ -155,3 +161,12 @@ export const collapsibleContent = style({
     '&[data-state="closed"]': { animation: `${collapsibleClose} 260ms ${ease.out}` },
   },
 })
+
+export const audioGrid = style({
+  display: 'grid',
+  maxWidth: maxWidthValues.maxWidth + 200,
+  margin: 'auto',
+  gridTemplateColumns: '1fr',
+  gap: '12px',
+})
+

@@ -3983,6 +3983,11 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
+howler@^2.2.1:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.3.tgz#a2eff9b08b586798e7a2ee17a602a90df28715da"
+  integrity sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==
+
 humanize-ms@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/humanize-ms/-/humanize-ms-1.2.1.tgz#c46e3159a293f6b896da29316d8b6fe8bb79bbed"
@@ -4461,6 +4466,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+magic-bytes.js@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/magic-bytes.js/-/magic-bytes.js-1.0.13.tgz#b8e72e7c78900bf7be8647bb71098d4371b3c818"
+  integrity sha512-DiI8gdaLxnO4+H0WglSlDSCIQRff1L42ZhOVTuAbb0uwCFIVLM3J28oQ4XMX6LJmFTiqMV/ejYV8bc/eewwdmQ==
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -5047,6 +5057,13 @@ parent-module@^1.0.0:
   dependencies:
     callsites "^3.0.0"
 
+parse-data-url@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/parse-data-url/-/parse-data-url-4.0.1.tgz#132e9dc00c8ae0ed63b212f749bc05b35f19a960"
+  integrity sha512-W+ZgeHPkG2Awbj2RCGG3zALoKGoKucIWXRp8jPgTVNmRgiftXbwXXzzaXXH4L1+OdxeSXC6C8G+hzlcv41f24A==
+  dependencies:
+    valid-data-url "^4.0.0"
+
 path-exists@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"
@@ -5294,6 +5311,13 @@ react-style-singleton@^2.2.1:
     get-nonce "^1.0.0"
     invariant "^2.2.4"
     tslib "^2.0.0"
+
+react-use-audio-player@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/react-use-audio-player/-/react-use-audio-player-1.2.6.tgz#e50b6183029493c693c89e5822f8530b7648e864"
+  integrity sha512-ukFF5WOxsFYd44AaPXzFI4HltWaPD68+iJ9aDicn9FRBJ5poJUPO/WjFl5nk0tRYiyve3z711Oz79LYzCahhFQ==
+  dependencies:
+    howler "^2.2.1"
 
 react@^17.0.2:
   version "17.0.2"
@@ -6036,6 +6060,11 @@ v8-compile-cache@^2.0.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
   integrity sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==
+
+valid-data-url@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/valid-data-url/-/valid-data-url-4.0.1.tgz#ac019f7cc917b79651796ceafe4ce861d02eb91b"
+  integrity sha512-t0oA6VCnlQ/MPKP/Ie9ZD3biEpB2JTxK1Hx4KC72RbhubL9HsXznoBn228UQTazL7cPvsY36bhzt3fk424TjyA==
 
 vfile-message@^3.0.0:
   version "3.1.2"
