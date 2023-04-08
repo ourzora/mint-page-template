@@ -1,6 +1,6 @@
 import { ERC721Drop__factory } from '../constants/typechain'
 import { EditionSalesConfig } from '../models/edition'
-import { MAX_UINT64 } from 'constants/numbers'
+import { MAX_UINT64, ZORA_MINT_FEE } from 'constants/numbers'
 import { BigNumber, errors, logger } from 'ethers'
 import type { ContractTransaction } from 'ethers'
 import { SubgraphERC721Drop } from 'models/subgraph'
@@ -14,10 +14,6 @@ import React, {
 } from 'react'
 import { AllowListEntry } from 'utils/merkle-proof'
 import { useSigner } from 'wagmi'
-import * as ethers from 'ethers'
-
-
-const MINT_FEE = ethers.utils.parseEther('0.000777')
 
 export interface ERC721DropProviderState
   extends Omit<
@@ -116,7 +112,7 @@ function ERC721DropContractProvider({
       if (!drop || !state.salesConfig) return
       await checkHasContract(drop.address)
       const tx = await drop.purchase(quantity, {
-        value: (state.salesConfig.publicSalePrice as BigNumber).add(MINT_FEE).mul(
+        value: (state.salesConfig.publicSalePrice as BigNumber).add(ZORA_MINT_FEE).mul(
           BigNumber.from(quantity)
         ),
       })
@@ -135,7 +131,7 @@ function ERC721DropContractProvider({
         BigNumber.from(allowlistEntry.price),
         allowlistEntry.proof.map((e) => `0x${e}`),
         {
-          value: BigNumber.from(allowlistEntry.price).add(MINT_FEE).mul(BigNumber.from(quantity)),
+          value: BigNumber.from(allowlistEntry.price).add(ZORA_MINT_FEE).mul(BigNumber.from(quantity)),
         }
       )
       return tx
