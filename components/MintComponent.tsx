@@ -1,6 +1,7 @@
 import { MintButton } from './MintButton'
 import { Box, Button, Eyebrow, Flex, Heading, Stack, StackProps } from '@zoralabs/zord'
-import { OPEN_EDITION_SIZE } from 'constants/numbers'
+import { OPEN_EDITION_SIZE, ZORA_MINT_FEE } from 'constants/numbers'
+import { BigNumber } from 'ethers'
 import { useSaleStatus } from 'hooks/useSaleStatus'
 import { parseInt } from 'lodash'
 import { ERC721DropProviderState } from 'providers/ERC721DropProvider'
@@ -37,7 +38,7 @@ export function MintComponent({
   const [isMinted, setIsMinted] = useState<boolean>(false)
   const [mintCounter, setMintCounter] = useState(1)
   const availableMints = maxPerWallet - (userMintedCount || 0)
-  const internalPrice = allowlistEntry?.price || collection.salesConfig.publicSalePrice
+  const internalPrice = BigNumber.from(allowlistEntry?.price || collection.salesConfig.publicSalePrice).add(ZORA_MINT_FEE)
   const availableTokenCount = collection.maxSupply - totalMinted
 
   function handleMintCounterUpdate(value: any) {
@@ -71,9 +72,7 @@ export function MintComponent({
           <Stack gap="x1" style={{ flex: 'none' }}>
             <Eyebrow>Price</Eyebrow>
             <Heading size="sm" className={priceDateHeading}>
-              {internalPrice === '0'
-                ? 'Free'
-                : `${formatCryptoVal(Number(internalPrice) * (mintCounter || 1))} ETH`}
+              {`${formatCryptoVal(Number(internalPrice) * (mintCounter || 1))} ETH`}
             </Heading>
           </Stack>
 
