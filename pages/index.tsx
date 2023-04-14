@@ -17,20 +17,21 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = ({ collections }) => {
-  const { metadata } = useCollectionMetadata(collections[0].contractConfig.metadataRenderer)
-  const ogImage = ipfsImage(collections[0]?.editionMetadata?.imageURI)
-  const { address } = useAccount()
+  const hasContractConfig = collections[0]?.contractConfig?.metadataRenderer;
+  const { metadata } = useCollectionMetadata(hasContractConfig ? collections[0].contractConfig.metadataRenderer : undefined);
+  const ogImage = ipfsImage(collections[0]?.editionMetadata?.imageURI);
+  const { address } = useAccount();
   const { data: ensName } = useEnsName({
     address: address,
-  })
-  const username = useMemo(() => ensName || shortenAddress(address), [address, ensName])
+  });
+  const username = useMemo(() => ensName || shortenAddress(address), [address, ensName]);
 
   if (!collections.length) {
     return (
       <Paragraph py="x5" align="center">
         404, contract not found.
       </Paragraph>
-    )
+    );
   }
 
   return (
